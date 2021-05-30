@@ -1,9 +1,9 @@
 ---
 layout:     post
-title:      typedef&using
+title:      typedef & using
 date:       2021-05-27 20:00:00
 author:     Lazarus
-summary:    balabala
+summary:    c++ primer
 categories: c++
 thumbnail:  cpp
 tags:
