@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      iterator
-date:       2021-05-28 00:00:00
+date:       2021-05-30 00:00:00
 author:     Lazarus
 summary:    c++ primer
 categories: c++
@@ -9,6 +9,8 @@ thumbnail:  cpp
 tags:
  - c++
 ---
+
+**迭代器**
 
 `end`  成员返回指向容器 (或 `string` 对象) "尾元素的下一个位置 (one past the end)" 的迭代器，  也就是说，该迭代器指示的是容器的一个本不存在的 **尾后 (off the end)** 元素，这样的迭代器没有实  际意义，仅是个标记。`end` 成员返回的迭代器常被称作 **尾后迭代器 (off-the-end-iterator)** 或者简称为 **尾迭代器 (end iterator)**。 特殊情况下如果容器为空，则 `begin` 和 `end` 返回的是一个迭代器.
 
@@ -82,7 +84,3 @@ tags:
         mid = beg + (end - beg) /2;  //新的中间点
     }
 ```
-
-
-
-
