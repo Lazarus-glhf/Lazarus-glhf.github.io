@@ -14,20 +14,47 @@ tags:
 
 **Basic Operations in "SplineComponent.h"**
 ```cpp
-inline void USplineComponent::AddSplineWorldPoint(const FVector& Position) { AddSplinePoint(Position, ESplineCoordinateSpace::World); }
-inline void USplineComponent::AddSplineLocalPoint(const FVector& Position) { AddSplinePoint(Position, ESplineCoordinateSpace::Local); }
-inline void USplineComponent::SetSplineWorldPoints(const TArray<FVector>& Points) { SetSplinePoints(Points, ESplineCoordinateSpace::World); }
-inline void USplineComponent::SetSplineLocalPoints(const TArray<FVector>& Points) { SetSplinePoints(Points, ESplineCoordinateSpace::Local); }
-inline void USplineComponent::SetWorldLocationAtSplinePoint(int32 PointIndex, const FVector& InLocation) { SetLocationAtSplinePoint(PointIndex, InLocation, ESplineCoordinateSpace::World); }
-inline FVector USplineComponent::GetWorldLocationAtSplinePoint(int32 PointIndex) const { return GetLocationAtSplinePoint(PointIndex, ESplineCoordinateSpace::World); }
-inline void USplineComponent::GetLocalLocationAndTangentAtSplinePoint(int32 PointIndex, FVector& LocalLocation, FVector& LocalTangent) const { GetLocationAndTangentAtSplinePoint(PointIndex, LocalLocation, LocalTangent, ESplineCoordinateSpace::Local); }
-inline FVector USplineComponent::GetWorldLocationAtDistanceAlongSpline(float Distance) const { return GetLocationAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World); }
-inline FVector USplineComponent::GetWorldDirectionAtDistanceAlongSpline(float Distance) const { return GetDirectionAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World); }
-inline FVector USplineComponent::GetWorldTangentAtDistanceAlongSpline(float Distance) const { return GetTangentAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World); }
-inline FRotator USplineComponent::GetWorldRotationAtDistanceAlongSpline(float Distance) const { return GetRotationAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World); }
-inline FVector USplineComponent::GetWorldLocationAtTime(float Time, bool bUseConstantVelocity) const { return GetLocationAtTime(Time, ESplineCoordinateSpace::World, bUseConstantVelocity); }
-inline FVector USplineComponent::GetWorldDirectionAtTime(float Time, bool bUseConstantVelocity) const { return GetDirectionAtTime(Time, ESplineCoordinateSpace::World, bUseConstantVelocity); }
-inline FRotator USplineComponent::GetWorldRotationAtTime(float Time, bool bUseConstantVelocity) const { return GetRotationAtTime(Time, ESplineCoordinateSpace::World, bUseConstantVelocity); }
+inline void USplineComponent::AddSplineWorldPoint(const FVector& Position) 
+{ AddSplinePoint(Position, ESplineCoordinateSpace::World); }
+
+inline void USplineComponent::AddSplineLocalPoint(const FVector& Position) 
+{ AddSplinePoint(Position, ESplineCoordinateSpace::Local); }
+
+inline void USplineComponent::SetSplineWorldPoints(const TArray<FVector>& Points) 
+{ SetSplinePoints(Points, ESplineCoordinateSpace::World); }
+
+inline void USplineComponent::SetSplineLocalPoints(const TArray<FVector>& Points) 
+{ SetSplinePoints(Points, ESplineCoordinateSpace::Local); }
+
+inline void USplineComponent::SetWorldLocationAtSplinePoint(int32 PointIndex, const FVector& InLocation) 
+{ SetLocationAtSplinePoint(PointIndex, InLocation, ESplineCoordinateSpace::World); }
+
+inline FVector USplineComponent::GetWorldLocationAtSplinePoint(int32 PointIndex) 
+const { return GetLocationAtSplinePoint(PointIndex, ESplineCoordinateSpace::World); }
+
+inline void USplineComponent::GetLocalLocationAndTangentAtSplinePoint(int32 PointIndex, FVector& LocalLocation, FVector& LocalTangent) 
+const { GetLocationAndTangentAtSplinePoint(PointIndex, LocalLocation, LocalTangent, ESplineCoordinateSpace::Local); }
+
+inline FVector USplineComponent::GetWorldLocationAtDistanceAlongSpline(float Distance) const 
+{ return GetLocationAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World); }
+
+inline FVector USplineComponent::GetWorldDirectionAtDistanceAlongSpline(float Distance) const 
+{ return GetDirectionAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World); }
+
+inline FVector USplineComponent::GetWorldTangentAtDistanceAlongSpline(float Distance) const 
+{ return GetTangentAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World); }
+
+inline FRotator USplineComponent::GetWorldRotationAtDistanceAlongSpline(float Distance) const 
+{ return GetRotationAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World); }
+
+inline FVector USplineComponent::GetWorldLocationAtTime(float Time, bool bUseConstantVelocity) const 
+{ return GetLocationAtTime(Time, ESplineCoordinateSpace::World, bUseConstantVelocity); }
+
+inline FVector USplineComponent::GetWorldDirectionAtTime(float Time, bool bUseConstantVelocity) const 
+{ return GetDirectionAtTime(Time, ESplineCoordinateSpace::World, bUseConstantVelocity); }
+
+inline FRotator USplineComponent::GetWorldRotationAtTime(float Time, bool bUseConstantVelocity) const 
+{ return GetRotationAtTime(Time, ESplineCoordinateSpace::World, bUseConstantVelocity); }
 ```
 <br>
 
