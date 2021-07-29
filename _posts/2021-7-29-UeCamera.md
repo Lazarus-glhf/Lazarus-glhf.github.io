@@ -13,165 +13,21 @@ tags:
 ## Spline
 
 **Basic Operations in "SplineComponent.h"**
-```CPP
-/** Adds an FSplinePoint to the spline. This contains its input key, position, tangent, rotation and scale. */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	void AddPoint(const FSplinePoint& Point, bool bUpdateSpline = true);
-
-	/** Adds an array of FSplinePoints to the spline. */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	void AddPoints(const TArray<FSplinePoint>& Points, bool bUpdateSpline = true);
-
-	/** Adds a point to the spline */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	void AddSplinePoint(const FVector& Position, ESplineCoordinateSpace::Type CoordinateSpace, bool bUpdateSpline = true);
-
-	/** Adds a point to the spline at the specified index */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	void AddSplinePointAtIndex(const FVector& Position, int32 Index, ESplineCoordinateSpace::Type CoordinateSpace, bool bUpdateSpline = true);
-
-	/** Removes point at specified index from the spline */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	void RemoveSplinePoint(int32 Index, bool bUpdateSpline = true);
-
-	/** Adds a world space point to the spline */
-	UFUNCTION(BlueprintCallable, Category = Spline, meta = (DeprecatedFunction, DeprecationMessage = "Please use AddSplinePoint, specifying SplineCoordinateSpace::World"))
-	void AddSplineWorldPoint(const FVector& Position);
-
-	/** Adds a local space point to the spline */
-	UFUNCTION(BlueprintCallable, Category = Spline, meta = (DeprecatedFunction, DeprecationMessage = "Please use AddSplinePoint, specifying SplineCoordinateSpace::Local"))
-	void AddSplineLocalPoint(const FVector& Position);
-
-	/** Sets the spline to an array of points */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	void SetSplinePoints(const TArray<FVector>& Points, ESplineCoordinateSpace::Type CoordinateSpace, bool bUpdateSpline = true);
-
-	/** Sets the spline to an array of world space points */
-	UFUNCTION(BlueprintCallable, Category = Spline, meta = (DeprecatedFunction, DeprecationMessage = "Please use SetSplinePoints, specifying SplineCoordinateSpace::World"))
-	void SetSplineWorldPoints(const TArray<FVector>& Points);
-
-	/** Sets the spline to an array of local space points */
-	UFUNCTION(BlueprintCallable, Category = Spline, meta = (DeprecatedFunction, DeprecationMessage = "Please use SetSplinePoints, specifying SplineCoordinateSpace::Local"))
-	void SetSplineLocalPoints(const TArray<FVector>& Points);
-
-	/** Move an existing point to a new location */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	void SetLocationAtSplinePoint(int32 PointIndex, const FVector& InLocation, ESplineCoordinateSpace::Type CoordinateSpace, bool bUpdateSpline = true);
-
-	/** Move an existing point to a new world location */
-	UFUNCTION(BlueprintCallable, Category = Spline, meta = (DeprecatedFunction, DeprecationMessage = "Please use SetLocationAtSplinePoint, specifying SplineCoordinateSpace::World"))
-	void SetWorldLocationAtSplinePoint(int32 PointIndex, const FVector& InLocation);
-
-	/** Specify the tangent at a given spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	void SetTangentAtSplinePoint(int32 PointIndex, const FVector& InTangent, ESplineCoordinateSpace::Type CoordinateSpace, bool bUpdateSpline = true);
-
-	/** Specify the tangents at a given spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	void SetTangentsAtSplinePoint(int32 PointIndex, const FVector& InArriveTangent, const FVector& InLeaveTangent, ESplineCoordinateSpace::Type CoordinateSpace, bool bUpdateSpline = true);
-
-	/** Specify the up vector at a given spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	void SetUpVectorAtSplinePoint(int32 PointIndex, const FVector& InUpVector, ESplineCoordinateSpace::Type CoordinateSpace, bool bUpdateSpline = true);
-
-	/** Set the rotation of an existing spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	void SetRotationAtSplinePoint(int32 PointIndex, const FRotator& InRotation, ESplineCoordinateSpace::Type CoordinateSpace, bool bUpdateSpline = true);
-
-	/** Set the scale at a given spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	void SetScaleAtSplinePoint(int32 PointIndex, const FVector& InScaleVector, bool bUpdateSpline = true); 
-
-	/** Get the type of a spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	ESplinePointType::Type GetSplinePointType(int32 PointIndex) const;
-
-	/** Specify the type of a spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	void SetSplinePointType(int32 PointIndex, ESplinePointType::Type Type, bool bUpdateSpline = true);
-
-	/** Get the number of points that make up this spline */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	int32 GetNumberOfSplinePoints() const;
-
-	/** Get the number of segments that make up this spline */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	int32 GetNumberOfSplineSegments() const;
-
-	/** Get the location at spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	FVector GetLocationAtSplinePoint(int32 PointIndex, ESplineCoordinateSpace::Type CoordinateSpace) const;
-
-	/** Get the world location at spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline, meta = (DeprecatedFunction, DeprecationMessage = "Please use GetLocationAtSplinePoint, specifying SplineCoordinateSpace::World"))
-	FVector GetWorldLocationAtSplinePoint(int32 PointIndex) const;
-
-	/** Get the direction at spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	FVector GetDirectionAtSplinePoint(int32 PointIndex, ESplineCoordinateSpace::Type CoordinateSpace) const;
-
-	/** Get the tangent at spline point. This fetches the Leave tangent of the point. */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	FVector GetTangentAtSplinePoint(int32 PointIndex, ESplineCoordinateSpace::Type CoordinateSpace) const;
-
-	/** Get the arrive tangent at spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	FVector GetArriveTangentAtSplinePoint(int32 PointIndex, ESplineCoordinateSpace::Type CoordinateSpace) const;
-
-	/** Get the leave tangent at spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	FVector GetLeaveTangentAtSplinePoint(int32 PointIndex, ESplineCoordinateSpace::Type CoordinateSpace) const;
-
-	/** Get the rotation at spline point as a quaternion */
-	FQuat GetQuaternionAtSplinePoint(int32 PointIndex, ESplineCoordinateSpace::Type CoordinateSpace) const;
-
-	/** Get the rotation at spline point as a rotator */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	FRotator GetRotationAtSplinePoint(int32 PointIndex, ESplineCoordinateSpace::Type CoordinateSpace) const;
-
-	/** Get the up vector at spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	FVector GetUpVectorAtSplinePoint(int32 PointIndex, ESplineCoordinateSpace::Type CoordinateSpace) const;
-
-	/** Get the right vector at spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	FVector GetRightVectorAtSplinePoint(int32 PointIndex, ESplineCoordinateSpace::Type CoordinateSpace) const;
-
-	/** Get the amount of roll at spline point, in degrees */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	float GetRollAtSplinePoint(int32 PointIndex, ESplineCoordinateSpace::Type CoordinateSpace) const;
-
-	/** Get the scale at spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	FVector GetScaleAtSplinePoint(int32 PointIndex) const;
-
-	/** Get the transform at spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	FTransform GetTransformAtSplinePoint(int32 PointIndex, ESplineCoordinateSpace::Type CoordinateSpace, bool bUseScale = false) const;
-
-	/** Get location and tangent at a spline point */
-	UFUNCTION(BlueprintCallable, Category=Spline)
-	void GetLocationAndTangentAtSplinePoint(int32 PointIndex, FVector& Location, FVector& Tangent, ESplineCoordinateSpace::Type CoordinateSpace) const;
-
-	/** Get local location and tangent at a spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline, meta = (DeprecatedFunction, DeprecationMessage = "Please use GetLocationAndTangentAtSplinePoint, specifying SplineCoordinateSpace::Local"))
-	void GetLocalLocationAndTangentAtSplinePoint(int32 PointIndex, FVector& LocalLocation, FVector& LocalTangent) const;
-
-	/** Get the distance along the spline at the spline point */
-	UFUNCTION(BlueprintCallable, Category=Spline)
-	float GetDistanceAlongSplineAtSplinePoint(int32 PointIndex) const;
-
-    /** Get a metadata property float value along the spline at spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	float GetFloatPropertyAtSplinePoint(int32 Index, FName PropertyName) const;
-	
- 	/** Get a metadata property vector value along the spline at spline point */
-	UFUNCTION(BlueprintCallable, Category = Spline)
-	FVector GetVectorPropertyAtSplinePoint(int32 Index, FName PropertyName) const;
-
-	/** Returns total length along this spline */
-	UFUNCTION(BlueprintCallable, Category=Spline) 
-	float GetSplineLength() const;
+```cpp
+inline void USplineComponent::AddSplineWorldPoint(const FVector& Position) { AddSplinePoint(Position, ESplineCoordinateSpace::World); }
+inline void USplineComponent::AddSplineLocalPoint(const FVector& Position) { AddSplinePoint(Position, ESplineCoordinateSpace::Local); }
+inline void USplineComponent::SetSplineWorldPoints(const TArray<FVector>& Points) { SetSplinePoints(Points, ESplineCoordinateSpace::World); }
+inline void USplineComponent::SetSplineLocalPoints(const TArray<FVector>& Points) { SetSplinePoints(Points, ESplineCoordinateSpace::Local); }
+inline void USplineComponent::SetWorldLocationAtSplinePoint(int32 PointIndex, const FVector& InLocation) { SetLocationAtSplinePoint(PointIndex, InLocation, ESplineCoordinateSpace::World); }
+inline FVector USplineComponent::GetWorldLocationAtSplinePoint(int32 PointIndex) const { return GetLocationAtSplinePoint(PointIndex, ESplineCoordinateSpace::World); }
+inline void USplineComponent::GetLocalLocationAndTangentAtSplinePoint(int32 PointIndex, FVector& LocalLocation, FVector& LocalTangent) const { GetLocationAndTangentAtSplinePoint(PointIndex, LocalLocation, LocalTangent, ESplineCoordinateSpace::Local); }
+inline FVector USplineComponent::GetWorldLocationAtDistanceAlongSpline(float Distance) const { return GetLocationAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World); }
+inline FVector USplineComponent::GetWorldDirectionAtDistanceAlongSpline(float Distance) const { return GetDirectionAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World); }
+inline FVector USplineComponent::GetWorldTangentAtDistanceAlongSpline(float Distance) const { return GetTangentAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World); }
+inline FRotator USplineComponent::GetWorldRotationAtDistanceAlongSpline(float Distance) const { return GetRotationAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World); }
+inline FVector USplineComponent::GetWorldLocationAtTime(float Time, bool bUseConstantVelocity) const { return GetLocationAtTime(Time, ESplineCoordinateSpace::World, bUseConstantVelocity); }
+inline FVector USplineComponent::GetWorldDirectionAtTime(float Time, bool bUseConstantVelocity) const { return GetDirectionAtTime(Time, ESplineCoordinateSpace::World, bUseConstantVelocity); }
+inline FRotator USplineComponent::GetWorldRotationAtTime(float Time, bool bUseConstantVelocity) const { return GetRotationAtTime(Time, ESplineCoordinateSpace::World, bUseConstantVelocity); }
 ```
 <br>
 
