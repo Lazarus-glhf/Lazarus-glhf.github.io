@@ -1,24 +1,14 @@
-\---
-
-layout:   post
-
-title:   UE UInterface
-
-date:    2021-08-21 00:00:00
-
-author:   Lazarus
-
-summary:  UE
-
-categories: ue 
-
-thumbnail: ue4
-
+---
+layout:     post
+title:      UE UInterface
+date:       2021-08-22 00:00:00
+author:     Lazarus
+summary:    UE
+categories: ue  
+thumbnail:  ue4
 tags:
-
- \- ue4
-
-\---
+ - ue4
+---
 
 What can UInterface do?
 
