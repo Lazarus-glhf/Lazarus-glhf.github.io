@@ -236,7 +236,7 @@ virtual void DrawVisualization(const UActorComponent* Component, const FSceneVie
 
 ```
 
-只需要重写 DrawVisualization 这一个函数就可以了
+只需要重写 `DrawVisualization()` 这一个函数就可以了
 
 ```c++
 // Fill out your copyright notice in the Description page of Project Settings.
