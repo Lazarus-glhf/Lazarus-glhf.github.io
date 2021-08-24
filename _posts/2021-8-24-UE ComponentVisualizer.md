@@ -253,8 +253,7 @@ const FSceneView* View, FPrimitiveDrawInterface* PDI)
  const ULineDraw* LineDrawer = Cast<const ULineDraw>(Component);
  
  // 获取组件所在 Actor 的坐标
- FVector ActorLocation= LineDrawer->GetOwner()->
- GetTargetLocation();
+ FVector ActorLocation= LineDrawer->GetOwner()->GetTargetLocation();
  
  if (LineDrawer->Points != nullptr)
  {
@@ -266,7 +265,8 @@ const FSceneView* View, FPrimitiveDrawInterface* PDI)
   for (int i = 0; i < LineDrawer->PointActors.Num(); i++)
   {
    APointActor* Point = LineDrawer->PointActors[i];
-   FVector Val = Point->GetActorLocation() - LineDrawer->GetOwner()->GetActorLocation();
+   FVector Val = Point->GetActorLocation() - LineDrawer->GetOwner()->
+   GetActorLocation();
 
    FKeyHandle Key = Curve->FloatCurves[0].UpdateOrAddKey(Point->Time, Val.X);
    Curve->FloatCurves[0].SetKeyInterpMode(Key, ERichCurveInterpMode::RCIM_Cubic);
