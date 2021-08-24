@@ -25,7 +25,8 @@ public class UnLuaTestEditor : ModuleRules
  {
   PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
   // ComponentViz needed for the objects we're visualizing
-  PublicDependencyModuleNames.AddRange(new string[] {  "Core", "Engine", "CoreUObject", "UnluaTest" });
+  PublicDependencyModuleNames.AddRange(new string[] {  "Core", "Engine", 
+  "CoreUObject", "UnluaTest" });
         
   // Needed for our editor logic
   // 这里加入 UnrealEd 模块
@@ -52,7 +53,8 @@ void FUnLuaTestEditorModule::StartupModule()
   TSharedPtr<FComponentVisualizer> Viz = MakeShareable(new LineVisualizer());	
 
  // ULineDraw 为 自定义 ActorComponent, 这里对其注册 ComponentVisualizer
-  GUnrealEd->RegisterComponentVisualizer(ULineDraw::StaticClass()->GetFName(), Viz);
+  GUnrealEd->RegisterComponentVisualizer(ULineDraw::StaticClass()->GetFName(), 
+  Viz);
   Viz->OnRegister();
  }
  else
@@ -167,7 +169,8 @@ void ULineDraw::BeginPlay()
 }
 
 // Called every frame
-void ULineDraw::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void ULineDraw::TickComponent(float DeltaTime, ELevelTick TickType, 
+FActorComponentTickFunction* ThisTickFunction)
 {
  Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
  // ...
@@ -181,9 +184,11 @@ void ULineDraw::AddPoints()
 
   if (MyWorld)
   {
-   APointActor* Point = MyWorld->SpawnActor<APointActor>(ActorToSpawn, this->GetOwner()->GetActorLocation(), FRotator(0.f));
+   APointActor* Point = MyWorld->SpawnActor<APointActor>(ActorToSpawn, 
+   this->GetOwner()->GetActorLocation(), FRotator(0.f));
    PointActors.Add(Point);
-   Point->AttachToActor(this->GetOwner(), FAttachmentTransformRules::KeepWorldTransform);
+   Point->AttachToActor(this->GetOwner(), 
+   FAttachmentTransformRules::KeepWorldTransform);
    Point->Time = PointDefaultTime;
    PointDefaultTime += 2;
   }
@@ -241,13 +246,15 @@ virtual void DrawVisualization(const UActorComponent* Component, const FSceneVie
 #include "SceneManagement.h"
 #include "UnLuaTest/LineDraw.h"
 
-void LineVisualizer::DrawVisualization(const UActorComponent* Component, const FSceneView* View, FPrimitiveDrawInterface* PDI)
+void LineVisualizer::DrawVisualization(const UActorComponent* Component, 
+const FSceneView* View, FPrimitiveDrawInterface* PDI)
 {
  // UE_LOG(LogTemp, Warning, TEXT("Drawing"));
  const ULineDraw* LineDrawer = Cast<const ULineDraw>(Component);
  
-    // 获取组件所在 Actor 的坐标
- FVector ActorLocation= LineDrawer->GetOwner()->GetTargetLocation();
+ // 获取组件所在 Actor 的坐标
+ FVector ActorLocation= LineDrawer->GetOwner()->
+ GetTargetLocation();
  
  if (LineDrawer->Points != nullptr)
  {
@@ -255,7 +262,7 @@ void LineVisualizer::DrawVisualization(const UActorComponent* Component, const F
   float MaxTime;
   UCurveVector* Curve = LineDrawer->Points;
 
-        // 将 PointActor 点的信息写入到 Curve 里面
+  // 将 PointActor 点的信息写入到 Curve 里面
   for (int i = 0; i < LineDrawer->PointActors.Num(); i++)
   {
    APointActor* Point = LineDrawer->PointActors[i];
@@ -271,10 +278,10 @@ void LineVisualizer::DrawVisualization(const UActorComponent* Component, const F
    Curve->FloatCurves[2].SetKeyInterpMode(Key, ERichCurveInterpMode::RCIM_Cubic);
   }
   
-        /** 获取 Curve 所有值的时间区间 */
+  /** 获取 Curve 所有值的时间区间 */
   Curve->GetTimeRange(Time, MaxTime);
   
-        /** 画出整个 Curve 曲线 */
+  /** 画出整个 Curve 曲线 */
   while (Time < MaxTime)
   {
    FVector Start = LineDrawer->Points->GetVectorValue(Time) + ActorLocation;
