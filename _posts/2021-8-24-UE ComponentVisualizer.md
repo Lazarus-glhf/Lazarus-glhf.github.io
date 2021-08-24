@@ -230,8 +230,7 @@ void ULineDraw::ClearAllPoints()
  */
 class UNLUATESTEDITOR_API LineVisualizer : public FComponentVisualizer 
 {
-virtual void DrawVisualization(const UActorComponent* Component, const FSceneView* View, 
-       FPrimitiveDrawInterface* PDI) override;
+virtual void DrawVisualization(const UActorComponent* Component, const FSceneView* View, FPrimitiveDrawInterface* PDI) override;
 };
 
 ```
