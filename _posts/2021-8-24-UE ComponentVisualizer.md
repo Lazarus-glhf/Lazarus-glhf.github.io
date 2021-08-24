@@ -21,17 +21,16 @@ using UnrealBuildTool;
 
 public class UnLuaTestEditor : ModuleRules
 {
-public UnLuaTestEditor(ReadOnlyTargetRules Target) : base(Target)
-{
- PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
- // ComponentViz needed for the objects we're visualizing
- PublicDependencyModuleNames.AddRange(new string[] {  "Core",
-     "Engine", "CoreUObject", "UnluaTest" });
+ public UnLuaTestEditor(ReadOnlyTargetRules Target) : base(Target)
+ {
+  PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+  // ComponentViz needed for the objects we're visualizing
+  PublicDependencyModuleNames.AddRange(new string[] {  "Core", "Engine", "CoreUObject", "UnluaTest" });
         
- // Needed for our editor logic
-       // 这里加入 UnrealEd 模块
- PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd" });	
-}
+  // Needed for our editor logic
+  // 这里加入 UnrealEd 模块
+  PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd" });	
+ }
 }
 ```
 
@@ -50,12 +49,10 @@ void FUnLuaTestEditorModule::StartupModule()
  if (GUnrealEd)
  {
   UE_LOG(LogTemp, Warning, TEXT("OnRegeister"));
-  TSharedPtr<FComponentVisualizer> Viz = 
-        MakeShareable(new LineVisualizer());	
+  TSharedPtr<FComponentVisualizer> Viz = MakeShareable(new LineVisualizer());	
 
-        // ULineDraw 为 自定义 ActorComponent, 这里对其注册 ComponentVisualizer
-  GUnrealEd->RegisterComponentVisualizer
-        (ULineDraw::StaticClass()->GetFName(), Viz);
+ // ULineDraw 为 自定义 ActorComponent, 这里对其注册 ComponentVisualizer
+  GUnrealEd->RegisterComponentVisualizer(ULineDraw::StaticClass()->GetFName(), Viz);
   Viz->OnRegister();
  }
  else
@@ -68,8 +65,7 @@ void FUnLuaTestEditorModule::ShutdownModule()
 {
  if (GUnrealEd)
  {
-  GUnrealEd->UnregisterComponentVisualizer
-        (ULineDraw::StaticClass()->GetFName());
+  GUnrealEd->UnregisterComponentVisualizer(ULineDraw::StaticClass()->GetFName());
  }
 }
 
