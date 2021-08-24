@@ -23,14 +23,14 @@ public class UnLuaTestEditor : ModuleRules
 {
 public UnLuaTestEditor(ReadOnlyTargetRules Target) : base(Target)
 {
-	PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-	// ComponentViz needed for the objects we're visualizing
-	PublicDependencyModuleNames.AddRange(new string[] {  "Core",
+ PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+ // ComponentViz needed for the objects we're visualizing
+ PublicDependencyModuleNames.AddRange(new string[] {  "Core",
      "Engine", "CoreUObject", "UnluaTest" });
         
-	// Needed for our editor logic
+ // Needed for our editor logic
        // 这里加入 UnrealEd 模块
-	PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd" });	
+ PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd" });	
 }
 }
 ```
@@ -46,31 +46,31 @@ IMPLEMENT_GAME_MODULE(FUnLuaTestEditorModule, UnLuaTestEditor);
 
 void FUnLuaTestEditorModule::StartupModule()
 {
-	UE_LOG(LogTemp, Warning, TEXT("StartupModule"));
-	if (GUnrealEd)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("OnRegeister"));
-		TSharedPtr<FComponentVisualizer> Viz = 
+ UE_LOG(LogTemp, Warning, TEXT("StartupModule"));
+ if (GUnrealEd)
+ {
+  UE_LOG(LogTemp, Warning, TEXT("OnRegeister"));
+  TSharedPtr<FComponentVisualizer> Viz = 
         MakeShareable(new LineVisualizer());	
 
         // ULineDraw 为 自定义 ActorComponent, 这里对其注册 ComponentVisualizer
-		GUnrealEd->RegisterComponentVisualizer
+  GUnrealEd->RegisterComponentVisualizer
         (ULineDraw::StaticClass()->GetFName(), Viz);
-		Viz->OnRegister();
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Regeister failed"));
-	}
+  Viz->OnRegister();
+ }
+ else
+ {
+  UE_LOG(LogTemp, Warning, TEXT("Regeister failed"));
+ }
 }
 
 void FUnLuaTestEditorModule::ShutdownModule()
 {
-	if (GUnrealEd)
-	{
-		GUnrealEd->UnregisterComponentVisualizer
+ if (GUnrealEd)
+ {
+  GUnrealEd->UnregisterComponentVisualizer
         (ULineDraw::StaticClass()->GetFName());
-	}
+ }
 }
 
 ```
@@ -98,49 +98,49 @@ void FUnLuaTestEditorModule::ShutdownModule()
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNLUATEST_API ULineDraw : public UActorComponent
 {
-	GENERATED_BODY()
+ GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
-	ULineDraw();
+ // Sets default values for this component's properties
+ ULineDraw();
 
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+ // Called when the game starts
+ virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+ // Called every frame
+ virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
     /** Spawn Actor 的种类 */
-	UPROPERTY()
-	TSubclassOf<APointActor> ActorToSpawn;
+ UPROPERTY()
+ TSubclassOf<APointActor> ActorToSpawn;
 
     /** 点的集合 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<APointActor*> PointActors;
+ UPROPERTY(EditAnywhere, BlueprintReadWrite)
+ TArray<APointActor*> PointActors;
 
     /** 画线信息来源的 Curve, 增加的点的值最终也是更新到 Curve 上 */
-	UPROPERTY(EditAnywhere)
-	UCurveVector* Points;
+ UPROPERTY(EditAnywhere)
+ UCurveVector* Points;
 
     /** 是否以 Component Owner 的坐标为起点 */
-	UPROPERTY(EditAnywhere)
-	bool bDrawFromActor;
+ UPROPERTY(EditAnywhere)
+ bool bDrawFromActor;
 
     /** 添加一个点 */
-	UFUNCTION(CallInEditor, Category="Custom Point")
-	void AddPoints();
+ UFUNCTION(CallInEditor, Category="Custom Point")
+ void AddPoints();
 
     /** 销毁所有的点，重置 Curve 数据 */
-	UFUNCTION(CallInEditor, Category="Custom Point")
-	void ClearAllPoints();
-	
+ UFUNCTION(CallInEditor, Category="Custom Point")
+ void ClearAllPoints();
+ 
 private:
     /**AddPoint() 生成 Point 对应 Curve 上的默认 Key 值
-	* 每次调用 +2
-	*/
-	float PointDefaultTime = 0;
+ * 每次调用 +2
+ */
+ float PointDefaultTime = 0;
 };
 
 ////////////////////////////////////////////////////////////
@@ -156,52 +156,52 @@ private:
 // Sets default values for this component's properties
 ULineDraw::ULineDraw()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-	bDrawFromActor = true;
-	// ...
+ // Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+ // off to improve performance if you don't need them.
+ PrimaryComponentTick.bCanEverTick = true;
+ bDrawFromActor = true;
+ // ...
 }
 
 // Called when the game starts
 void ULineDraw::BeginPlay()
 {
-	Super::BeginPlay();
-	// ...
+ Super::BeginPlay();
+ // ...
 }
 
 // Called every frame
 void ULineDraw::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	// ...
+ Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+ // ...
 }
 
 void ULineDraw::AddPoints()
 {
-	if (ActorToSpawn)
-	{
-		UWorld* MyWorld = GetWorld();
+ if (ActorToSpawn)
+ {
+  UWorld* MyWorld = GetWorld();
 
-		if (MyWorld)
-		{
-			APointActor* Point = MyWorld->SpawnActor<APointActor>(ActorToSpawn, this->GetOwner()->GetActorLocation(), FRotator(0.f));
-			PointActors.Add(Point);
-			Point->AttachToActor(this->GetOwner(), FAttachmentTransformRules::KeepWorldTransform);
-			Point->Time = PointDefaultTime;
-			PointDefaultTime += 2;
-		}
-	}
+  if (MyWorld)
+  {
+   APointActor* Point = MyWorld->SpawnActor<APointActor>(ActorToSpawn, this->GetOwner()->GetActorLocation(), FRotator(0.f));
+   PointActors.Add(Point);
+   Point->AttachToActor(this->GetOwner(), FAttachmentTransformRules::KeepWorldTransform);
+   Point->Time = PointDefaultTime;
+   PointDefaultTime += 2;
+  }
+ }
 }
 
 void ULineDraw::ClearAllPoints()
 {
-	for (APointActor* point : PointActors)
-	{
-		point->Destroy();
-	}
-	PointActors.Reset();
-	Points->ResetCurve();
+ for (APointActor* point : PointActors)
+ {
+  point->Destroy();
+ }
+ PointActors.Reset();
+ Points->ResetCurve();
 }
 
 ```
@@ -231,7 +231,7 @@ void ULineDraw::ClearAllPoints()
 class UNLUATESTEDITOR_API LineVisualizer : public FComponentVisualizer 
 {
 virtual void DrawVisualization(const UActorComponent* Component, const FSceneView* View, 
-							FPrimitiveDrawInterface* PDI) override;
+       FPrimitiveDrawInterface* PDI) override;
 };
 
 ```
@@ -248,48 +248,48 @@ virtual void DrawVisualization(const UActorComponent* Component, const FSceneVie
 
 void LineVisualizer::DrawVisualization(const UActorComponent* Component, const FSceneView* View, FPrimitiveDrawInterface* PDI)
 {
-	// UE_LOG(LogTemp, Warning, TEXT("Drawing"));
-	const ULineDraw* LineDrawer = Cast<const ULineDraw>(Component);
-	
+ // UE_LOG(LogTemp, Warning, TEXT("Drawing"));
+ const ULineDraw* LineDrawer = Cast<const ULineDraw>(Component);
+ 
     // 获取组件所在 Actor 的坐标
-	FVector ActorLocation= LineDrawer->GetOwner()->GetTargetLocation();
-	
-	if (LineDrawer->Points != nullptr)
-	{
-		float Time = 0;
-		float MaxTime;
-		UCurveVector* Curve = LineDrawer->Points;
+ FVector ActorLocation= LineDrawer->GetOwner()->GetTargetLocation();
+ 
+ if (LineDrawer->Points != nullptr)
+ {
+  float Time = 0;
+  float MaxTime;
+  UCurveVector* Curve = LineDrawer->Points;
 
         // 将 PointActor 点的信息写入到 Curve 里面
-		for (int i = 0; i < LineDrawer->PointActors.Num(); i++)
-		{
-			APointActor* Point = LineDrawer->PointActors[i];
-			FVector Val = Point->GetActorLocation() - LineDrawer->GetOwner()->GetActorLocation();
+  for (int i = 0; i < LineDrawer->PointActors.Num(); i++)
+  {
+   APointActor* Point = LineDrawer->PointActors[i];
+   FVector Val = Point->GetActorLocation() - LineDrawer->GetOwner()->GetActorLocation();
 
-			FKeyHandle Key = Curve->FloatCurves[0].UpdateOrAddKey(Point->Time, Val.X);
-			Curve->FloatCurves[0].SetKeyInterpMode(Key, ERichCurveInterpMode::RCIM_Cubic);
-			
-			Key = Curve->FloatCurves[1].UpdateOrAddKey(Point->Time, Val.Y);
-			Curve->FloatCurves[1].SetKeyInterpMode(Key, ERichCurveInterpMode::RCIM_Cubic);
-			
-			Key = Curve->FloatCurves[2].UpdateOrAddKey(Point->Time, Val.Z);
-			Curve->FloatCurves[2].SetKeyInterpMode(Key, ERichCurveInterpMode::RCIM_Cubic);
-		}
-		
+   FKeyHandle Key = Curve->FloatCurves[0].UpdateOrAddKey(Point->Time, Val.X);
+   Curve->FloatCurves[0].SetKeyInterpMode(Key, ERichCurveInterpMode::RCIM_Cubic);
+   
+   Key = Curve->FloatCurves[1].UpdateOrAddKey(Point->Time, Val.Y);
+   Curve->FloatCurves[1].SetKeyInterpMode(Key, ERichCurveInterpMode::RCIM_Cubic);
+   
+   Key = Curve->FloatCurves[2].UpdateOrAddKey(Point->Time, Val.Z);
+   Curve->FloatCurves[2].SetKeyInterpMode(Key, ERichCurveInterpMode::RCIM_Cubic);
+  }
+  
         /** 获取 Curve 所有值的时间区间 */
-		Curve->GetTimeRange(Time, MaxTime);
-		
+  Curve->GetTimeRange(Time, MaxTime);
+  
         /** 画出整个 Curve 曲线 */
-		while (Time < MaxTime)
-		{
-			FVector Start = LineDrawer->Points->GetVectorValue(Time) + ActorLocation;
-			FVector End = LineDrawer->Points->GetVectorValue(Time + 0.1) + ActorLocation;
-			
-			PDI->DrawLine(Start, End, FLinearColor::Red, SDPG_World, 2.0f);
-			
-			Time += 0.1;
-		}
-	}
+  while (Time < MaxTime)
+  {
+   FVector Start = LineDrawer->Points->GetVectorValue(Time) + ActorLocation;
+   FVector End = LineDrawer->Points->GetVectorValue(Time + 0.1) + ActorLocation;
+   
+   PDI->DrawLine(Start, End, FLinearColor::Red, SDPG_World, 2.0f);
+   
+   Time += 0.1;
+  }
+ }
 }
 
 
@@ -302,15 +302,15 @@ void LineVisualizer::DrawVisualization(const UActorComponent* Component, const F
 我们看下 `DrawLine()` 的声明 <br>
 
 ```c++
-	virtual void DrawLine(
-		const FVector& Start,
-		const FVector& End,
-		const FLinearColor& Color,
-		uint8 DepthPriorityGroup,
-		float Thickness = 0.0f,
-		float DepthBias = 0.0f,
-		bool bScreenSpace = false
-		) = 0;
+ virtual void DrawLine(
+  const FVector& Start,
+  const FVector& End,
+  const FLinearColor& Color,
+  uint8 DepthPriorityGroup,
+  float Thickness = 0.0f,
+  float DepthBias = 0.0f,
+  bool bScreenSpace = false
+  ) = 0;
 ```
 
 很清晰了，就是这些参数。<br>
