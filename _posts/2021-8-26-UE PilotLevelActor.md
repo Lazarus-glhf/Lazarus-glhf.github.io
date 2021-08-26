@@ -4,7 +4,7 @@ title:      UE PilotLevelActor
 date:       2021-08-26 00:00:00
 author:     Lazarus
 summary:    UE
-categories: ue  
+categories: ue
 thumbnail:  ue4
 tags:
  - ue4
@@ -29,23 +29,24 @@ using UnrealBuildTool;
 
 public class UnLuaTest : ModuleRules
 {
-	public UnLuaTest(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-	
-        // 就是这个 EditorScriptingUtilities
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EditorScriptingUtilities" });
+ public UnLuaTest(ReadOnlyTargetRules Target) : base(Target)
+ {
+  PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+  // 就是这个 EditorScriptingUtilities
+  PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore",
+   "EditorScriptingUtilities" });
 
-		// Uncomment if you are using Slate UI
-		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-		
-		// Uncomment if you are using online features
-		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
+  PrivateDependencyModuleNames.AddRange(new string[] {  });
 
-		// To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
-	}
+  // Uncomment if you are using Slate UI
+  // PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
+
+  // Uncomment if you are using online features
+  // PrivateDependencyModuleNames.Add("OnlineSubsystem");
+
+  // To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
+ }
 }
 
 ```
@@ -59,7 +60,7 @@ public class UnLuaTest : ModuleRules
 ```c++
 /* EditorLevelLibrary.h */
 
-/** 开始 Pilot ActorToPilot */	
+/** 开始 Pilot ActorToPilot */
 UFUNCTION(BlueprintCallable, Category = "Editor Scripting | Level Utility", meta=(DevelopmentOnly))
 static void PilotLevelActor(AActor* ActorToPilot);
 
@@ -73,45 +74,47 @@ static void EjectPilotLevelActor();
 ```c++
 void UEditorLevelLibrary::PilotLevelActor(AActor* ActorToPilot)
 {
-	FLevelEditorModule& LevelEditorModule = FModuleManager::GetModuleChecked<FLevelEditorModule>("LevelEditor");
+ FLevelEditorModule& LevelEditorModule = FModuleManager::GetModuleChecked<FLevelEditorModule>
+ ("LevelEditor");
 
-	TSharedPtr<SLevelViewport> ActiveLevelViewport = LevelEditorModule.GetFirstActiveLevelViewport();
-	if (ActiveLevelViewport.IsValid())
-	{
-		FLevelEditorViewportClient& LevelViewportClient = ActiveLevelViewport->GetLevelViewportClient();
+ TSharedPtr<SLevelViewport> ActiveLevelViewport = LevelEditorModule.GetFirstActiveLevelViewport();
+ if (ActiveLevelViewport.IsValid())
+ {
+  FLevelEditorViewportClient& LevelViewportClient = ActiveLevelViewport->GetLevelViewportClient();
 
-		LevelViewportClient.SetActorLock(ActorToPilot);
-		if (LevelViewportClient.IsPerspective() && LevelViewportClient.GetActiveActorLock().IsValid())
-		{
-			LevelViewportClient.MoveCameraToLockedActor();
-		}
-	}
+  LevelViewportClient.SetActorLock(ActorToPilot);
+  if (LevelViewportClient.IsPerspective() && LevelViewportClient.GetActiveActorLock().IsValid())
+  {
+   LevelViewportClient.MoveCameraToLockedActor();
+  }
+ }
 }
 
 void UEditorLevelLibrary::EjectPilotLevelActor()
 {
-	FLevelEditorModule& LevelEditorModule = FModuleManager::GetModuleChecked<FLevelEditorModule>("LevelEditor");
+ FLevelEditorModule& LevelEditorModule = FModuleManager::GetModuleChecked<FLevelEditorModule>
+ ("LevelEditor");
 
-	TSharedPtr<SLevelViewport> ActiveLevelViewport = LevelEditorModule.GetFirstActiveLevelViewport();
-	if (ActiveLevelViewport.IsValid())
-	{
-		FLevelEditorViewportClient& LevelViewportClient = ActiveLevelViewport->GetLevelViewportClient();
+ TSharedPtr<SLevelViewport> ActiveLevelViewport = LevelEditorModule.GetFirstActiveLevelViewport();
+ if (ActiveLevelViewport.IsValid())
+ {
+  FLevelEditorViewportClient& LevelViewportClient = ActiveLevelViewport->GetLevelViewportClient();
 
-		if (AActor* LockedActor = LevelViewportClient.GetActiveActorLock().Get())
-		{
-			//// Check to see if the locked actor was previously overriding the camera settings
-			//if (CanGetCameraInformationFromActor(LockedActor))
-			//{
-			//	// Reset the settings
-			//	LevelViewportClient.ViewFOV = LevelViewportClient.FOVAngle;
-			//}
+  if (AActor* LockedActor = LevelViewportClient.GetActiveActorLock().Get())
+  {
+   //// Check to see if the locked actor was previously overriding the camera settings
+   //if (CanGetCameraInformationFromActor(LockedActor))
+   //{
+   //	// Reset the settings
+   //	LevelViewportClient.ViewFOV = LevelViewportClient.FOVAngle;
+   //}
 
-			LevelViewportClient.SetActorLock(nullptr);
+   LevelViewportClient.SetActorLock(nullptr);
 
-			// remove roll and pitch from camera when unbinding from actors
-			GEditor->RemovePerspectiveViewRotation(true, true, false);
-		}
-	}
+   // remove roll and pitch from camera when unbinding from actors
+   GEditor->RemovePerspectiveViewRotation(true, true, false);
+  }
+ }
 }
 ```
 

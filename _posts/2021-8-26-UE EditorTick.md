@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      UE 
+title:      UE Editor Tick
 date:       2021-08-26 00:00:00
 author:     Lazarus
 summary:    UE
@@ -22,7 +22,8 @@ tags:
 UPROPERTY(EditInstanceOnly)
 bool bIsTick = false;
 
-virtual void TickActor(float DeltaTime, ELevelTick TickType, FActorTickFunction& ThisTickFunction) override;
+virtual void TickActor(float DeltaTime, ELevelTick TickType, FActorTickFunction& ThisTickFunction) 
+override;
 virtual bool ShouldTickIfViewportsOnly() const override;
 
 /////////////////////////////////////////////////////////////
@@ -43,7 +44,7 @@ bool AFloatTarget::ShouldTickIfViewportsOnly() const
 }
 ```
 
-基本都是模板定式的，`ShouldTickIfViewportsOnly()` 函数返回的  `bool` 变量决定是否在编辑器内 Tick。
+基本都是模板定式的，`ShouldTickIfViewportsOnly()` 函数返回的  `bool` 变量决定是否在 Editor 内 Tick。
 
 ---
 
