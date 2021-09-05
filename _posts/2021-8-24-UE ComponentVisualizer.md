@@ -318,3 +318,7 @@ const FSceneView* View, FPrimitiveDrawInterface* PDI)
 很清晰了，就是这些参数。<br>
 
 其实原本是准备用 MeshComponent 来画线的，顺便学习下怎么自定义一个 Mesh，但属实能力不够只能先用 Visualizer 凑合凑合，有时间搞定了 Mesh 到时候再发一篇。
+
+参考链接: https://sondreutheim.com/post/ue4_component_visualizers
+<br>
+参考项目: https://github.com/sutheim/UE4-ComponentVisualizer-Example
