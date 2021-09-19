@@ -678,9 +678,11 @@ ul {
 
 			p, ul, ol {
 
+				font-size: 16px;
+				
 				code {
 					font-family: 'Anonymous Pro';
-					font-size: 15px;
+					font-size: 16px;
 					background-color: $darker;
 					color: $white;
 					padding: 0.5em;
