@@ -160,7 +160,7 @@ ul {
 	}
 }
 
-.links {
+.links, .mm-links {
 	margin-top: 50px;
 	text-align: center;
 
@@ -219,6 +219,10 @@ ul {
 	.fa-rss:hover {
 		color: $rss;
 	}
+}
+
+.mm-links {
+	text-align: right;
 }
 
 /* Index */
