@@ -1,14 +1,14 @@
+---
 layout:     post
-title:      LearnOpenGL Part Ⅰ
-date:       2023-01-10 9:00:00
+title:      Learn OpenGL Part Ⅰ
+date:       2023-01-10 00:00:00
 author:     Lazarus
 summary:    Recording experience of learning OpenGL
-categories:  Computer Graphics
+categories: Computer Graphics
 thumbnail:  ue4
 tags:
-
  - Computer Graphics
-
+---
 
 
 ##  Window
@@ -56,7 +56,7 @@ if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 
 ---
 
-## ViewportglViewport
+## Viewport
 
 `Window` is just a window, viewport is where we see the world.
 
@@ -109,4 +109,6 @@ After looping we can use **glfwTerminate()** to clean everything up and quit.
 glfwTerminate();
 return 0;
 ```
+
+---
 
