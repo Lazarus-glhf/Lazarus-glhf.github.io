@@ -110,5 +110,45 @@ glfwTerminate();
 return 0;
 ```
 
+So if we run the program, there should be a empty black window.
+
+We can clear the previous frame render result and draw the *window* with the **[glClearColor()]([glClearColor - OpenGL 3 - docs.gl](https://docs.gl/gl3/glClearColor))** and **[glClear()]([glClear - OpenGL 3 - docs.gl](https://docs.gl/gl3/glClear))** functions.
+
+```c++
+glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+glClear(GL_COLOR_BUFFER_BIT);
+```
+
+>  As you may recall from the *OpenGL* chapter, the **glClearColor()** function is a *state-setting* function and **glClear()** is a *state-using* function in that it uses the current state to retrieve the clearing color from.
+
 ---
+
+## Input
+
+We can use  **glfwGetKey()** function to get the inputs. The function takes a `window` as input together with a `key`. To make every thing clear, we create a function to handle all the inputs.
+
+```c++
+// Check if we are pressing ESC key
+void processInput(GLFWwindow *window)
+{
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+```
+
+And we need to call the **processInput()** function every iteration of the render loop:
+
+```c++
+while (!glfwWindowShouldClose(window))
+{
+    processInput(window);
+
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+}  
+```
+
+---
+
+
 
