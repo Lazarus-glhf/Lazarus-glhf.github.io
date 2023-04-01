@@ -216,6 +216,25 @@ void ADoorActor::Tick(float DeltaTime)
 
 ```
 
+## 多播委托
+
+上面样例运用了无参数，无返回值的单播委托，虽然很简洁，但是单播委托是一对一绑定的。无法解决存在多个物体要对委托做出回应的问题。
+> “单播委托只能绑定一个回调函数,新绑定的会覆盖旧的,因此被称为单播。”
+
+想要使用多播委托，需要对以下几处进行修改  
+```c++
+// DECLARE_DELEGATE(FOnBossDiedDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnBossDiedDelegate);
+
+// OnBossDied.ExecuteIfBound();
+OnBossDied.Broadcast();
+
+// BossActorRef->OnBossDied.BindUObject(this, &ADoorActor::BossDiedEventFunction);
+BossActorRef->OnBossDied.AddUObject(this, &ADoorActor::BossDiedEventFunction);
+```
+
+
+
 **ref:**  
 [[UE4 C++入门到进阶] 4.Delegate(委托)](bilibili.com/read/cv9602026)  
 
