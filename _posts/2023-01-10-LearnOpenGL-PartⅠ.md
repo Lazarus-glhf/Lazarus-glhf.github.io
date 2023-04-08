@@ -10,7 +10,22 @@ tags:
  - Computer Graphics
 ---
 
-*update on 1/11/2023*
+*update on 4/8/2023*
+
+## Prerequisites
+
+### Windows
+
+If using Windows and Visual Studio, use [vcpkg](https://github.com/microsoft/vcpkg#getting-started) to install relative libraries of OpenGL:
+
+```powershell
+vcpkg install glfw3:x64-windows
+vcpkg install glew:x64-windows
+vcpkg install glad:x64-windows
+vcpkg install glm:x64-windows
+```
+
+Then open project properties, enter `Linker - Input`, add `opengl32.lib` into the list of additional dependencies.
 
 ##  Window
 
