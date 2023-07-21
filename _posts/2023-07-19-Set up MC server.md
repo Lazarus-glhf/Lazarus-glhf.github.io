@@ -13,42 +13,66 @@ tags:
 *update on 7/19/2023*
 
 ## **What do you need**
-搭建一个 MC 服务器所需的东西并不多:  
+搭建一个 Java Edition Minecraft 服务器所需的东西并不多:  
 - 一台安装了操作系统并能够运行的电脑  
 - Java 环境
 - MC 服务器资源 (Server Core)  
-- Tmux
 - 一个良好的网络环境 *
+- Tmux*
 - FRP *
 
 本教程使用的是 ubuntu 22.04 LTS 系统。下面让我们逐步进行。
 
 ## Java 环境
-1. **下载 Java**  
-```
-### Linux 64-bit ### 
-wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz  
-tar xvf openjdk-17.0.2_linux-x64_bin.tar.gz
-sudo mv jdk-17.0.2/ /opt/jdk-17/
-```
-2. **设置环境变量**  
-```
-echo 'export JAVA_HOME=/opt/jdk-17' | sudo tee /etc/profile.d/java17.sh 
-echo 'export PATH=$JAVA_HOME/bin:$PATH'|sudo tee -a /etc/profile.d/java17.sh 
-source /etc/profile.d/java17.sh
-```
-3. **设置 JAVA_HOME 环境变量**
-- 编辑 /etc/profile  
-`sudo vim /etc/profile`  
-在文件内加入 `JAVA_HOME="/opt/jdk-17"`，这里填入你实际的安装位置，本案例中为 `/opt/jdk-17`。  
-- 应用更改
-`source /etc/environment`  
-4. **验证安装**  
-- `echo $JAVA_HOME`  
-![echo $JAVA_HOME](https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230720004037.png)
-- `java` 与 `javac`  
-![java](https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230720004134.png)  
+执行下列指令: 
+``` shell
+sudo apt-get update  
+sudo apt-get upgrade
+sudo apt install openjdk-17-jdk
 
+# 安装 jre
+sudo apt install openjdk-17-jre
+
+# 卸载
+sudo apt remove openjdk-17-jre openjdk-17-jdk --purge
+```
+执行 `java --version` 验证安装是否成功
+
+## MineCraft 服务器配置  
+### 服务器下载
+MC 服务器种类繁多，这里以 Minecraft Server Launcher 为例。
+> ***Fabric is a lightweight, experimental modding toolchain for Minecraft.***  
+
+下载服务器资产非常简单，访问 [Download Minecraft Server Launcher](https://fabricmc.net/use/server/) 界面:  
+![Download Minecraft Server Launcher](https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230721105307.png)
+选择 Mincraft 版本，会自动生成资源下载链接，这里以 JE 1.20.1 为例。我们复制 Fabric 下载界面提供的下载指令 `curl -OJ https://meta.fabricmc.net/v2/versions/loader/1.20.1/0.14.21/0.11.2/server/jar` 至 linux 终端并运行。
+![Download Link](https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230721105847.png)  
+会获得一个服务器的 jar 包。接着我们在服务器所在文件夹创建一个服务器启动脚本 `vim run.sh`, 将 Fabric 下载界面提供的启动命令 `java -Xmx2G -jar fabric-server-mc.1.20.1-loader.0.14.21-launcher.0.11.2.jar nogui` 输入，保存并退出。
+![run.sh](https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230721110919.png)  
+> 列举一些 run.sh 可能用到的参数  
+    1. -Xmx?G ? 为服务器最多可用内存  
+    2. -Xms?G ? 为服务器最小占用内存  
+    3. nogui 不启用服务器 GUI  
+    4. -jar 后面为 Server Launcher 的名字，如果强迫症看着默认名字难受修改了的话，启动脚本需要修改  
+
+随后我们别忘了给运行脚本执行权限，`chomod +x run.sh`。此时我们可以直接运行脚本了 `./run.sh`，启动器会自动下载服务器核心资源，并生成需要的资产。 
+第一次运行会失败，并且给出下列提示: ![EULA](https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230721111242.png)  
+这里我们需要去修改刚刚生成的 eula 用户许可文件。`ls` 查看本地文件发现有一个 `eula.txt`, 我们 `vim eula.txt` 去修改它。
+![eula](https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230721111625.png)  
+我们将最后一行的 `eula=false` 改为 `eula=true` 即可，保存并退出。  
+此时已经可以连接服务器愉快地玩耍了，但在此之前，我们可能还需要修改一些服务器的配置项。让我们输入 `stop` 终止服务器运行。我们查看服务器目录下的文件，发现有一个 `server.properties` 文件，这个就是服务器的配置文件，里面有着非常多的配置项。
+![server directory](https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230721112213.png)
+关于具体选项的作用，可以查看 Minecraft Wiki 了解更多: [Server.properties](https://minecraft.fandom.com/wiki/Server.properties)，这里主要提及几个比较重要的配置项：  
+
+``` shell
+- online-mode=true #重要！当值为 true 时只有拥有 MC JE 正版的账户才能够进入服务器，并且可以使用诸如官方皮肤，披风等物品。此项一般也被称为正版验证。当值为 false 时关闭正版验证。
+- server-port=25565 # 重要！服务器监听端口！
+- query.port=25565 # 重要！服务器查询端口！
+- difficulty=easy # 难度，关系到游戏的某些特性
+- level-seed= #服务器种子，默认随机。
+```
+完成配置文件修改后我们再次运行 `run.sh`，如果显示以下的画面，恭喜你，服务器成功运行了！
+![server running](https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230721111853.png)
 
 ## 代理配置  
 ### Windows Subsystem for Linux
