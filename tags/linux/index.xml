@@ -6,11 +6,10 @@
         <description>Recent content in Linux on Lazarus&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <copyright>Lazarus</copyright>
-        <lastBuildDate>Wed, 19 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://example.com/tags/linux/index.xml" rel="self" type="application/rss+xml" /><item>
+        <copyright>Lazarus</copyright><atom:link href="https://example.com/tags/linux/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>搭建个人 MC 服务器指北</title>
         <link>https://example.com/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/</link>
-        <pubDate>Wed, 19 Jul 2023 00:00:00 +0000</pubDate>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://example.com/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/</guid>
         <description>&lt;p&gt;&lt;em&gt;update on 7/22/2023&lt;/em&gt;&lt;/p&gt;
