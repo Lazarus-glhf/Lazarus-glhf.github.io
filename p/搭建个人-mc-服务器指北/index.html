@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Set up a linux Minecraft Server">
+<title>搭建个人 MC 服务器指北</title>
+
+<link rel='canonical' href='https://example.com/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/'>
+
+<link rel="stylesheet" href="/scss/style.min.9fb9f63165170067397a89e877d27f3a49561a8a245205608e0e790f97c4375d.css"><meta property='og:title' content="搭建个人 MC 服务器指北">
+<meta property='og:description' content="Set up a linux Minecraft Server">
+<meta property='og:url' content='https://example.com/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/'>
+<meta property='og:site_name' content='Lazarus&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='linux' /><meta property='article:published_time' content='2023-07-19T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-07-19T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="搭建个人 MC 服务器指北">
+<meta name="twitter:description" content="Set up a linux Minecraft Server">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu8863448416065604028.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🤨</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Lazarus&#39;s Blog</a></h1>
+            <h2 class="site-description">Do it, then do it right, then do it better.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Lazarus-glhf'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://example.com/" selected>中文</option>
+                                
+                                    <option value="https://example.com/en/" >English</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#what-do-you-need"><strong>What do you need</strong></a></li>
+    <li><a href="#java-环境"><strong>Java 环境</strong></a></li>
+    <li><a href="#minecraft-服务器配置"><strong>MineCraft 服务器配置</strong></a>
+      <ol>
+        <li><a href="#服务器下载">服务器下载</a></li>
+      </ol>
+    </li>
+    <li><a href="#tmux"><strong>Tmux</strong></a>
+      <ol>
+        <li><a href="#速通-tmux">速通 Tmux</a></li>
+        <li><a href="#tmux-在搭建服务器时的应用">Tmux 在搭建服务器时的应用</a></li>
+      </ol>
+    </li>
+    <li><a href="#frp">Frp</a></li>
+    <li><a href="#wsl-代理配置">Wsl 代理配置</a>
+      <ol>
+        <li><a href="#windows-subsystem-for-linux">Windows Subsystem for Linux</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/linux/" >
+                Linux
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/">搭建个人 MC 服务器指北</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jul 19, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 5 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p><em>update on 7/22/2023</em></p>
+<h2 id="what-do-you-need"><strong>What do you need</strong>
+</h2><p>搭建一个 Java Edition Minecraft 服务器所需的东西并不多:</p>
+<ul>
+<li>一台安装了操作系统并能够运行的电脑</li>
+<li>Java 环境</li>
+<li>MC 服务器资源 (Server Core)</li>
+<li>一个良好的网络环境 *</li>
+<li>Tmux *</li>
+<li>FRP *</li>
+</ul>
+<p>本教程使用的是 ubuntu 22.04 LTS 系统。下面让我们逐步进行。</p>
+<h2 id="java-环境"><strong>Java 环境</strong>
+</h2><p>执行下列指令:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo apt-get update  
+</span></span><span class="line"><span class="cl">sudo apt-get upgrade
+</span></span><span class="line"><span class="cl">sudo apt install openjdk-17-jdk
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 安装 jre</span>
+</span></span><span class="line"><span class="cl">sudo apt install openjdk-17-jre
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 卸载</span>
+</span></span><span class="line"><span class="cl">sudo apt remove openjdk-17-jre openjdk-17-jdk --purge
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行 <code>java --version</code> 验证安装是否成功</p>
+<h2 id="minecraft-服务器配置"><strong>MineCraft 服务器配置</strong>
+</h2><h3 id="服务器下载">服务器下载
+</h3><p>MC 服务器种类繁多，这里以 Fabric Minecraft Server Launcher 为例。</p>
+<blockquote>
+<p><em><strong>Fabric is a lightweight, experimental modding toolchain for Minecraft.</strong></em></p>
+</blockquote>
+<p>下载服务器资产非常简单，访问 <a class="link" href="https://fabricmc.net/use/server/"  target="_blank" rel="noopener"
+    >Download Minecraft Server Launcher</a> 界面:<br>
+<img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230721105307.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="Download Minecraft Server Launcher"
+	
+	
+>
+选择 Mincraft 版本，会自动生成资源下载链接，这里以 JE 1.20.1 为例。我们复制 Fabric 下载界面提供的下载指令 <code>curl -OJ https://meta.fabricmc.net/v2/versions/loader/1.20.1/0.14.21/0.11.2/server/jar</code> 至 linux 终端并运行。
+<img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230721105847.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="Download Link"
+	
+	
+><br>
+会获得一个服务器的 jar 包。接着我们在服务器所在文件夹创建一个服务器启动脚本 <code>vim run.sh</code>, 将 Fabric 下载界面提供的启动命令 <code>java -Xmx2G -jar fabric-server-mc.1.20.1-loader.0.14.21-launcher.0.11.2.jar nogui</code> 输入，保存并退出。
+<img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230721110919.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="run.sh"
+	
+	
+></p>
+<blockquote>
+<p>列举一些 run.sh 可能用到的参数<br>
+1. -Xmx?G ? 为服务器最多可用内存<br>
+2. -Xms?G ? 为服务器最小占用内存<br>
+3. nogui 不启用服务器 GUI<br>
+4. -jar 后面为 Server Launcher 的名字，如果强迫症看着默认名字难受修改了的话，启动脚本需要修改</p>
+</blockquote>
+<p>随后我们别忘了给运行脚本执行权限，<code>chomod +x run.sh</code>。此时我们可以直接运行脚本了 <code>./run.sh</code>，启动器会自动下载服务器核心资源，并生成需要的资产。
+第一次运行会失败，并且给出下列提示: <img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230721111242.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="EULA"
+	
+	
+><br>
+这里我们需要去修改刚刚生成的 eula 用户许可文件。<code>ls</code> 查看本地文件发现有一个 <code>eula.txt</code>, 我们 <code>vim eula.txt</code> 去修改它。
+<img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230721111625.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="eula"
+	
+	
+><br>
+我们将最后一行的 <code>eula=false</code> 改为 <code>eula=true</code> 即可，保存并退出。<br>
+此时已经可以连接服务器愉快地玩耍了，但在此之前，我们可能还需要修改一些服务器的配置项。让我们输入 <code>stop</code> 终止服务器运行。我们查看服务器目录下的文件，发现有一个 <code>server.properties</code> 文件，这个就是服务器的配置文件，里面有着非常多的配置项。
+<img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230721112213.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="server directory"
+	
+	
+>
+关于具体选项的作用，可以查看 Minecraft Wiki 了解更多: <a class="link" href="https://minecraft.fandom.com/wiki/Server.properties"  target="_blank" rel="noopener"
+    >Server.properties</a>，这里主要提及几个比较重要的配置项：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">- online-mode<span class="o">=</span><span class="nb">true</span> <span class="c1">#重要！当值为 true 时只有拥有 MC JE 正版的账户才能够进入服务器，并且可以使用诸如官方皮肤，披风等物品。此项一般也被称为正版验证。当值为 false 时关闭正版验证。</span>
+</span></span><span class="line"><span class="cl">- server-port<span class="o">=</span><span class="m">25565</span> <span class="c1"># 重要！服务器监听端口！</span>
+</span></span><span class="line"><span class="cl">- query.port<span class="o">=</span><span class="m">25565</span> <span class="c1"># 重要！服务器查询端口！</span>
+</span></span><span class="line"><span class="cl">- <span class="nv">difficulty</span><span class="o">=</span>easy <span class="c1"># 难度，关系到游戏的某些特性</span>
+</span></span><span class="line"><span class="cl">- level-seed<span class="o">=</span> <span class="c1">#服务器种子，默认随机。</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>完成配置文件修改后我们再次运行 <code>run.sh</code>，如果显示以下的画面，恭喜你，服务器成功运行了！
+<img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230721111853.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="server running"
+	
+	
+></p>
+<h2 id="tmux"><strong>Tmux</strong>
+</h2><p>当我们在服务器运行时把终端的黑框框关掉时(包括 ssh 的终端)，那么服务器也会被直接关闭。显然我们不可能一直开着这个黑框框在电脑上，所以我们需要一些小工具，比如 <strong>Tmux</strong>。</p>
+<h3 id="速通-tmux">速通 Tmux
+</h3><ol>
+<li>执行 <code>sudo apt-get install tmux</code> 安装 tmux。</li>
+<li>新建会话 <code>tmux new -s &lt;session-name&gt;</code>。使用 <code>tmux ls</code> 浏览会话列表。</li>
+<li>退出会话 <code>tmux detach</code> 或者 <code>ctrl + b</code></li>
+<li>接入会话 <code>tmux a -t &lt;session-name&gt;</code>，<code>tmux a</code> 默认接入上次打开的会话</li>
+<li>结束会话 <code>tmux kill-session -t &lt;session-name&gt;</code></li>
+</ol>
+<h3 id="tmux-在搭建服务器时的应用">Tmux 在搭建服务器时的应用
+</h3><ol>
+<li><code>tmux new -s MCServer</code> 创建一个会话。</li>
+<li>在会话内执行 <code>run.sh</code> 服务器启动脚本。</li>
+<li><code>ctrl + b + d</code> 退出会话，此时即使关闭终端服务器也不会停止运行。</li>
+</ol>
+<h2 id="frp">Frp
+</h2><p>Frp 是什么？</p>
+<blockquote>
+<p>frp 是一个专注于内网穿透的高性能的反向代理应用，支持 TCP、UDP、HTTP、HTTPS 等多种协议。可以将内网服务以安全、便捷的方式通过具有公网 IP 节点的中转暴露到公网。</p>
+</blockquote>
+<p>关于 Frp 的更多内容，可以查阅<a class="link" href="https://frps.cn/11.html"  target="_blank" rel="noopener"
+    >官方文档</a>与 <a class="link" href="https://github.com/fatedier/frp"  target="_blank" rel="noopener"
+    >Github 仓库</a>。<br>
+接下来示范如何将本地运行的 MC 服务器通过 Frp 反向代理到公网上。当然首先你需要一台拥有公网 ip 的电脑/服务器/VPS/路由器。</p>
+<ol>
+<li>安装 Frp。
+<ul>
+<li>访问 github 的 <a class="link" href="https://github.com/fatedier/frp/releases"  target="_blank" rel="noopener"
+    >Releases</a>，获取所需版本的下载链接。</li>
+<li>在 Server (公网)和 Client (内网)上分别执行 <code>wget https://github.com/fatedier/frp/releases/download/v0.51.1/frp_0.51.1_linux_amd64.tar.gz</code> 指令下载预编译好的文件。</li>
+<li><code>tar -zxvf frp.tar.gz</code> 解压文件，可以获得如下文件：
+<img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230722183125.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="frp"
+	
+	
+></li>
+</ul>
+</li>
+<li>配置 Frp
+<ul>
+<li>配置服务端(公网)文件 frps.ini，默认状态下 frps.ini 的内容是这样的。设置了 frp 服务器用户接收客户端连接的端口为默认的 7000。这里我们要记住端口，以及公网的 ip 地址。
+<img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230722183425.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="frps"
+	
+	
+></li>
+<li>配置客户端(局域网)文件 frpc.ini。默认状态下 frpc.ini 的内容是这样的:</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">    <span class="c1"># 必要！</span>
+</span></span><span class="line"><span class="cl">    <span class="o">[</span>common<span class="o">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">server_addr</span> <span class="o">=</span> 127.0.0.1 <span class="c1"># 服务器的地址，这里要修改成你的公网服务器 IP</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">server_port</span> <span class="o">=</span> <span class="m">7000</span>  <span class="c1"># 服务器接收客户端连接的端口</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 一个名为 ssh 的配置项，frp 会将请求服务器 6000 端口的流量转发到内网机器的 22 端口。</span>
+</span></span><span class="line"><span class="cl">    <span class="o">[</span>ssh<span class="o">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">type</span> <span class="o">=</span> tcp <span class="c1"># 连接方式</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">local_ip</span> <span class="o">=</span> 127.0.0.1 <span class="c1"># 本地地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">local_port</span> <span class="o">=</span> <span class="m">22</span> <span class="c1"># 需要转发的端口</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">remote_port</span> <span class="o">=</span> <span class="m">6000</span> <span class="c1"># 服务器监听端口            </span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>我们参考这份样例，先将 frpc.ini 中服务器的地址和接收端口改成自己的，然后在文件后面添加一个 MC 服务器需要使用的配置项:
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">    <span class="o">[</span>MCServer<span class="o">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">type</span> <span class="o">=</span> tcp <span class="c1"># MCJE 使用 tcp 协议</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">local_ip</span> <span class="o">=</span> 127.0.0.1 <span class="c1"># 本地地址</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">local_port</span> <span class="o">=</span> <span class="m">25565</span> <span class="c1"># MC 服务器监听和查询的地址，在 server.properties 中设定</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">remote_port</span> <span class="o">=</span> <span class="m">25565</span> <span class="c1"># 服务器监听端口 </span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>在公网服务器上开放需要使用到的端口，如 7000, 25565.</li>
+<li>运行 Frp 反向代理
+<ul>
+<li>首先在服务器上执行 <code>tmux new -s frps</code> 创建一个 tmux 会话</li>
+<li>然后在 frp 目录下执行 <code>./frps -c frps.ini</code> 开启 frp 服务端后 <code>ctrl + b + d</code> 退出 tmux 会话。</li>
+<li>在客户端上执行 <code>tmux new -s frpc</code> 创建一个 tmux 会话</li>
+<li>在 frp 目录下执行 <code>./frpc -c frpc.ini</code> 开启 frp 客户端后 <code>ctrl + b + d</code> 退出 tmux 会话。</li>
+</ul>
+</li>
+</ol>
+<p>此时如果服务端和客户端都没有错误信息，那说明反向代理搭建成功，可以通过公网访问内网 MC 服务器了。</p>
+<h2 id="wsl-代理配置">Wsl 代理配置
+</h2><h3 id="windows-subsystem-for-linux">Windows Subsystem for Linux
+</h3><ol>
+<li>Clash 配置应确保如下图<br>
+<img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/20230720001624.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="Clash 配置"
+	
+	
+>{:height=&ldquo;75%&rdquo; width=&ldquo;75%&rdquo;}</li>
+<li>配置 Wsl 环境
+<ul>
+<li>编辑 ~/.bashrc <code>vim ~/.bashrc</code>,在末尾添加下列内容。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">    # add proxy
+</span></span><span class="line"><span class="cl">    export hostip=$(ip route | grep default | awk &#39;{print $3}&#39;)
+</span></span><span class="line"><span class="cl">    export socks_hostport=7890
+</span></span><span class="line"><span class="cl">    export http_hostport=7890
+</span></span><span class="line"><span class="cl">    alias proxy=&#39;
+</span></span><span class="line"><span class="cl">        export https_proxy=&#34;http://${hostip}:${http_hostport}&#34;
+</span></span><span class="line"><span class="cl">        export http_proxy=&#34;http://${hostip}:${http_hostport}&#34;
+</span></span><span class="line"><span class="cl">        export ALL_PROXY=&#34;socks5://${hostip}:${socks_hostport}&#34;
+</span></span><span class="line"><span class="cl">        export all_proxy=&#34;socks5://${hostip}:${socks_hostport}&#34;
+</span></span><span class="line"><span class="cl">    &#39;
+</span></span><span class="line"><span class="cl">    alias unproxy=&#39;
+</span></span><span class="line"><span class="cl">        unset ALL_PROXY
+</span></span><span class="line"><span class="cl">        unset https_proxy
+</span></span><span class="line"><span class="cl">        unset http_proxy
+</span></span><span class="line"><span class="cl">        unset all_proxy
+</span></span><span class="line"><span class="cl">    &#39;
+</span></span><span class="line"><span class="cl">    alias echoproxy=&#39;
+</span></span><span class="line"><span class="cl">        echo $ALL_PROXY
+</span></span><span class="line"><span class="cl">        echo $all_proxy
+</span></span><span class="line"><span class="cl">        echo $https_proxy
+</span></span><span class="line"><span class="cl">        echo $http_proxy
+</span></span><span class="line"><span class="cl">    &#39;
+</span></span><span class="line"><span class="cl">    #end proxy
+</span></span></code></pre></td></tr></table>
+</div>
+</div>保存并退出后，执行 <code>source ~/.bashrc</code> 使配置生效。
+<ul>
+<li>用法：
+在终端输入 <code>proxy</code> 启动代理，<code>unproxy</code> 关闭代理, <code>echoproxy</code> 查看代理相关信息。</li>
+<li>测试：
+启动代理后执行 <code>wget google.com</code>,如果能获取到 google.com 页面即为成功。</li>
+</ul>
+</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/linux/">Linux</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2024 Lazarus
+    </section>
+    
+    <section class="powerby">
+        
+            Long may the sun shine! <br/>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<style>
+    @font-face {
+      font-family: '霞鹜文楷';
+      src: url(https://example.com/font/LXGWWenKai-Regular.ttf) format('truetype');
+    }
+  
+    :root {
+      --base-font-family: '霞鹜文楷';
+      --code-font-family: '霞鹜文楷';
+    }
+  </style>
+  
+    </body>
+</html>
