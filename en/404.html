@@ -152,24 +152,19 @@
         <h1 class="article-title">Not Found</h1>
         <h2 class="article-subtitle">This page does not exist</h2>
     </div><footer class="site-footer">
+    
+    <section class="running-time">
+        本博客已稳定运行 <span id="runningdays" class="running-days"></span>
+    </section>
     <section class="copyright">
         &copy; 
         
         2024 Lazarus
     </section>
-    
     <section class="powerby">
-        
-            Long may the sun shine! <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
         Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
-    
-    <section class="running-time">
-    本博客已稳定运行
-    <span id="runningdays" class="running-days"></span>
-    </section>
-    
 </footer>
 
 
@@ -203,5 +198,20 @@
     }
   </style>
   
+  
+<script>
+  let s1 = '2024-12-19'; 
+  s1 = new Date(s1.replace(/-/g, "/"));
+  let s2 = new Date();
+  let timeDifference = s2.getTime() - s1.getTime();
+
+  let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  let hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+  let result = days + "天" + hours + "小时" + minutes + "分钟";
+  document.getElementById('runningdays').innerHTML = result;
+</script>
+
     </body>
 </html>
