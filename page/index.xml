@@ -7,7 +7,19 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lazarus</copyright>
-        <lastBuildDate>Sat, 21 Dec 2024 18:41:23 +0800</lastBuildDate><atom:link href="https://example.com/page/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 21 Dec 2024 20:10:48 +0800</lastBuildDate><atom:link href="https://example.com/page/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>About</title>
+        <link>https://example.com/about/</link>
+        <pubDate>Sat, 21 Dec 2024 00:00:00 +0000</pubDate>
+        
+        <guid>https://example.com/about/</guid>
+        <description>&lt;p&gt;这个人很懒，还没想好说啥。&lt;br&gt;
+写代码的，是个不会写 C++ 的 C++ 程序员。&lt;br&gt;
+做游戏的，但是打游戏挺菜的。&lt;br&gt;
+总之，不想做渲染的客户端不是好引擎。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Archives</title>
         <link>https://example.com/archives/</link>
         <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
@@ -30,15 +42,6 @@
         
         <guid>https://example.com/search/</guid>
         <description></description>
-        </item>
-        <item>
-        <title>关于</title>
-        <link>https://example.com/%E5%85%B3%E4%BA%8E/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://example.com/%E5%85%B3%E4%BA%8E/</guid>
-        <description>&lt;p&gt;This is a test page for i18n support.&lt;/p&gt;
-</description>
         </item>
         
     </channel>

@@ -14,6 +14,14 @@
         <guid>https://example.com/categories/linux/</guid>
         <description></description>
         </item>
+        <item>
+        <title>Minecraft</title>
+        <link>https://example.com/categories/minecraft/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://example.com/categories/minecraft/</guid>
+        <description></description>
+        </item>
         
     </channel>
 </rss>

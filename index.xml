@@ -7,6 +7,18 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lazarus</copyright><atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>About</title>
+        <link>https://example.com/about/</link>
+        <pubDate>Sat, 21 Dec 2024 00:00:00 +0000</pubDate>
+        
+        <guid>https://example.com/about/</guid>
+        <description>&lt;p&gt;这个人很懒，还没想好说啥。&lt;br&gt;
+写代码的，是个不会写 C++ 的 C++ 程序员。&lt;br&gt;
+做游戏的，但是打游戏挺菜的。&lt;br&gt;
+总之，不想做渲染的客户端不是好引擎。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Archives</title>
         <link>https://example.com/archives/</link>
         <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
@@ -36,7 +48,7 @@
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://example.com/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/</guid>
-        <description>&lt;p&gt;&lt;em&gt;update on 7/22/2023&lt;/em&gt;&lt;/p&gt;
+        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/tinify.png" alt="Featured image of post 搭建个人 MC 服务器指北" /&gt;&lt;p&gt;&lt;em&gt;update on 7/22/2023&lt;/em&gt;&lt;/p&gt;
 &lt;h2 id=&#34;what-do-you-need&#34;&gt;&lt;strong&gt;What do you need&lt;/strong&gt;
 &lt;/h2&gt;&lt;p&gt;搭建一个 Java Edition Minecraft 服务器所需的东西并不多:&lt;/p&gt;
 &lt;ul&gt;
@@ -384,15 +396,6 @@
 &lt;li&gt;测试：
 启动代理后执行 &lt;code&gt;wget google.com&lt;/code&gt;,如果能获取到 google.com 页面即为成功。&lt;/li&gt;
 &lt;/ul&gt;
-</description>
-        </item>
-        <item>
-        <title>关于</title>
-        <link>https://example.com/%E5%85%B3%E4%BA%8E/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://example.com/%E5%85%B3%E4%BA%8E/</guid>
-        <description>&lt;p&gt;This is a test page for i18n support.&lt;/p&gt;
 </description>
         </item>
         
