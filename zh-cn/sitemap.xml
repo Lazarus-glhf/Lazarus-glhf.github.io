@@ -6,7 +6,7 @@
     <lastmod>2024-12-19T20:50:08+08:00</lastmod>
   </url><url>
     <loc>https://example.com/page/</loc>
-    <lastmod>2024-12-19T20:50:08+08:00</lastmod>
+    <lastmod>2024-12-21T18:41:23+08:00</lastmod>
   </url><url>
     <loc>https://example.com/</loc>
     <lastmod>2024-12-19T20:50:08+08:00</lastmod>
@@ -22,7 +22,7 @@
                 />
   </url><url>
     <loc>https://example.com/categories/</loc>
-    <lastmod>2024-12-20T19:03:47+08:00</lastmod>
+    <lastmod>2024-12-21T19:43:28+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -35,22 +35,22 @@
                 />
   </url><url>
     <loc>https://example.com/links/</loc>
-    <lastmod>2024-12-19T20:50:08+08:00</lastmod>
+    <lastmod>2024-12-21T18:41:23+08:00</lastmod>
   </url><url>
     <loc>https://example.com/tags/linux/</loc>
-    <lastmod>2024-12-20T19:03:47+08:00</lastmod>
+    <lastmod>2024-12-21T19:43:28+08:00</lastmod>
   </url><url>
     <loc>https://example.com/categories/linux/</loc>
-    <lastmod>2024-12-20T19:03:47+08:00</lastmod>
+    <lastmod>2024-12-21T19:43:28+08:00</lastmod>
   </url><url>
     <loc>https://example.com/post/</loc>
-    <lastmod>2024-12-20T19:03:47+08:00</lastmod>
+    <lastmod>2024-12-21T19:43:28+08:00</lastmod>
   </url><url>
     <loc>https://example.com/search/</loc>
     <lastmod>2024-12-19T20:50:08+08:00</lastmod>
   </url><url>
     <loc>https://example.com/tags/</loc>
-    <lastmod>2024-12-20T19:03:47+08:00</lastmod>
+    <lastmod>2024-12-21T19:43:28+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -62,11 +62,8 @@
                 href="https://example.com/tags/"
                 />
   </url><url>
-    <loc>https://example.com/categories/test/</loc>
-    <lastmod>2024-12-19T20:50:08+08:00</lastmod>
-  </url><url>
     <loc>https://example.com/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/</loc>
-    <lastmod>2024-12-20T19:03:47+08:00</lastmod>
+    <lastmod>2024-12-21T19:43:28+08:00</lastmod>
   </url><url>
     <loc>https://example.com/%E5%85%B3%E4%BA%8E/</loc>
     <lastmod>2024-12-19T20:50:08+08:00</lastmod>
