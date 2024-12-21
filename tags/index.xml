@@ -6,10 +6,11 @@
         <description>Recent content in Tags on Lazarus&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <copyright>Lazarus</copyright><atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <copyright>Lazarus</copyright>
+        <lastBuildDate>Sat, 21 Dec 2024 20:16:27 +0800</lastBuildDate><atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Linux</title>
         <link>https://example.com/tags/linux/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        <pubDate>Sat, 22 Jul 2023 00:00:00 +0000</pubDate>
         
         <guid>https://example.com/tags/linux/</guid>
         <description></description>
@@ -17,7 +18,7 @@
         <item>
         <title>Minecraft</title>
         <link>https://example.com/tags/minecraft/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        <pubDate>Sat, 22 Jul 2023 00:00:00 +0000</pubDate>
         
         <guid>https://example.com/tags/minecraft/</guid>
         <description></description>
