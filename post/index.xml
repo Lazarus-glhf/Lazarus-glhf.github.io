@@ -7,10 +7,10 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lazarus</copyright>
-        <lastBuildDate>Mon, 23 Dec 2024 03:01:44 +0800</lastBuildDate><atom:link href="https://example.com/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 26 Dec 2024 01:37:22 +0800</lastBuildDate><atom:link href="https://example.com/post/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>CMake 学习记录</title>
         <link>https://example.com/p/cmake-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</link>
-        <pubDate>Sun, 22 Dec 2024 00:00:00 +0000</pubDate>
+        <pubDate>Mon, 23 Dec 2024 00:00:00 +0000</pubDate>
         
         <guid>https://example.com/p/cmake-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</guid>
         <description>&lt;img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/keyborad.jpg" alt="Featured image of post CMake 学习记录" /&gt;&lt;h2 id=&#34;前言絮絮叨叨&#34;&gt;前言絮絮叨叨
@@ -323,6 +323,175 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;然后就可以在代码里调用了。&lt;/p&gt;
+&lt;p&gt;如果需要指定 C++ 标准的话，可以在 CMakeLists 里加上这两个指令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-cmake&#34; data-lang=&#34;cmake&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cmake_minimum_required&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;VERSION&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;3.15&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;# set the project name and version
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;project&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;PROJECT_NAME&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;VERSION&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;1.0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;# specify the C++ standard
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;set&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;CMAKE_CXX_STANDARD&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;11&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;set&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;CMAKE_CXX_STANDARD_REQUIRED&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;添加库&#34;&gt;添加库
+&lt;/h2&gt;&lt;p&gt;库自己的 CMakeLists 里要加上这句&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-cmake&#34; data-lang=&#34;cmake&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;# MathFunctions/CMakeLists.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;add_library&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;MathFunctions&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;mysqrt.cpp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;顶级 CMakeLists 里面要也要加上指定子目录的指令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-cmake&#34; data-lang=&#34;cmake&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;# add the MathFunctions library
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;add_subdirectory&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;MathFunctions&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;# add the executable
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;add_executable&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;PROJECT_NAME&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;tutorial.cpp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;target_link_libraries&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;PROJECT_NAME&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;PUBLIC&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;MathFunctions&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;# add the binary tree to the search path for include files
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;# so that we will find TutorialConfig.h
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;target_include_directories&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;PROJECT_NAME&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;PUBLIC&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                           &lt;span class=&#34;o&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;PROJECT_BINARY_DIR&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                           &lt;span class=&#34;o&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;PROJECT_SOURCE_DIR&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;/MathFunctions&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                           &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h3 id=&#34;add_library-语法&#34;&gt;add_library() 语法：
+&lt;/h3&gt;&lt;p&gt;这个指令用于定义一个库目标。库可以是静态库、共享库或模块库。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-cmake&#34; data-lang=&#34;cmake&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;add_library&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;lt;name&amp;gt;&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;[STATIC&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;SHARED&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;MODULE]&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;[EXCLUDE_FROM_ALL]&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;lt;source_files...&amp;gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;name&amp;gt;&lt;/code&gt;：库的名字。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;[STATIC | SHARED | MODULE]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;：指定库的类型：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;STATIC&lt;/strong&gt;：静态库（如 &lt;code&gt;.a&lt;/code&gt; 或 &lt;code&gt;.lib&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SHARED&lt;/strong&gt;：动态库（如 &lt;code&gt;.so&lt;/code&gt; 或 &lt;code&gt;.dll&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;MODULE&lt;/strong&gt;：非链接的动态库（通常用于插件系统）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;[EXCLUDE_FROM_ALL]&lt;/code&gt;：如果指定，库不会默认参与 &lt;code&gt;all&lt;/code&gt; 目标的构建。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;source_files...&amp;gt;&lt;/code&gt;：库的源码文件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-cmake&#34; data-lang=&#34;cmake&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;add_library&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;MyLib&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;STATIC&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;mylib.cpp&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;mylib.h&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这会创建一个名为 &lt;code&gt;MyLib&lt;/code&gt; 的静态库。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;add_subdirectory-语法&#34;&gt;add_subdirectory() 语法
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;引入子目录&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;它会加载指定子目录中的 &lt;code&gt;CMakeLists.txt&lt;/code&gt; 文件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;子目录可以定义自己的目标（例如库或可执行文件）或设置构建选项。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;共享作用域&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;子目录中的变量、目标、设置等会影响主目录，反之亦然（除非特别限定作用域）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;支持递归调用&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;子目录可以进一步包含其他子目录，从而实现递归组织项目。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;target_link_libraries-语法&#34;&gt;target_link_libraries() 语法
+&lt;/h3&gt;&lt;p&gt;这个指令用于将库链接到目标（库或可执行文件）。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-cmake&#34; data-lang=&#34;cmake&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;target_link_libraries&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;lt;target&amp;gt;&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;[PRIVATE&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;PUBLIC&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;INTERFACE]&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;lt;libraries...&amp;gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;target&amp;gt;&lt;/code&gt;：要链接库的目标名字（之前通过 &lt;code&gt;add_library&lt;/code&gt; 或 &lt;code&gt;add_executable&lt;/code&gt; 定义）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[PRIVATE | PUBLIC | INTERFACE]&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;PRIVATE&lt;/strong&gt;：链接库仅对当前目标可见，其他目标无法继承。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;PUBLIC&lt;/strong&gt;：当前目标和依赖此目标的其他目标都可以访问该库。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;INTERFACE&lt;/strong&gt;：仅依赖此目标的其他目标可以访问该库，当前目标自身不会链接。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;libraries...&amp;gt;&lt;/code&gt;：需要链接的库，可以是目标名称（如 &lt;code&gt;MyLib&lt;/code&gt;）、系统库（如 &lt;code&gt;pthread&lt;/code&gt;）或文件路径。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-cmake&#34; data-lang=&#34;cmake&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;target_link_libraries&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;MyApp&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;PRIVATE&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;MyLib&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;pthread&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这会将静态库 &lt;code&gt;MyLib&lt;/code&gt; 和系统库 &lt;code&gt;pthread&lt;/code&gt; 链接到 &lt;code&gt;MyApp&lt;/code&gt; 可执行文件。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;参考资料&#34;&gt;参考资料
 &lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://zhuanlan.zhihu.com/p/500002865&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
