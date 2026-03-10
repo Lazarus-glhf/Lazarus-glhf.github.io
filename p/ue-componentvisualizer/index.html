@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://example.com/p/ue-componentvisualizer/'>
 
-<link rel="stylesheet" href="/scss/style.min.cbcf1c52e41a74e28f7822156862b09772de6251748301350cac3f0bf8fe80fd.css"><meta property='og:title' content="UE ComponentVisualizer">
+<link rel="stylesheet" href="/scss/style.min.700aca6d9c71d3deda6de2a16785b140373e61e93a5228eb8293f506d147df76.css"><meta property='og:title' content="UE ComponentVisualizer">
 <meta property='og:description' content="利用 ComponentVisualizer 可视化在编辑器视口内画出相机脚本的运行轨迹。">
 <meta property='og:url' content='https://example.com/p/ue-componentvisualizer/'>
 <meta property='og:site_name' content='Lazarus&#39;s Blog'>
@@ -61,7 +61,7 @@
                     
                     
                         
-                        <img src="/img/avatar_hu8863448416065604028.jpg" width="300"
+                        <img src="/img/avatar_hu_c996843da127fdcb.jpg" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -415,12 +415,12 @@
 </span></span><span class="line"><span class="cl"> <span class="err">{</span>
 </span></span><span class="line"><span class="cl">  <span class="err">PCHUsage</span> <span class="err">=</span> <span class="err">PCHUsageMode.UseExplicitOrSharedPCHs;</span>
 </span></span><span class="line"><span class="cl">  <span class="c1">// ComponentViz needed for the objects we&#39;re visualizing
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="err">PublicDependencyModuleNames.AddRange(new</span> <span class="err">string[]</span> <span class="err">{</span>  <span class="nt">&#34;Core&#34;</span><span class="p">,</span> <span class="nt">&#34;Engine&#34;</span><span class="p">,</span> 
+</span></span></span><span class="line"><span class="cl">  <span class="err">PublicDependencyModuleNames.AddRange(new</span> <span class="err">string[]</span> <span class="err">{</span>  <span class="nt">&#34;Core&#34;</span><span class="p">,</span> <span class="nt">&#34;Engine&#34;</span><span class="p">,</span> 
 </span></span><span class="line"><span class="cl">  <span class="nt">&#34;CoreUObject&#34;</span><span class="p">,</span> <span class="nt">&#34;UnluaTest&#34;</span> <span class="p">}</span><span class="err">);</span>
 </span></span><span class="line"><span class="cl">        
 </span></span><span class="line"><span class="cl">  <span class="c1">// Needed for our editor logic
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// 这里加入 UnrealEd 模块
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="err">PrivateDependencyModuleNames.AddRange(new</span> <span class="err">string</span><span class="p">[]</span> <span class="p">{</span> <span class="nt">&#34;UnrealEd&#34;</span> <span class="p">}</span><span class="err">);</span>	
+</span></span></span><span class="line"><span class="cl">  <span class="c1">// 这里加入 UnrealEd 模块
+</span></span></span><span class="line"><span class="cl">  <span class="err">PrivateDependencyModuleNames.AddRange(new</span> <span class="err">string</span><span class="p">[]</span> <span class="p">{</span> <span class="nt">&#34;UnrealEd&#34;</span> <span class="p">}</span><span class="err">);</span>	
 </span></span><span class="line"><span class="cl"> <span class="err">}</span>
 </span></span><span class="line"><span class="cl"><span class="err">}</span>
 </span></span></code></pre></td></tr></table>
@@ -467,9 +467,9 @@
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;UnrealEd.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;LineVisualizer.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;UnLuaTest/LineDraw.h&#34;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// Actually registers the module
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">IMPLEMENT_GAME_MODULE</span><span class="p">(</span><span class="n">FUnLuaTestEditorModule</span><span class="p">,</span> <span class="n">UnLuaTestEditor</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="n">IMPLEMENT_GAME_MODULE</span><span class="p">(</span><span class="n">FUnLuaTestEditorModule</span><span class="p">,</span> <span class="n">UnLuaTestEditor</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">FUnLuaTestEditorModule</span><span class="o">::</span><span class="n">StartupModule</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
@@ -480,7 +480,7 @@
 </span></span><span class="line"><span class="cl">  <span class="n">TSharedPtr</span><span class="o">&lt;</span><span class="n">FComponentVisualizer</span><span class="o">&gt;</span> <span class="n">Viz</span> <span class="o">=</span> <span class="n">MakeShareable</span><span class="p">(</span><span class="k">new</span> <span class="n">LineVisualizer</span><span class="p">());</span>	
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"> <span class="c1">// ULineDraw 为 自定义 ActorComponent, 这里对其注册 ComponentVisualizer
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">GUnrealEd</span><span class="o">-&gt;</span><span class="n">RegisterComponentVisualizer</span><span class="p">(</span><span class="n">ULineDraw</span><span class="o">::</span><span class="n">StaticClass</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetFName</span><span class="p">(),</span> 
+</span></span></span><span class="line"><span class="cl">  <span class="n">GUnrealEd</span><span class="o">-&gt;</span><span class="n">RegisterComponentVisualizer</span><span class="p">(</span><span class="n">ULineDraw</span><span class="o">::</span><span class="n">StaticClass</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetFName</span><span class="p">(),</span> 
 </span></span><span class="line"><span class="cl">  <span class="n">Viz</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">  <span class="n">Viz</span><span class="o">-&gt;</span><span class="n">OnRegister</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"> <span class="p">}</span>
@@ -630,15 +630,15 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="p">.</span><span class="n">h</span>
 </span></span><span class="line"><span class="cl"><span class="c1">// Fill out your copyright notice in the Description page of Project Settings.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cp">#pragma once
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;CoreMinimal.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;PointActor.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;Components/ActorComponent.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;Curves/CurveVector.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;LineDraw.generated.h&#34;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">UCLASS</span><span class="p">(</span> <span class="n">ClassGroup</span><span class="o">=</span><span class="p">(</span><span class="n">Custom</span><span class="p">),</span> <span class="n">meta</span><span class="o">=</span><span class="p">(</span><span class="n">BlueprintSpawnableComponent</span><span class="p">)</span> <span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">UNLUATEST_API</span> <span class="nl">ULineDraw</span> <span class="p">:</span> <span class="k">public</span> <span class="n">UActorComponent</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
@@ -646,15 +646,15 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>	
 </span></span><span class="line"><span class="cl"> <span class="c1">// Sets default values for this component&#39;s properties
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="n">ULineDraw</span><span class="p">();</span>
+</span></span></span><span class="line"><span class="cl"> <span class="n">ULineDraw</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">protected</span><span class="o">:</span>
 </span></span><span class="line"><span class="cl"> <span class="c1">// Called when the game starts
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="k">virtual</span> <span class="kt">void</span> <span class="n">BeginPlay</span><span class="p">()</span> <span class="k">override</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl"> <span class="k">virtual</span> <span class="kt">void</span> <span class="n">BeginPlay</span><span class="p">()</span> <span class="k">override</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>	
 </span></span><span class="line"><span class="cl"> <span class="c1">// Called every frame
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="k">virtual</span> <span class="kt">void</span> <span class="n">TickComponent</span><span class="p">(</span><span class="kt">float</span> <span class="n">DeltaTime</span><span class="p">,</span> <span class="n">ELevelTick</span> <span class="n">TickType</span><span class="p">,</span> <span class="n">FActorComponentTickFunction</span><span class="o">*</span> <span class="n">ThisTickFunction</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl"> <span class="k">virtual</span> <span class="kt">void</span> <span class="n">TickComponent</span><span class="p">(</span><span class="kt">float</span> <span class="n">DeltaTime</span><span class="p">,</span> <span class="n">ELevelTick</span> <span class="n">TickType</span><span class="p">,</span> <span class="n">FActorComponentTickFunction</span><span class="o">*</span> <span class="n">ThisTickFunction</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/** Spawn Actor 的种类 */</span>
 </span></span><span class="line"><span class="cl"> <span class="n">UPROPERTY</span><span class="p">()</span>
@@ -689,38 +689,38 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">////////////////////////////////////////////////////////////
 </span></span></span><span class="line"><span class="cl"><span class="c1">////////////////////////////////////////////////////////////
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">cpp</span>
 </span></span><span class="line"><span class="cl">    
 </span></span><span class="line"><span class="cl"><span class="c1">// Fill out your copyright notice in the Description page of Project Settings.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;LineDraw.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;GetMeshSizeInterface.h&#34;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// Sets default values for this component&#39;s properties
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">ULineDraw</span><span class="o">::</span><span class="n">ULineDraw</span><span class="p">()</span>
+</span></span></span><span class="line"><span class="cl"><span class="n">ULineDraw</span><span class="o">::</span><span class="n">ULineDraw</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl"> <span class="c1">// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="c1">// off to improve performance if you don&#39;t need them.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="n">PrimaryComponentTick</span><span class="p">.</span><span class="n">bCanEverTick</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl"> <span class="c1">// off to improve performance if you don&#39;t need them.
+</span></span></span><span class="line"><span class="cl"> <span class="n">PrimaryComponentTick</span><span class="p">.</span><span class="n">bCanEverTick</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"> <span class="n">bDrawFromActor</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"> <span class="c1">// ...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// Called when the game starts
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="n">ULineDraw</span><span class="o">::</span><span class="n">BeginPlay</span><span class="p">()</span>
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">ULineDraw</span><span class="o">::</span><span class="n">BeginPlay</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl"> <span class="n">Super</span><span class="o">::</span><span class="n">BeginPlay</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"> <span class="c1">// ...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// Called every frame
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="n">ULineDraw</span><span class="o">::</span><span class="n">TickComponent</span><span class="p">(</span><span class="kt">float</span> <span class="n">DeltaTime</span><span class="p">,</span> <span class="n">ELevelTick</span> <span class="n">TickType</span><span class="p">,</span> 
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">ULineDraw</span><span class="o">::</span><span class="n">TickComponent</span><span class="p">(</span><span class="kt">float</span> <span class="n">DeltaTime</span><span class="p">,</span> <span class="n">ELevelTick</span> <span class="n">TickType</span><span class="p">,</span> 
 </span></span><span class="line"><span class="cl"><span class="n">FActorComponentTickFunction</span><span class="o">*</span> <span class="n">ThisTickFunction</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl"> <span class="n">Super</span><span class="o">::</span><span class="n">TickComponent</span><span class="p">(</span><span class="n">DeltaTime</span><span class="p">,</span> <span class="n">TickType</span><span class="p">,</span> <span class="n">ThisTickFunction</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"> <span class="c1">// ...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">ULineDraw</span><span class="o">::</span><span class="n">AddPoints</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
@@ -776,12 +776,12 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// Fill out your copyright notice in the Description page of Project Settings.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cp">#pragma once
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;CoreMinimal.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;ComponentVisualizer.h&#34;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cm">/**
 </span></span></span><span class="line"><span class="cl"><span class="cm"> * 
@@ -852,20 +852,20 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// Fill out your copyright notice in the Description page of Project Settings.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;LineVisualizer.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;SceneManagement.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;UnLuaTest/LineDraw.h&#34;</span><span class="cp">
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">LineVisualizer</span><span class="o">::</span><span class="n">DrawVisualization</span><span class="p">(</span><span class="k">const</span> <span class="n">UActorComponent</span><span class="o">*</span> <span class="n">Component</span><span class="p">,</span> 
 </span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">FSceneView</span><span class="o">*</span> <span class="n">View</span><span class="p">,</span> <span class="n">FPrimitiveDrawInterface</span><span class="o">*</span> <span class="n">PDI</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl"> <span class="c1">// UE_LOG(LogTemp, Warning, TEXT(&#34;Drawing&#34;));
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="k">const</span> <span class="n">ULineDraw</span><span class="o">*</span> <span class="n">LineDrawer</span> <span class="o">=</span> <span class="n">Cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ULineDraw</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Component</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"> <span class="k">const</span> <span class="n">ULineDraw</span><span class="o">*</span> <span class="n">LineDrawer</span> <span class="o">=</span> <span class="n">Cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ULineDraw</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Component</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl"> <span class="c1">// 获取组件所在 Actor 的坐标
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="n">FVector</span> <span class="n">ActorLocation</span><span class="o">=</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">GetOwner</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetTargetLocation</span><span class="p">();</span>
+</span></span></span><span class="line"><span class="cl"> <span class="n">FVector</span> <span class="n">ActorLocation</span><span class="o">=</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">GetOwner</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetTargetLocation</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl"> <span class="k">if</span> <span class="p">(</span><span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">Points</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"> <span class="p">{</span>
@@ -874,7 +874,7 @@
 </span></span><span class="line"><span class="cl">  <span class="n">UCurveVector</span><span class="o">*</span> <span class="n">Curve</span> <span class="o">=</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">Points</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1">// 将 PointActor 点的信息写入到 Curve 里面
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">PointActors</span><span class="p">.</span><span class="n">Num</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">PointActors</span><span class="p">.</span><span class="n">Num</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">{</span>
 </span></span><span class="line"><span class="cl">   <span class="n">APointActor</span><span class="o">*</span> <span class="n">Point</span> <span class="o">=</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">PointActors</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">   <span class="n">FVector</span> <span class="n">Val</span> <span class="o">=</span> <span class="n">Point</span><span class="o">-&gt;</span><span class="n">GetActorLocation</span><span class="p">()</span> <span class="o">-</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">GetOwner</span><span class="p">()</span><span class="o">-&gt;</span>
@@ -1043,7 +1043,9 @@
     <section class="copyright">
         &copy; 
         
-        2024 Lazarus
+            2024 - 
+        
+        2026 Lazarus
     </section>
     <section class="powerby">
         使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
