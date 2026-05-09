@@ -5,7 +5,7 @@
         <link>https://example.com/categories/unreal-engine/</link>
         <description>Recent content in Unreal Engine on Lazarus&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
-        <language>zh-cn</language>
+        <language>en-us</language>
         <copyright>Lazarus</copyright>
         <lastBuildDate>Sat, 21 Dec 2024 20:33:51 +0800</lastBuildDate><atom:link href="https://example.com/categories/unreal-engine/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>UE ComponentVisualizer</title>
