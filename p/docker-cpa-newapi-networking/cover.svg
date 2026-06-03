@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#181825"/>
+      <stop offset="100%" stop-color="#1e1e2e"/>
+    </linearGradient>
+    <radialGradient id="glowBlue" cx="22%" cy="50%" r="45%">
+      <stop offset="0%" stop-color="#89dceb" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#89dceb" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowGreen" cx="78%" cy="52%" r="40%">
+      <stop offset="0%" stop-color="#a6e3a1" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#a6e3a1" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cardGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#313244"/>
+      <stop offset="100%" stop-color="#1e1e2e"/>
+    </linearGradient>
+    <linearGradient id="netCardGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e1e2e"/>
+      <stop offset="100%" stop-color="#181825"/>
+    </linearGradient>
+    <linearGradient id="arrowGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#89dceb"/>
+      <stop offset="100%" stop-color="#a6e3a1"/>
+    </linearGradient>
+    <linearGradient id="accentLine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#89dceb" stop-opacity="0"/>
+      <stop offset="30%" stop-color="#89dceb"/>
+      <stop offset="60%" stop-color="#cba6f7"/>
+      <stop offset="90%" stop-color="#a6e3a1"/>
+      <stop offset="100%" stop-color="#a6e3a1" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="24"/>
+    </filter>
+    <clipPath id="canvas">
+      <rect width="800" height="400"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#canvas)">
+    <rect width="800" height="400" fill="url(#bg)"/>
+
+    <pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#cba6f7" opacity="0.12"/>
+    </pattern>
+    <rect width="800" height="400" fill="url(#dots)"/>
+
+    <ellipse cx="160" cy="200" rx="270" ry="220" fill="url(#glowBlue)" filter="url(#blur)"/>
+    <ellipse cx="640" cy="200" rx="240" ry="200" fill="url(#glowGreen)" filter="url(#blur)"/>
+
+    <!-- ── Left card: New API ── -->
+    <!-- Card body -->
+    <rect x="28" y="88" width="218" height="220" rx="12" fill="url(#cardGrad)" stroke="#45475a" stroke-width="1"/>
+    <!-- Top accent line clipped to card top corners -->
+    <path d="M 40,88 h 194 a 12,12 0 0 1 12,12 v 0 h -218 v 0 a 12,12 0 0 1 12,-12 Z" fill="#89dceb" opacity="0.9" stroke="none"/>
+    <rect x="28" y="88" width="218" height="1.5" fill="#89dceb" opacity="0" />
+    <!-- Titlebar: only top corners rounded, via path -->
+    <path d="M 40,88 h 194 a 12,12 0 0 1 12,12 v 22 h -218 v -22 a 12,12 0 0 1 12,-12 Z" fill="#313244"/>
+    <!-- Traffic lights -->
+    <circle cx="50" cy="105" r="5" fill="#f38ba8"/>
+    <circle cx="65" cy="105" r="5" fill="#f9e2af"/>
+    <circle cx="80" cy="105" r="5" fill="#a6e3a1"/>
+    <text x="137" y="109" text-anchor="middle" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#6c7086">new-api  :3000</text>
+    <line x1="28" y1="122" x2="246" y2="122" stroke="#45475a" stroke-width="0.8"/>
+    <!-- Card content -->
+    <text x="44" y="142" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#7f849c">渠道配置</text>
+    <text x="44" y="160" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#585b70">base_url:</text>
+    <text x="44" y="178" font-family="ui-monospace,'SF Mono',monospace" font-size="11" fill="#f38ba8">localhost:8317</text>
+    <text x="44" y="193" font-family="ui-monospace,'SF Mono',monospace" font-size="9" fill="#585b70">  ↑ ❌  指向容器自身</text>
+    <line x1="44" y1="203" x2="230" y2="203" stroke="#45475a" stroke-width="0.7" stroke-dasharray="3,2"/>
+    <text x="44" y="217" font-family="ui-monospace,'SF Mono',monospace" font-size="9" fill="#6c7086"># 方案一  共享网络</text>
+    <text x="44" y="233" font-family="ui-monospace,'SF Mono',monospace" font-size="11" fill="#a6e3a1">cli-proxy-api:8317</text>
+    <line x1="44" y1="243" x2="230" y2="243" stroke="#45475a" stroke-width="0.7" stroke-dasharray="3,2"/>
+    <text x="44" y="257" font-family="ui-monospace,'SF Mono',monospace" font-size="9" fill="#6c7086"># 方案二  宿主机映射</text>
+    <text x="44" y="273" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#a6e3a1">host.docker.internal:8317</text>
+    <rect x="44" y="283" width="6" height="12" rx="1" fill="#89dceb" opacity="0.9"/>
+
+    <!-- ── Center: network badge ── -->
+    <rect x="274" y="155" width="148" height="88" rx="10" fill="url(#netCardGrad)" stroke="#45475a" stroke-width="1"/>
+    <rect x="274" y="155" width="148" height="1.5" rx="1" fill="url(#arrowGrad)" opacity="0.8"/>
+    <text x="348" y="178" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" font-weight="600" fill="#6c7086" letter-spacing="1.2">DOCKER NETWORK</text>
+    <text x="348" y="200" text-anchor="middle" font-family="ui-monospace,'SF Mono',monospace" font-size="14" fill="#cba6f7">shared-net</text>
+    <text x="348" y="220" text-anchor="middle" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#585b70">172.x.0.0/16</text>
+    <text x="348" y="236" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#45475a">DNS 自动解析容器名</text>
+
+    <!-- Arrows -->
+    <line x1="248" y1="198" x2="272" y2="198" stroke="url(#arrowGrad)" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <polygon points="272,194 280,198 272,202" fill="#89dceb"/>
+    <line x1="424" y1="198" x2="448" y2="198" stroke="url(#arrowGrad)" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <polygon points="448,194 456,198 448,202" fill="#a6e3a1"/>
+
+    <!-- ── Right card: CPA ── -->
+    <!-- Card body -->
+    <rect x="458" y="88" width="218" height="220" rx="12" fill="url(#cardGrad)" stroke="#45475a" stroke-width="1"/>
+    <!-- Titlebar: only top corners rounded -->
+    <path d="M 470,88 h 194 a 12,12 0 0 1 12,12 v 22 h -218 v -22 a 12,12 0 0 1 12,-12 Z" fill="#313244"/>
+    <!-- Traffic lights -->
+    <circle cx="480" cy="105" r="5" fill="#f38ba8"/>
+    <circle cx="495" cy="105" r="5" fill="#f9e2af"/>
+    <circle cx="510" cy="105" r="5" fill="#a6e3a1"/>
+    <text x="567" y="109" text-anchor="middle" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#6c7086">cli-proxy-api  :8317</text>
+    <line x1="458" y1="122" x2="676" y2="122" stroke="#45475a" stroke-width="0.8"/>
+    <!-- Card content -->
+    <text x="474" y="142" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#7f849c">config.yaml</text>
+    <text x="474" y="160" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#585b70">host:</text>
+    <text x="516" y="160" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#f9e2af">""</text>
+    <text x="474" y="178" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#585b70">port:</text>
+    <text x="516" y="178" font-family="ui-monospace,'SF Mono',monospace" font-size="11" fill="#89dceb">8317</text>
+    <text x="474" y="196" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#585b70">api-keys:</text>
+    <text x="474" y="214" font-family="ui-monospace,'SF Mono',monospace" font-size="11" fill="#cba6f7">  - "sk-xxx..."</text>
+    <line x1="474" y1="224" x2="660" y2="224" stroke="#45475a" stroke-width="0.7" stroke-dasharray="3,2"/>
+    <text x="474" y="240" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#585b70">shared-net IP:</text>
+    <text x="474" y="258" font-family="ui-monospace,'SF Mono',monospace" font-size="11" fill="#a6e3a1">172.21.0.2</text>
+    <text x="474" y="276" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#585b70">ports: 8317:8317</text>
+    <rect x="474" y="286" width="6" height="12" rx="1" fill="#a6e3a1" opacity="0.9"/>
+
+    <!-- ── Top badge ── -->
+    <rect x="294" y="32" width="116" height="22" rx="4" fill="#cba6f7" fill-opacity="0.1" stroke="#cba6f7" stroke-opacity="0.35" stroke-width="1"/>
+    <text x="352" y="47" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" font-weight="600" fill="#cba6f7" letter-spacing="0.8">🐳 DOCKER DEPLOY</text>
+
+    <!-- ── Bottom tags ── -->
+    <rect x="28" y="330" width="70" height="22" rx="3" fill="#89dceb" fill-opacity="0.1" stroke="#89dceb" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="63" y="345" text-anchor="middle" font-family="ui-monospace,'SF Mono',monospace" font-size="11" fill="#89dceb">New API</text>
+
+    <rect x="106" y="330" width="86" height="22" rx="3" fill="#a6e3a1" fill-opacity="0.1" stroke="#a6e3a1" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="149" y="345" text-anchor="middle" font-family="ui-monospace,'SF Mono',monospace" font-size="11" fill="#a6e3a1">CLIProxyAPI</text>
+
+    <rect x="200" y="330" width="80" height="22" rx="3" fill="#cba6f7" fill-opacity="0.1" stroke="#cba6f7" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="240" y="345" text-anchor="middle" font-family="ui-monospace,'SF Mono',monospace" font-size="11" fill="#cba6f7">Networking</text>
+
+    <rect x="288" y="330" width="52" height="22" rx="3" fill="#f9e2af" fill-opacity="0.1" stroke="#f9e2af" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="314" y="345" text-anchor="middle" font-family="ui-monospace,'SF Mono',monospace" font-size="11" fill="#f9e2af">Docker</text>
+
+    <!-- ── Bottom-right tip ── -->
+    <rect x="490" y="322" width="282" height="56" rx="8" fill="#181825" stroke="#45475a" stroke-width="1"/>
+    <rect x="490" y="322" width="282" height="1.5" rx="1" fill="#cba6f7" opacity="0.45"/>
+    <text x="506" y="340" font-family="ui-monospace,'SF Mono',monospace" font-size="9" fill="#6c7086"># 方案一</text>
+    <text x="543" y="340" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#a6e3a1">cli-proxy-api:8317</text>
+    <text x="506" y="358" font-family="ui-monospace,'SF Mono',monospace" font-size="9" fill="#6c7086"># 方案二</text>
+    <text x="543" y="358" font-family="ui-monospace,'SF Mono',monospace" font-size="10" fill="#a6e3a1">host.docker.internal:8317</text>
+    <text x="506" y="370" font-family="ui-monospace,'SF Mono',monospace" font-size="9" fill="#45475a">  └ Docker Desktop / Linux extra_hosts</text>
+
+    <!-- ── Bottom accent ── -->
+    <rect x="0" y="397" width="800" height="3" fill="url(#accentLine)"/>
+  </g>
+</svg>
