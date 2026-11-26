@@ -2,105 +2,105 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Tags on Lazarus&#39;s Blog</title>
-        <link>https://example.com/tags/</link>
+        <link>https://lazarus-glhf.github.io/tags/</link>
         <description>Recent content in Tags on Lazarus&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>Lazarus</copyright>
-        <lastBuildDate>Wed, 03 Jun 2026 15:59:39 +0800</lastBuildDate><atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 03 Jun 2026 15:59:39 +0800</lastBuildDate><atom:link href="https://lazarus-glhf.github.io/tags/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>CLIProxyAPI</title>
-        <link>https://example.com/tags/cliproxyapi/</link>
+        <link>https://lazarus-glhf.github.io/tags/cliproxyapi/</link>
         <pubDate>Wed, 03 Jun 2026 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/tags/cliproxyapi/</guid>
+        <guid>https://lazarus-glhf.github.io/tags/cliproxyapi/</guid>
         <description></description>
         </item>
         <item>
         <title>Docker</title>
-        <link>https://example.com/tags/docker/</link>
+        <link>https://lazarus-glhf.github.io/tags/docker/</link>
         <pubDate>Wed, 03 Jun 2026 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/tags/docker/</guid>
+        <guid>https://lazarus-glhf.github.io/tags/docker/</guid>
         <description></description>
         </item>
         <item>
         <title>New API</title>
-        <link>https://example.com/tags/new-api/</link>
+        <link>https://lazarus-glhf.github.io/tags/new-api/</link>
         <pubDate>Wed, 03 Jun 2026 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/tags/new-api/</guid>
+        <guid>https://lazarus-glhf.github.io/tags/new-api/</guid>
         <description></description>
         </item>
         <item>
         <title>运维</title>
-        <link>https://example.com/tags/%E8%BF%90%E7%BB%B4/</link>
+        <link>https://lazarus-glhf.github.io/tags/%E8%BF%90%E7%BB%B4/</link>
         <pubDate>Wed, 03 Jun 2026 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/tags/%E8%BF%90%E7%BB%B4/</guid>
+        <guid>https://lazarus-glhf.github.io/tags/%E8%BF%90%E7%BB%B4/</guid>
         <description></description>
         </item>
         <item>
         <title>Obsidian</title>
-        <link>https://example.com/tags/obsidian/</link>
+        <link>https://lazarus-glhf.github.io/tags/obsidian/</link>
         <pubDate>Fri, 08 May 2026 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/tags/obsidian/</guid>
+        <guid>https://lazarus-glhf.github.io/tags/obsidian/</guid>
         <description></description>
         </item>
         <item>
         <title>OpenCode</title>
-        <link>https://example.com/tags/opencode/</link>
+        <link>https://lazarus-glhf.github.io/tags/opencode/</link>
         <pubDate>Fri, 08 May 2026 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/tags/opencode/</guid>
+        <guid>https://lazarus-glhf.github.io/tags/opencode/</guid>
         <description></description>
         </item>
         <item>
         <title>WSL</title>
-        <link>https://example.com/tags/wsl/</link>
+        <link>https://lazarus-glhf.github.io/tags/wsl/</link>
         <pubDate>Fri, 08 May 2026 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/tags/wsl/</guid>
+        <guid>https://lazarus-glhf.github.io/tags/wsl/</guid>
         <description></description>
         </item>
         <item>
         <title>工具配置</title>
-        <link>https://example.com/tags/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/</link>
+        <link>https://lazarus-glhf.github.io/tags/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/</link>
         <pubDate>Fri, 08 May 2026 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/tags/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/</guid>
+        <guid>https://lazarus-glhf.github.io/tags/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/</guid>
         <description></description>
         </item>
         <item>
         <title>C&#43;&#43;</title>
-        <link>https://example.com/tags/c&#43;&#43;/</link>
+        <link>https://lazarus-glhf.github.io/tags/c&#43;&#43;/</link>
         <pubDate>Mon, 23 Dec 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/tags/c&#43;&#43;/</guid>
+        <guid>https://lazarus-glhf.github.io/tags/c&#43;&#43;/</guid>
         <description></description>
         </item>
         <item>
         <title>Linux</title>
-        <link>https://example.com/tags/linux/</link>
+        <link>https://lazarus-glhf.github.io/tags/linux/</link>
         <pubDate>Sat, 22 Jul 2023 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/tags/linux/</guid>
+        <guid>https://lazarus-glhf.github.io/tags/linux/</guid>
         <description></description>
         </item>
         <item>
         <title>Minecraft</title>
-        <link>https://example.com/tags/minecraft/</link>
+        <link>https://lazarus-glhf.github.io/tags/minecraft/</link>
         <pubDate>Sat, 22 Jul 2023 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/tags/minecraft/</guid>
+        <guid>https://lazarus-glhf.github.io/tags/minecraft/</guid>
         <description></description>
         </item>
         <item>
         <title>Urneal Engine</title>
-        <link>https://example.com/tags/urneal-engine/</link>
+        <link>https://lazarus-glhf.github.io/tags/urneal-engine/</link>
         <pubDate>Tue, 24 Aug 2021 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/tags/urneal-engine/</guid>
+        <guid>https://lazarus-glhf.github.io/tags/urneal-engine/</guid>
         <description></description>
         </item>
         

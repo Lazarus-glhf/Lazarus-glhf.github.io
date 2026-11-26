@@ -2,49 +2,49 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Categories on Lazarus&#39;s Blog</title>
-        <link>https://example.com/categories/</link>
+        <link>https://lazarus-glhf.github.io/categories/</link>
         <description>Recent content in Categories on Lazarus&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>Lazarus</copyright>
-        <lastBuildDate>Wed, 03 Jun 2026 15:59:39 +0800</lastBuildDate><atom:link href="https://example.com/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 03 Jun 2026 15:59:39 +0800</lastBuildDate><atom:link href="https://lazarus-glhf.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>工具配置</title>
-        <link>https://example.com/categories/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/</link>
+        <link>https://lazarus-glhf.github.io/categories/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/</link>
         <pubDate>Wed, 03 Jun 2026 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/categories/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/</guid>
+        <guid>https://lazarus-glhf.github.io/categories/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/</guid>
         <description></description>
         </item>
         <item>
         <title>C&#43;&#43;</title>
-        <link>https://example.com/categories/c&#43;&#43;/</link>
+        <link>https://lazarus-glhf.github.io/categories/c&#43;&#43;/</link>
         <pubDate>Mon, 23 Dec 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/categories/c&#43;&#43;/</guid>
+        <guid>https://lazarus-glhf.github.io/categories/c&#43;&#43;/</guid>
         <description></description>
         </item>
         <item>
         <title>Linux</title>
-        <link>https://example.com/categories/linux/</link>
+        <link>https://lazarus-glhf.github.io/categories/linux/</link>
         <pubDate>Sat, 22 Jul 2023 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/categories/linux/</guid>
+        <guid>https://lazarus-glhf.github.io/categories/linux/</guid>
         <description></description>
         </item>
         <item>
         <title>Minecraft</title>
-        <link>https://example.com/categories/minecraft/</link>
+        <link>https://lazarus-glhf.github.io/categories/minecraft/</link>
         <pubDate>Sat, 22 Jul 2023 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/categories/minecraft/</guid>
+        <guid>https://lazarus-glhf.github.io/categories/minecraft/</guid>
         <description></description>
         </item>
         <item>
         <title>Unreal Engine</title>
-        <link>https://example.com/categories/unreal-engine/</link>
+        <link>https://lazarus-glhf.github.io/categories/unreal-engine/</link>
         <pubDate>Tue, 24 Aug 2021 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/categories/unreal-engine/</guid>
+        <guid>https://lazarus-glhf.github.io/categories/unreal-engine/</guid>
         <description></description>
         </item>
         

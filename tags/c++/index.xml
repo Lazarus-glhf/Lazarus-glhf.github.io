@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>C&#43;&#43; on Lazarus&#39;s Blog</title>
-        <link>https://example.com/tags/c&#43;&#43;/</link>
+        <link>https://lazarus-glhf.github.io/tags/c&#43;&#43;/</link>
         <description>Recent content in C&#43;&#43; on Lazarus&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>Lazarus</copyright>
-        <lastBuildDate>Thu, 26 Dec 2024 01:37:22 +0800</lastBuildDate><atom:link href="https://example.com/tags/c++/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 26 Dec 2024 01:37:22 +0800</lastBuildDate><atom:link href="https://lazarus-glhf.github.io/tags/c++/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>CMake 学习记录</title>
-        <link>https://example.com/p/cmake-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</link>
+        <link>https://lazarus-glhf.github.io/p/cmake-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</link>
         <pubDate>Mon, 23 Dec 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/p/cmake-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</guid>
+        <guid>https://lazarus-glhf.github.io/p/cmake-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</guid>
         <description>&lt;img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/keyborad.jpg" alt="Featured image of post CMake 学习记录" /&gt;&lt;h2 id=&#34;前言絮絮叨叨&#34;&gt;前言絮絮叨叨
 &lt;/h2&gt;&lt;p&gt;CMake 目前对我而言最大的意义就是告诉我，如果一个东西如果你不用，那最好挑中午的时候学，因为早晚要忘。这次重新倒腾博客，想了想决定把 CMake 作为第一篇文章，希望以后学了的东西都能用上（笑。&lt;/p&gt;
 &lt;hr&gt;

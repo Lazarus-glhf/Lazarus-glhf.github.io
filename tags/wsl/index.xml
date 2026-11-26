@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>WSL on Lazarus&#39;s Blog</title>
-        <link>https://example.com/tags/wsl/</link>
+        <link>https://lazarus-glhf.github.io/tags/wsl/</link>
         <description>Recent content in WSL on Lazarus&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>Lazarus</copyright>
-        <lastBuildDate>Sat, 09 May 2026 10:28:32 +0800</lastBuildDate><atom:link href="https://example.com/tags/wsl/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 09 May 2026 10:28:32 +0800</lastBuildDate><atom:link href="https://lazarus-glhf.github.io/tags/wsl/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>WSL &#43; OpenCode &#43; Obsidian CLI 配置指南</title>
-        <link>https://example.com/p/wsl--opencode--obsidian-cli-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</link>
+        <link>https://lazarus-glhf.github.io/p/wsl--opencode--obsidian-cli-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</link>
         <pubDate>Fri, 08 May 2026 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/p/wsl--opencode--obsidian-cli-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</guid>
-        <description>&lt;img src="https://example.com/p/wsl--opencode--obsidian-cli-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/cover.svg" alt="Featured image of post WSL &#43; OpenCode &#43; Obsidian CLI 配置指南" /&gt;&lt;p&gt;在 WSL 环境下运行 OpenCode（配置了 oh-my-openagent），访问 Windows 下运行的 Obsidian 及其 CLI，需要解决两个独立问题：&lt;strong&gt;CLI 命令不可用&lt;/strong&gt;和 &lt;strong&gt;Skills 无法加载&lt;/strong&gt;。&lt;/p&gt;
+        <guid>https://lazarus-glhf.github.io/p/wsl--opencode--obsidian-cli-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</guid>
+        <description>&lt;img src="https://lazarus-glhf.github.io/p/wsl--opencode--obsidian-cli-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/cover.svg" alt="Featured image of post WSL &#43; OpenCode &#43; Obsidian CLI 配置指南" /&gt;&lt;p&gt;在 WSL 环境下运行 OpenCode（配置了 oh-my-openagent），访问 Windows 下运行的 Obsidian 及其 CLI，需要解决两个独立问题：&lt;strong&gt;CLI 命令不可用&lt;/strong&gt;和 &lt;strong&gt;Skills 无法加载&lt;/strong&gt;。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;问题一wsl-中-obsidian-cli-命令不可用&#34;&gt;问题一：WSL 中 obsidian CLI 命令不可用
 &lt;/h2&gt;&lt;h3 id=&#34;原因&#34;&gt;原因

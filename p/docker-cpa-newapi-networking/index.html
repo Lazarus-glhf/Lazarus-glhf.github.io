@@ -4,16 +4,26 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="在 Docker 环境下分别部署 CLIProxyAPI 和 New API，通过 Docker 网络实现容器间互通，将 CLIProxyAPI 作为 New API 的上游渠道。">
 <title>使用 Docker 部署 CLIProxyAPI 与 New API 并配置互联</title>
 
-<link rel='canonical' href='https://example.com/p/docker-cpa-newapi-networking/'>
+<link rel='canonical' href='https://lazarus-glhf.github.io/p/docker-cpa-newapi-networking/'>
 
-<link rel="stylesheet" href="/scss/style.min.700aca6d9c71d3deda6de2a16785b140373e61e93a5228eb8293f506d147df76.css"><meta property='og:title' content="使用 Docker 部署 CLIProxyAPI 与 New API 并配置互联">
+<link rel="stylesheet" href="/scss/style.min.b945122de52718c953879b08d09ffae300ff40fa253fff622d0ca50e8d8b8d76.css"><meta property='og:title' content="使用 Docker 部署 CLIProxyAPI 与 New API 并配置互联">
 <meta property='og:description' content="在 Docker 环境下分别部署 CLIProxyAPI 和 New API，通过 Docker 网络实现容器间互通，将 CLIProxyAPI 作为 New API 的上游渠道。">
-<meta property='og:url' content='https://example.com/p/docker-cpa-newapi-networking/'>
+<meta property='og:url' content='https://lazarus-glhf.github.io/p/docker-cpa-newapi-networking/'>
 <meta property='og:site_name' content='Lazarus&#39;s Blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Docker' /><meta property='article:tag' content='CLIProxyAPI' /><meta property='article:tag' content='New API' /><meta property='article:tag' content='运维' /><meta property='article:published_time' content='2026-06-03T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-06-03T15:59:39&#43;08:00'/><meta property='og:image' content='https://example.com/p/docker-cpa-newapi-networking/cover.svg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Docker' /><meta property='article:tag' content='CLIProxyAPI' /><meta property='article:tag' content='New API' /><meta property='article:tag' content='运维' /><meta property='article:published_time' content='2026-06-03T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-06-03T15:59:39&#43;08:00'/><meta property='og:image' content='https://lazarus-glhf.github.io/p/docker-cpa-newapi-networking/cover.svg' />
 <meta name="twitter:title" content="使用 Docker 部署 CLIProxyAPI 与 New API 并配置互联">
 <meta name="twitter:description" content="在 Docker 环境下分别部署 CLIProxyAPI 和 New API，通过 Docker 网络实现容器间互通，将 CLIProxyAPI 作为 New API 的上游渠道。"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://example.com/p/docker-cpa-newapi-networking/cover.svg' />
+    <meta name="twitter:image" content='https://lazarus-glhf.github.io/p/docker-cpa-newapi-networking/cover.svg' />
+<style>
+    @font-face {
+        font-family: '霞鹜文楷';
+        src: url(/font/LXGWWenKai-Regular.ttf) format('truetype');
+        font-display: swap;
+    }
+</style>
+
+
+
 <script defer src="https://cloud.umami.is/script.js" data-website-id="89c9cc18-3cbe-43d9-89a0-bfd85e1b4fd3"></script>
 
 
@@ -45,7 +55,7 @@
     })();
 </script>
 <div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-controls="main-menu" aria-expanded="false" aria-label="切换菜单">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
         </span>
@@ -217,8 +227,9 @@
             <ol class="menu">
 
                 
-                    <li id="dark-mode-toggle">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <li>
+                        <button type="button" id="dark-mode-toggle" aria-pressed="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="8" cy="12" r="2" />
   <rect x="2" y="6" width="20" height="12" rx="6" />
@@ -226,7 +237,7 @@
 
 
 
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="16" cy="12" r="2" />
   <rect x="2" y="6" width="20" height="12" rx="6" />
@@ -234,7 +245,8 @@
 
 
 
-                        <span>暗色模式</span>
+                            <span>暗色模式</span>
+                        </button>
                     </li>
                 
             </ol>
@@ -395,6 +407,36 @@
     
 </div>
 </header>
+
+    
+        <details class="mobile-toc">
+            <summary>目录</summary>
+            <nav id="mobile-table-of-contents">
+  <ol>
+    <li><a href="#前置知识docker-容器的网络隔离">前置知识：Docker 容器的网络隔离</a></li>
+    <li><a href="#部署-cliproxyapi">部署 CLIProxyAPI</a></li>
+    <li><a href="#部署-new-api">部署 New API</a></li>
+    <li><a href="#方案一共享-docker-网络推荐">方案一：共享 Docker 网络（推荐）</a>
+      <ol>
+        <li><a href="#创建共享网络">创建共享网络</a></li>
+        <li><a href="#将两个容器加入同一网络">将两个容器加入同一网络</a></li>
+        <li><a href="#验证连通性">验证连通性</a></li>
+      </ol>
+    </li>
+    <li><a href="#在-new-api-中添加-cpa-渠道">在 New API 中添加 CPA 渠道</a></li>
+    <li><a href="#方案二经由宿主机端口映射访问不配置共享网络">方案二：经由宿主机端口映射访问（不配置共享网络）</a>
+      <ol>
+        <li><a href="#docker-desktopwindows--macos">Docker Desktop（Windows / macOS）</a></li>
+        <li><a href="#linux-原生-docker">Linux 原生 Docker</a></li>
+        <li><a href="#注意事项">注意事项</a></li>
+      </ol>
+    </li>
+    <li><a href="#持久化网络配置可选">持久化网络配置（可选）</a></li>
+    <li><a href="#常用命令">常用命令</a></li>
+  </ol>
+</nav>
+        </details>
+    
 
     <section class="article-content">
     
@@ -914,7 +956,7 @@
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.dc4a13d42ee437c02d44b49a92b724e0b20012883073b50ce12b72f0743684cd.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.de8ed22de9e9054d6edd078d9dda42f59ff6c65530449be92aafc7348e3dec8e.js" defer></script>
 <script>
     (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
   
@@ -922,29 +964,7 @@
       "pluginKey": "6916cfa7-b953-4dbd-a21f-ff71e9e1b515"
     });
 </script>
-<script>
-    (function () {
-        const customFont = document.createElement('link');
-        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
 
-        customFont.type = "text/css";
-        customFont.rel = "stylesheet";
-
-        document.head.appendChild(customFont);
-    }());
-</script>
-<style>
-    @font-face {
-      font-family: '霞鹜文楷';
-      src: url(https://example.com/font/LXGWWenKai-Regular.ttf) format('truetype');
-    }
-  
-    :root {
-      --base-font-family: '霞鹜文楷';
-      --code-font-family: '霞鹜文楷';
-    }
-  </style>
-  
   
 <script>
   let s1 = '2024-12-19'; 

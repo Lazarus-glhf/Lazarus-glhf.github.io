@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>New API on Lazarus&#39;s Blog</title>
-        <link>https://example.com/tags/new-api/</link>
+        <link>https://lazarus-glhf.github.io/tags/new-api/</link>
         <description>Recent content in New API on Lazarus&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>Lazarus</copyright>
-        <lastBuildDate>Wed, 03 Jun 2026 15:59:39 +0800</lastBuildDate><atom:link href="https://example.com/tags/new-api/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 03 Jun 2026 15:59:39 +0800</lastBuildDate><atom:link href="https://lazarus-glhf.github.io/tags/new-api/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>使用 Docker 部署 CLIProxyAPI 与 New API 并配置互联</title>
-        <link>https://example.com/p/docker-cpa-newapi-networking/</link>
+        <link>https://lazarus-glhf.github.io/p/docker-cpa-newapi-networking/</link>
         <pubDate>Wed, 03 Jun 2026 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/p/docker-cpa-newapi-networking/</guid>
-        <description>&lt;img src="https://example.com/p/docker-cpa-newapi-networking/cover.svg" alt="Featured image of post 使用 Docker 部署 CLIProxyAPI 与 New API 并配置互联" /&gt;&lt;p&gt;本文介绍如何在 Docker 中分别部署 CLIProxyAPI（CPA）与 New API，并通过 Docker 网络将二者互联，使 New API 可以将 CPA 作为上游 API 渠道使用。&lt;/p&gt;
+        <guid>https://lazarus-glhf.github.io/p/docker-cpa-newapi-networking/</guid>
+        <description>&lt;img src="https://lazarus-glhf.github.io/p/docker-cpa-newapi-networking/cover.svg" alt="Featured image of post 使用 Docker 部署 CLIProxyAPI 与 New API 并配置互联" /&gt;&lt;p&gt;本文介绍如何在 Docker 中分别部署 CLIProxyAPI（CPA）与 New API，并通过 Docker 网络将二者互联，使 New API 可以将 CPA 作为上游 API 渠道使用。&lt;/p&gt;
 &lt;h2 id=&#34;前置知识docker-容器的网络隔离&#34;&gt;前置知识：Docker 容器的网络隔离
 &lt;/h2&gt;&lt;p&gt;Docker 中每个容器拥有独立的网络命名空间。容器内的 &lt;code&gt;localhost&lt;/code&gt; 指向容器自身，而非宿主机或其他容器。&lt;/p&gt;
 &lt;p&gt;因此，即使 CPA 在宿主机上通过 &lt;code&gt;http://localhost:8317&lt;/code&gt; 可以访问，New API 容器内同样的地址也只会指向 New API 容器本身。&lt;strong&gt;容器间通信必须通过 Docker 网络，使用容器 IP 或容器名作为地址。&lt;/strong&gt;&lt;/p&gt;

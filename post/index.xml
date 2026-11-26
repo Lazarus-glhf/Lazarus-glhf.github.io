@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Posts on Lazarus&#39;s Blog</title>
-        <link>https://example.com/post/</link>
+        <link>https://lazarus-glhf.github.io/post/</link>
         <description>Recent content in Posts on Lazarus&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>Lazarus</copyright>
-        <lastBuildDate>Wed, 03 Jun 2026 15:59:39 +0800</lastBuildDate><atom:link href="https://example.com/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 03 Jun 2026 15:59:39 +0800</lastBuildDate><atom:link href="https://lazarus-glhf.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>使用 Docker 部署 CLIProxyAPI 与 New API 并配置互联</title>
-        <link>https://example.com/p/docker-cpa-newapi-networking/</link>
+        <link>https://lazarus-glhf.github.io/p/docker-cpa-newapi-networking/</link>
         <pubDate>Wed, 03 Jun 2026 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/p/docker-cpa-newapi-networking/</guid>
-        <description>&lt;img src="https://example.com/p/docker-cpa-newapi-networking/cover.svg" alt="Featured image of post 使用 Docker 部署 CLIProxyAPI 与 New API 并配置互联" /&gt;&lt;p&gt;本文介绍如何在 Docker 中分别部署 CLIProxyAPI（CPA）与 New API，并通过 Docker 网络将二者互联，使 New API 可以将 CPA 作为上游 API 渠道使用。&lt;/p&gt;
+        <guid>https://lazarus-glhf.github.io/p/docker-cpa-newapi-networking/</guid>
+        <description>&lt;img src="https://lazarus-glhf.github.io/p/docker-cpa-newapi-networking/cover.svg" alt="Featured image of post 使用 Docker 部署 CLIProxyAPI 与 New API 并配置互联" /&gt;&lt;p&gt;本文介绍如何在 Docker 中分别部署 CLIProxyAPI（CPA）与 New API，并通过 Docker 网络将二者互联，使 New API 可以将 CPA 作为上游 API 渠道使用。&lt;/p&gt;
 &lt;h2 id=&#34;前置知识docker-容器的网络隔离&#34;&gt;前置知识：Docker 容器的网络隔离
 &lt;/h2&gt;&lt;p&gt;Docker 中每个容器拥有独立的网络命名空间。容器内的 &lt;code&gt;localhost&lt;/code&gt; 指向容器自身，而非宿主机或其他容器。&lt;/p&gt;
 &lt;p&gt;因此，即使 CPA 在宿主机上通过 &lt;code&gt;http://localhost:8317&lt;/code&gt; 可以访问，New API 容器内同样的地址也只会指向 New API 容器本身。&lt;strong&gt;容器间通信必须通过 Docker 网络，使用容器 IP 或容器名作为地址。&lt;/strong&gt;&lt;/p&gt;
@@ -300,11 +300,11 @@
         </item>
         <item>
         <title>WSL &#43; OpenCode &#43; Obsidian CLI 配置指南</title>
-        <link>https://example.com/p/wsl--opencode--obsidian-cli-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</link>
+        <link>https://lazarus-glhf.github.io/p/wsl--opencode--obsidian-cli-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</link>
         <pubDate>Fri, 08 May 2026 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/p/wsl--opencode--obsidian-cli-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</guid>
-        <description>&lt;img src="https://example.com/p/wsl--opencode--obsidian-cli-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/cover.svg" alt="Featured image of post WSL &#43; OpenCode &#43; Obsidian CLI 配置指南" /&gt;&lt;p&gt;在 WSL 环境下运行 OpenCode（配置了 oh-my-openagent），访问 Windows 下运行的 Obsidian 及其 CLI，需要解决两个独立问题：&lt;strong&gt;CLI 命令不可用&lt;/strong&gt;和 &lt;strong&gt;Skills 无法加载&lt;/strong&gt;。&lt;/p&gt;
+        <guid>https://lazarus-glhf.github.io/p/wsl--opencode--obsidian-cli-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/</guid>
+        <description>&lt;img src="https://lazarus-glhf.github.io/p/wsl--opencode--obsidian-cli-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/cover.svg" alt="Featured image of post WSL &#43; OpenCode &#43; Obsidian CLI 配置指南" /&gt;&lt;p&gt;在 WSL 环境下运行 OpenCode（配置了 oh-my-openagent），访问 Windows 下运行的 Obsidian 及其 CLI，需要解决两个独立问题：&lt;strong&gt;CLI 命令不可用&lt;/strong&gt;和 &lt;strong&gt;Skills 无法加载&lt;/strong&gt;。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;问题一wsl-中-obsidian-cli-命令不可用&#34;&gt;问题一：WSL 中 obsidian CLI 命令不可用
 &lt;/h2&gt;&lt;h3 id=&#34;原因&#34;&gt;原因
@@ -501,10 +501,10 @@
         </item>
         <item>
         <title>CMake 学习记录</title>
-        <link>https://example.com/p/cmake-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</link>
+        <link>https://lazarus-glhf.github.io/p/cmake-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</link>
         <pubDate>Mon, 23 Dec 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/p/cmake-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</guid>
+        <guid>https://lazarus-glhf.github.io/p/cmake-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</guid>
         <description>&lt;img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/keyborad.jpg" alt="Featured image of post CMake 学习记录" /&gt;&lt;h2 id=&#34;前言絮絮叨叨&#34;&gt;前言絮絮叨叨
 &lt;/h2&gt;&lt;p&gt;CMake 目前对我而言最大的意义就是告诉我，如果一个东西如果你不用，那最好挑中午的时候学，因为早晚要忘。这次重新倒腾博客，想了想决定把 CMake 作为第一篇文章，希望以后学了的东西都能用上（笑。&lt;/p&gt;
 &lt;hr&gt;
@@ -994,10 +994,10 @@
         </item>
         <item>
         <title>搭建个人 MC 服务器指北</title>
-        <link>https://example.com/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/</link>
+        <link>https://lazarus-glhf.github.io/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/</link>
         <pubDate>Sat, 22 Jul 2023 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/</guid>
+        <guid>https://lazarus-glhf.github.io/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/</guid>
         <description>&lt;img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/tinify.png" alt="Featured image of post 搭建个人 MC 服务器指北" /&gt;&lt;h2 id=&#34;what-do-you-need&#34;&gt;&lt;strong&gt;What do you need&lt;/strong&gt;
 &lt;/h2&gt;&lt;p&gt;搭建一个 Java Edition Minecraft 服务器所需的东西并不多:&lt;/p&gt;
 &lt;ul&gt;
@@ -1270,10 +1270,10 @@
         </item>
         <item>
         <title>UE ComponentVisualizer</title>
-        <link>https://example.com/p/ue-componentvisualizer/</link>
+        <link>https://lazarus-glhf.github.io/p/ue-componentvisualizer/</link>
         <pubDate>Tue, 24 Aug 2021 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/p/ue-componentvisualizer/</guid>
+        <guid>https://lazarus-glhf.github.io/p/ue-componentvisualizer/</guid>
         <description>&lt;img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/67d0602f4859a873876856fc8f306e7a.png" alt="Featured image of post UE ComponentVisualizer" /&gt;&lt;h2 id=&#34;1-创建一个-module修改-buildcs-和-cpp-文件如下&#34;&gt;1. 创建一个 Module，修改 Build.cs 和 .cpp 文件如下
 &lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
