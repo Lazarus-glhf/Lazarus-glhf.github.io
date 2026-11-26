@@ -1,0 +1,2316 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="以相机节点读取蓝图变量为例，讲解 UPROPERTY 如何生成属性描述，以及如何用 FProperty 查找、校验和读取变量。">
+<title>从&#34;按名字读变量&#34;说起：一步步搞懂 UE 的 FProperty 反射</title>
+
+<link rel='canonical' href='https://lazarus-glhf.github.io/p/ue-fproperty-reflection/'>
+
+<link rel="stylesheet" href="/scss/style.min.b945122de52718c953879b08d09ffae300ff40fa253fff622d0ca50e8d8b8d76.css"><meta property='og:title' content="从\"按名字读变量\"说起：一步步搞懂 UE 的 FProperty 反射">
+<meta property='og:description' content="以相机节点读取蓝图变量为例，讲解 UPROPERTY 如何生成属性描述，以及如何用 FProperty 查找、校验和读取变量。">
+<meta property='og:url' content='https://lazarus-glhf.github.io/p/ue-fproperty-reflection/'>
+<meta property='og:site_name' content='Lazarus&#39;s Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Unreal Engine' /><meta property='article:tag' content='C&#43;&#43;' /><meta property='article:tag' content='UPROPERTY' /><meta property='article:tag' content='FProperty' /><meta property='article:published_time' content='2026-11-26T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-11-26T12:43:23&#43;08:00'/>
+<meta name="twitter:title" content="从\"按名字读变量\"说起：一步步搞懂 UE 的 FProperty 反射">
+<meta name="twitter:description" content="以相机节点读取蓝图变量为例，讲解 UPROPERTY 如何生成属性描述，以及如何用 FProperty 查找、校验和读取变量。">
+<style>
+    @font-face {
+        font-family: '霞鹜文楷';
+        src: url(/font/LXGWWenKai-Regular.ttf) format('truetype');
+        font-display: swap;
+    }
+</style>
+
+
+
+<script defer src="https://cloud.umami.is/script.js" data-website-id="89c9cc18-3cbe-43d9-89a0-bfd85e1b4fd3"></script>
+
+
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-controls="main-menu" aria-expanded="false" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_c996843da127fdcb.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🤨</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Lazarus&#39;s Blog</a></h1>
+            <h2 class="site-description">Do it, then do it right, then do it better.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://space.bilibili.com/3546379821517316'
+                        target="_blank"
+                        title="Bilibili"
+                        rel="me"
+                    >
+                        
+                        
+                            <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1734776558704" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2182" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M983.76013808 897.73514288l-0.03535825-612.89840292 0.03425328-2.19441997c0.07734613-5.83631735 0.20220486-18.79179274-7.33020244-26.4468489-3.29162995-3.32477828-9.13678686-10.46714017-18.41058686-10.46714016H627.63870478l137.07942653-194.80394211c8.17659001-11.79086377 5.22307312-26.39160166-6.57884012-34.56156199-11.79638851-8.16333067-27.98935155-7.61196332-36.15599706 4.18774l-157.54742024 225.17665915H511.95321548c-1.4839406 0-3.0850053 0.70053486-4.90484904-0.26408176L229.30396814 99.25024564c-12.66045518-6.73574226-28.3970761-1.13809293-35.14828757 11.5334117-6.73795214 12.67039967-1.93917777 25.61261572 10.74116639 32.3583025l197.99502212 102.58637109H80.57621569c-17.8713739 0-35.35712211 20.94422482-35.35712212 38.85427178v610.71061261c0 17.90783706 17.48574825 34.50741973 35.35712212 34.50741972h68.80158512c3.4164887 18.09015293 15.11564207 45.18118451 25.5496339 56.02621573 14.5289165 15.11564207 33.72180412 23.12207062 51.32136161 23.12207062h0.03867308c20.13540537 0 41.39232951-8.96994021 56.87149834-25.55294875 9.97764969-10.67818458 21.37183836-35.50518468 25.42919492-53.59644254h412.52001534c3.40764913 18.09125786 15.11564207 45.18339441 25.53968939 56.02732067 14.53886099 15.11564207 33.73064368 23.12207062 51.32246658 23.12207062h0.06740161c20.11551635 0 41.36360094-8.96994021 56.84276978-25.55294875 9.97764969-10.67818458 21.37073342-35.50518468 25.4358246-53.59644254h77.7030188c9.27269504 0 15.11785195-4.96783091 18.41058685-8.29371412 7.53240731-7.64842648 7.40754857-17.92441124 7.33020247-23.7706731zM254.66686639 954.91050099c-9.71135806 10.3864792-21.01936105 11.07375474-28.37055744 11.07375473h-0.00883955c-5.55787132 0-15.20182774-0.89942489-23.26460847-9.27600987-5.53135264-5.7457119-11.66379516-20.12325099-14.35765008-26.90540093h80.13058208c-3.18224043 6.78435982-8.96110066 19.57630342-14.12892654 25.10765607z m571.73037721-0.00110494c-9.712463 10.38868908-21.01936105 11.07375474-28.35950802 11.07375471h-0.02872855c-5.55787132 0-15.19298821-0.89942489-23.26902825-9.27600987-5.52030319-5.7457119-11.65164076-20.12214602-14.33444623-26.9054009h80.11842769c-3.18003054 6.78325487-8.96883529 19.57630342-14.12671664 25.10765606z m115.46560528-66.94417329h-75.48208016c-1.2662665 0-2.59109508-0.40219985-3.93139287-0.40219982-1.3723412 0-2.71263898 0.40219985-4.00873899 0.40219982H743.07668645c-0.92373367 0-1.82536848-0.35468722-2.77783071-0.39115037-1.5612867-0.04640767-3.06732619 0.3911504-4.51369867 0.39115037H81.40271425V287.56374321h860.46013463v600.40037462z" fill="#dbdbdb" p-id="2183"></path><path d="M878.87879702 386.65627951c1.00770946-4.11149883 3.9247632-14.60957746-2.84191748-23.19941674-4.18884496-5.3545615-9.90582829-9.1820896-17.12885111-9.1820896H178.20470037c-12.97646933 0-35.74495767 11.33231179-35.74495767 32.67210673v415.90667055c0 25.07229782 23.71211102 30.83679377 35.74495767 30.83679377h680.704433c6.7291126 0 13.01182754-1.33145824 17.170839-6.3777402 7.15009649-8.67381507 2.83307795-18.25589461 1.7391828-23.81155604-0.12485874-0.72594859-2.66402142-0.86075184-2.66733625-0.86075184v0.10607469-0.10607469l2.23972269-414.56747767 1.48725541-1.41653897z m-45.56349532 404.06718916H191.11376807l0.05524725-400.26617978H833.3153017v400.26617978z" fill="#dbdbdb" p-id="2184"></path><path d="M374.36219961 491.14868l-130.74809401 62.53102458c-9.71798771 4.64518708-13.81180745 16.28025368-9.17766982 25.98608699 3.3424574 7.0020339 10.33123198 11.09585363 17.59071798 11.09585364a19.41387655 19.41387655 0 0 0 8.39978881-1.92039372l130.74588412-62.52881466c9.72019762-4.64850191 13.8228569-16.28246356 9.17656486-25.99161172-4.65181675-9.71467288-16.29572289-13.8526904-25.98719194-9.17214511zM782.75635183 565.1943322l-144.548852-88.51711154c-9.15778082-5.61643337-21.17405329-2.74468237-26.80927074 6.44624675-5.61753832 9.17545992-2.74136754 21.17736812 6.45508634 26.79711634l144.55216685 88.52263628a19.40835181 19.40835181 0 0 0 10.14560127 2.86622627c6.57994507 0 12.97646933-3.30378435 16.65924967-9.31247304 5.61753832-9.1820896 2.73363293-21.18178789-6.45287644-26.80264106zM646.64154193 627.29442835c-10.77762958 0-19.48790783 8.72685241-19.48790783 19.4890128 0 30.35282803-19.50558696 64.15639807-47.47394457 64.15639805-20.05805925 0-38.11727372-25.13196483-44.75467591-47.58885879-1.73034322-5.8694657-2.73031809-11.55993035-2.73031809-16.56753926 0-10.07709471-7.67384022-18.26915394-17.48022351-19.28680793-9.82295745 1.01765398-17.49679768 9.21192309-17.49679764 19.28680793 0 5.84184208-0.74362772 11.78754894-2.09387002 17.60950201-5.7335575 24.48115246-22.79169219 46.54800098-45.38338937 46.54800098-25.29439168 0-47.4772594-39.98131525-47.4772594-64.15639805 0-10.76216036-8.72906232-19.48790783-19.49564243-19.48790784-10.7555307 0-19.48790783 8.72574747-19.48790784 19.48790784 0 41.06084612 34.48200599 103.1388434 86.46191459 103.13884339 28.65342326 0 51.37771381-15.48358861 66.35413287-37.44325751 15.16204973 21.26244884 37.0786258 37.44325751 63.58293182 37.44325751 53.39644758 0 86.45859978-53.5356706 86.45859976-103.13884339 0-10.76216036-8.72022275-19.48901276-19.49564243-19.48901277z" fill="#dbdbdb" p-id="2185"></path></svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/Lazarus-glhf'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li>
+                        <button type="button" id="dark-mode-toggle" aria-pressed="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                            <span>暗色模式</span>
+                        </button>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#目录">目录</a></li>
+    <li><a href="#1-问题从哪里来">1. 问题从哪里来</a></li>
+    <li><a href="#2-c-为什么做不到按名字读成员">2. C++ 为什么做不到&quot;按名字读成员&quot;</a>
+      <ol>
+        <li><a href="#21-编译之后名字就消失了">2.1 编译之后，名字就消失了</a></li>
+        <li><a href="#22-自己动手一个迷你反射">2.2 自己动手：一个迷你反射</a></li>
+        <li><a href="#23-为什么类型信息必不可少">2.3 为什么类型信息必不可少</a></li>
+      </ol>
+    </li>
+    <li><a href="#3-ue-的说明书ustruct-与-fproperty">3. UE 的&quot;说明书&quot;：UStruct 与 FProperty</a></li>
+    <li><a href="#4-表从哪里来c-属性与蓝图变量">4. 表从哪里来：C++ 属性与蓝图变量</a>
+      <ol>
+        <li><a href="#41-c-的-uproperty由-uht-生成">4.1 C++ 的 UPROPERTY：由 UHT 生成</a></li>
+        <li><a href="#42-蓝图变量在蓝图编译时生成">4.2 蓝图变量：在蓝图编译时生成</a></li>
+        <li><a href="#43-fproperty-的创建时机">4.3 FProperty 的创建时机</a></li>
+      </ol>
+    </li>
+    <li><a href="#5-表里的一行fproperty-的类型体系">5. 表里的一行：FProperty 的类型体系</a>
+      <ol>
+        <li><a href="#51-类型--子类">5.1 类型 = 子类</a></li>
+        <li><a href="#52-castfieldfproperty-版的-dynamic_cast">5.2 <code>CastField</code>：FProperty 版的 dynamic_cast</a></li>
+        <li><a href="#53-getpropertyvalue_incontainer为什么必须先-cast">5.3 <code>GetPropertyValue_InContainer</code>：为什么必须先 Cast</a></li>
+        <li><a href="#54-属性标记propertyflags">5.4 属性标记：<code>PropertyFlags</code></a></li>
+      </ol>
+    </li>
+    <li><a href="#6-结构体属性表中有表">6. 结构体属性：表中有表</a>
+      <ol>
+        <li><a href="#61-比较-struct-指针">6.1 比较 <code>Struct</code> 指针</a></li>
+        <li><a href="#62-结构体也是一张表">6.2 结构体也是一张表</a></li>
+        <li><a href="#63-读取containerptrtovalueptr">6.3 读取：<code>ContainerPtrToValuePtr</code></a></li>
+      </ol>
+    </li>
+    <li><a href="#7-container最容易混淆的概念">7. Container：最容易混淆的概念</a>
+      <ol>
+        <li><a href="#71-为什么是这样偏移相对于自己的表">7.1 为什么是这样：偏移相对于&quot;自己的表&quot;</a></li>
+        <li><a href="#72-传错会怎样">7.2 传错会怎样</a></li>
+        <li><a href="#73-记忆规则">7.3 记忆规则</a></li>
+      </ol>
+    </li>
+    <li><a href="#8-运行时查找与缓存设计">8. 运行时：查找与缓存设计</a>
+      <ol>
+        <li><a href="#81-调用链每帧执行">8.1 调用链：每帧执行</a></li>
+        <li><a href="#82-先弄清所有权为什么缓存几乎总能命中">8.2 先弄清所有权：为什么缓存几乎总能命中</a></li>
+        <li><a href="#83-为什么用-getclass-而不是-staticclass">8.3 为什么用 <code>GetClass()</code> 而不是 <code>StaticClass()</code></a></li>
+        <li><a href="#84-一个带缓存的查找实现">8.4 一个带缓存的查找实现</a></li>
+        <li><a href="#85-两种缓存指针的选择">8.5 两种缓存指针的选择</a></li>
+        <li><a href="#86-读取失败时应该怎么办">8.6 读取失败时应该怎么办</a></li>
+        <li><a href="#87-情景推演pie-中删除变量">8.7 情景推演：PIE 中删除变量</a></li>
+      </ol>
+    </li>
+    <li><a href="#9-编辑器侧node-对自己做反射">9. 编辑器侧：Node 对自己做反射</a>
+      <ol>
+        <li><a href="#91-遍历-node-上所有的-ref">9.1 遍历 Node 上所有的 Ref</a></li>
+        <li><a href="#92-getoptions下拉框从哪里来">9.2 <code>GetOptions</code>：下拉框从哪里来</a></li>
+      </ol>
+    </li>
+    <li><a href="#10-变量改名之后guid-找回机制">10. 变量改名之后：Guid 找回机制</a>
+      <ol>
+        <li><a href="#101-问题绑定存的是名字">10.1 问题：绑定存的是名字</a></li>
+        <li><a href="#102-为什么运行时不能直接用-guid">10.2 为什么运行时不能直接用 Guid</a></li>
+        <li><a href="#103-同步流程">10.3 同步流程</a></li>
+        <li><a href="#104-为什么需要两种为准">10.4 为什么需要两种&quot;为准&quot;</a></li>
+        <li><a href="#105-挂到引擎的生命周期钩子上">10.5 挂到引擎的生命周期钩子上</a></li>
+        <li><a href="#106-完整闭环">10.6 完整闭环</a></li>
+      </ol>
+    </li>
+    <li><a href="#11-实战新增一种-vector-ref">11. 实战：新增一种 Vector Ref</a>
+      <ol>
+        <li><a href="#-声明-ref-结构体">① 声明 Ref 结构体</a></li>
+        <li><a href="#-类型判断与读取">② 类型判断与读取</a></li>
+        <li><a href="#-下拉框选项函数">③ 下拉框选项函数</a></li>
+        <li><a href="#-在-node-中使用">④ 在 Node 中使用</a></li>
+        <li><a href="#容易踩的坑编译器都不会提醒你">容易踩的坑：编译器都不会提醒你</a></li>
+        <li><a href="#验证步骤">验证步骤</a></li>
+      </ol>
+    </li>
+    <li><a href="#12-总结">12. 总结</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+        <a href="/categories/unreal-engine/" >
+            Unreal Engine
+        </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/ue-fproperty-reflection/">从&#34;按名字读变量&#34;说起：一步步搞懂 UE 的 FProperty 反射</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            以相机节点读取蓝图变量为例，讲解 UPROPERTY 如何生成属性描述，以及如何用 FProperty 查找、校验和读取变量。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Nov 26, 2026</time>
+        </div>
+        
+
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 30 分钟
+            </time>
+        </div>
+        
+
+        <div class="article-lastmod">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time>
+                Nov 26, 2026 12:43 &#43;0800
+            </time>
+        </div>
+        
+        
+        
+        <div>
+            <?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1734693019775" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1619" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M935.393882 172.092235l-84.510117-84.570353c-34.032941-34.093176-93.665882-34.093176-127.819294 0l-545.551059 545.611294-103.725177 318.524236 316.114824-106.315294 545.430588-545.490824a90.352941 90.352941 0 0 0 0.060235-127.759059zM186.368 800.768l38.851765-119.205647 116.495059 116.555294-118.241883 39.755294-37.104941-37.104941z m75.956706-167.213176l330.87247-330.872471 127.156706 127.096471-330.932706 330.932705-127.09647-127.156705z m373.458823-373.519059l43.91153-43.91153 127.156706 127.096471-43.91153 43.911529-127.156706-127.09647z m257.024-2.770824l-43.369411 43.369412-127.156706-127.096471 43.369412-43.429647a30.840471 30.840471 0 0 1 42.586352 0l84.510118 84.570353a30.117647 30.117647 0 0 1 0.060235 42.586353z" p-id="1620" fill="#8a8a8a"></path></svg>
+            <time class="article-words">
+                14756 字
+            </time>
+        </div>
+        
+    </footer>
+    </footer>
+    
+
+    
+</div>
+</header>
+
+    
+        <details class="mobile-toc">
+            <summary>目录</summary>
+            <nav id="mobile-table-of-contents">
+  <ol>
+    <li><a href="#目录">目录</a></li>
+    <li><a href="#1-问题从哪里来">1. 问题从哪里来</a></li>
+    <li><a href="#2-c-为什么做不到按名字读成员">2. C++ 为什么做不到&quot;按名字读成员&quot;</a>
+      <ol>
+        <li><a href="#21-编译之后名字就消失了">2.1 编译之后，名字就消失了</a></li>
+        <li><a href="#22-自己动手一个迷你反射">2.2 自己动手：一个迷你反射</a></li>
+        <li><a href="#23-为什么类型信息必不可少">2.3 为什么类型信息必不可少</a></li>
+      </ol>
+    </li>
+    <li><a href="#3-ue-的说明书ustruct-与-fproperty">3. UE 的&quot;说明书&quot;：UStruct 与 FProperty</a></li>
+    <li><a href="#4-表从哪里来c-属性与蓝图变量">4. 表从哪里来：C++ 属性与蓝图变量</a>
+      <ol>
+        <li><a href="#41-c-的-uproperty由-uht-生成">4.1 C++ 的 UPROPERTY：由 UHT 生成</a></li>
+        <li><a href="#42-蓝图变量在蓝图编译时生成">4.2 蓝图变量：在蓝图编译时生成</a></li>
+        <li><a href="#43-fproperty-的创建时机">4.3 FProperty 的创建时机</a></li>
+      </ol>
+    </li>
+    <li><a href="#5-表里的一行fproperty-的类型体系">5. 表里的一行：FProperty 的类型体系</a>
+      <ol>
+        <li><a href="#51-类型--子类">5.1 类型 = 子类</a></li>
+        <li><a href="#52-castfieldfproperty-版的-dynamic_cast">5.2 <code>CastField</code>：FProperty 版的 dynamic_cast</a></li>
+        <li><a href="#53-getpropertyvalue_incontainer为什么必须先-cast">5.3 <code>GetPropertyValue_InContainer</code>：为什么必须先 Cast</a></li>
+        <li><a href="#54-属性标记propertyflags">5.4 属性标记：<code>PropertyFlags</code></a></li>
+      </ol>
+    </li>
+    <li><a href="#6-结构体属性表中有表">6. 结构体属性：表中有表</a>
+      <ol>
+        <li><a href="#61-比较-struct-指针">6.1 比较 <code>Struct</code> 指针</a></li>
+        <li><a href="#62-结构体也是一张表">6.2 结构体也是一张表</a></li>
+        <li><a href="#63-读取containerptrtovalueptr">6.3 读取：<code>ContainerPtrToValuePtr</code></a></li>
+      </ol>
+    </li>
+    <li><a href="#7-container最容易混淆的概念">7. Container：最容易混淆的概念</a>
+      <ol>
+        <li><a href="#71-为什么是这样偏移相对于自己的表">7.1 为什么是这样：偏移相对于&quot;自己的表&quot;</a></li>
+        <li><a href="#72-传错会怎样">7.2 传错会怎样</a></li>
+        <li><a href="#73-记忆规则">7.3 记忆规则</a></li>
+      </ol>
+    </li>
+    <li><a href="#8-运行时查找与缓存设计">8. 运行时：查找与缓存设计</a>
+      <ol>
+        <li><a href="#81-调用链每帧执行">8.1 调用链：每帧执行</a></li>
+        <li><a href="#82-先弄清所有权为什么缓存几乎总能命中">8.2 先弄清所有权：为什么缓存几乎总能命中</a></li>
+        <li><a href="#83-为什么用-getclass-而不是-staticclass">8.3 为什么用 <code>GetClass()</code> 而不是 <code>StaticClass()</code></a></li>
+        <li><a href="#84-一个带缓存的查找实现">8.4 一个带缓存的查找实现</a></li>
+        <li><a href="#85-两种缓存指针的选择">8.5 两种缓存指针的选择</a></li>
+        <li><a href="#86-读取失败时应该怎么办">8.6 读取失败时应该怎么办</a></li>
+        <li><a href="#87-情景推演pie-中删除变量">8.7 情景推演：PIE 中删除变量</a></li>
+      </ol>
+    </li>
+    <li><a href="#9-编辑器侧node-对自己做反射">9. 编辑器侧：Node 对自己做反射</a>
+      <ol>
+        <li><a href="#91-遍历-node-上所有的-ref">9.1 遍历 Node 上所有的 Ref</a></li>
+        <li><a href="#92-getoptions下拉框从哪里来">9.2 <code>GetOptions</code>：下拉框从哪里来</a></li>
+      </ol>
+    </li>
+    <li><a href="#10-变量改名之后guid-找回机制">10. 变量改名之后：Guid 找回机制</a>
+      <ol>
+        <li><a href="#101-问题绑定存的是名字">10.1 问题：绑定存的是名字</a></li>
+        <li><a href="#102-为什么运行时不能直接用-guid">10.2 为什么运行时不能直接用 Guid</a></li>
+        <li><a href="#103-同步流程">10.3 同步流程</a></li>
+        <li><a href="#104-为什么需要两种为准">10.4 为什么需要两种&quot;为准&quot;</a></li>
+        <li><a href="#105-挂到引擎的生命周期钩子上">10.5 挂到引擎的生命周期钩子上</a></li>
+        <li><a href="#106-完整闭环">10.6 完整闭环</a></li>
+      </ol>
+    </li>
+    <li><a href="#11-实战新增一种-vector-ref">11. 实战：新增一种 Vector Ref</a>
+      <ol>
+        <li><a href="#-声明-ref-结构体">① 声明 Ref 结构体</a></li>
+        <li><a href="#-类型判断与读取">② 类型判断与读取</a></li>
+        <li><a href="#-下拉框选项函数">③ 下拉框选项函数</a></li>
+        <li><a href="#-在-node-中使用">④ 在 Node 中使用</a></li>
+        <li><a href="#容易踩的坑编译器都不会提醒你">容易踩的坑：编译器都不会提醒你</a></li>
+        <li><a href="#验证步骤">验证步骤</a></li>
+      </ol>
+    </li>
+    <li><a href="#12-总结">12. 总结</a></li>
+  </ol>
+</nav>
+        </details>
+    
+
+    <section class="article-content">
+    
+    
+    <blockquote>
+<p>设想一个场景：C++ 写的节点在运行时按名字读取蓝图里的变量。本文以这个场景为线索，依次讲解 C++ 自身的局限、UE 反射的表结构、FProperty 的类型体系、Container 概念、运行时的缓存设计、编辑器里的下拉框与改名找回，最后落到&quot;如何新增一种可绑定的值类型&quot;。</p>
+</blockquote>
+<blockquote>
+<p>说明：文中的类名、函数名和代码均为示意，用来说明原理，不对应任何具体项目的实现。引擎相关的类型和 API（<code>FProperty</code>、<code>UStruct</code>、<code>CastField</code> 等）均为 UE 的真实接口。</p>
+</blockquote>
+<hr>
+<h2 id="目录">目录
+</h2><ol>
+<li><a class="link" href="#1-%e9%97%ae%e9%a2%98%e4%bb%8e%e5%93%aa%e9%87%8c%e6%9d%a5" >问题从哪里来</a></li>
+<li><a class="link" href="#2-c-%e4%b8%ba%e4%bb%80%e4%b9%88%e5%81%9a%e4%b8%8d%e5%88%b0%e6%8c%89%e5%90%8d%e5%ad%97%e8%af%bb%e6%88%90%e5%91%98" >C++ 为什么做不到&quot;按名字读成员&quot;</a></li>
+<li><a class="link" href="#3-ue-%e7%9a%84%e8%af%b4%e6%98%8e%e4%b9%a6ustruct-%e4%b8%8e-fproperty" >UE 的&quot;说明书&quot;：UStruct 与 FProperty</a></li>
+<li><a class="link" href="#4-%e8%a1%a8%e4%bb%8e%e5%93%aa%e9%87%8c%e6%9d%a5c-%e5%b1%9e%e6%80%a7%e4%b8%8e%e8%93%9d%e5%9b%be%e5%8f%98%e9%87%8f" >表从哪里来：C++ 属性与蓝图变量</a></li>
+<li><a class="link" href="#5-%e8%a1%a8%e9%87%8c%e7%9a%84%e4%b8%80%e8%a1%8cfproperty-%e7%9a%84%e7%b1%bb%e5%9e%8b%e4%bd%93%e7%b3%bb" >表里的一行：FProperty 的类型体系</a></li>
+<li><a class="link" href="#6-%e7%bb%93%e6%9e%84%e4%bd%93%e5%b1%9e%e6%80%a7%e8%a1%a8%e4%b8%ad%e6%9c%89%e8%a1%a8" >结构体属性：表中有表</a></li>
+<li><a class="link" href="#7-container%e6%9c%80%e5%ae%b9%e6%98%93%e6%b7%b7%e6%b7%86%e7%9a%84%e6%a6%82%e5%bf%b5" >Container：最容易混淆的概念</a></li>
+<li><a class="link" href="#8-%e8%bf%90%e8%a1%8c%e6%97%b6%e6%9f%a5%e6%89%be%e4%b8%8e%e7%bc%93%e5%ad%98%e8%ae%be%e8%ae%a1" >运行时：查找与缓存设计</a></li>
+<li><a class="link" href="#9-%e7%bc%96%e8%be%91%e5%99%a8%e4%be%a7node-%e5%af%b9%e8%87%aa%e5%b7%b1%e5%81%9a%e5%8f%8d%e5%b0%84" >编辑器侧：Node 对自己做反射</a></li>
+<li><a class="link" href="#10-%e5%8f%98%e9%87%8f%e6%94%b9%e5%90%8d%e4%b9%8b%e5%90%8eguid-%e6%89%be%e5%9b%9e%e6%9c%ba%e5%88%b6" >变量改名之后：Guid 找回机制</a></li>
+<li><a class="link" href="#11-%e5%ae%9e%e6%88%98%e6%96%b0%e5%a2%9e%e4%b8%80%e7%a7%8d-vector-ref" >实战：新增一种 Vector Ref</a></li>
+<li><a class="link" href="#12-%e6%80%bb%e7%bb%93" >总结</a></li>
+</ol>
+<hr>
+<h2 id="1-问题从哪里来">1. 问题从哪里来
+</h2><p>设想有这样一套数据驱动的相机系统，由两类对象组成：</p>
+<ul>
+<li><strong>Rig</strong>（示意类名 <code>UMyRig</code>）：一个可以被蓝图继承的 UObject。策划在 Rig 蓝图里添加变量，比如 <code>FOV</code>、<code>bAiming</code>，并在蓝图事件里每帧计算这些变量的值。</li>
+<li><strong>Node</strong>（示意类名 <code>UMyNode</code> 及其子类）：用 C++ 写的节点，负责把某个值写进相机参数。比如一个&quot;浮点节点&quot;可以修改 FOV。</li>
+</ul>
+<p>节点上的值不一定是写死的常量，也可以<strong>绑定到 Rig 上的某个变量</strong>。为此，我们设计一个&quot;值引用&quot;结构体：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">UENUM</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="k">enum</span> <span class="k">class</span> <span class="nc">EMyValueSource</span> <span class="o">:</span> <span class="n">uint8</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">None</span><span class="p">,</span>       <span class="c1">// 不修改
+</span></span></span><span class="line"><span class="cl">	<span class="n">Constant</span><span class="p">,</span>   <span class="c1">// 使用常量
+</span></span></span><span class="line"><span class="cl">	<span class="n">Variable</span><span class="p">,</span>   <span class="c1">// 读取 Rig 上的变量
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">USTRUCT</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">FMyFloatRef</span> <span class="o">:</span> <span class="k">public</span> <span class="n">FMyValueRefBase</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">GENERATED_BODY</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">float</span> <span class="n">Constant</span> <span class="o">=</span> <span class="mf">0.f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="p">(</span><span class="n">GetOptions</span> <span class="o">=</span> <span class="s">&#34;GetFloatOptions&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="n">FName</span> <span class="n">BoundName</span><span class="p">;</span>          <span class="c1">// 绑定的变量名
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="kt">bool</span> <span class="nf">TryGet</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">,</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">OutValue</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在编辑器里，策划从一个下拉框中选一个变量名，比如 <code>&quot;FOV&quot;</code>。运行时，节点调用 <code>TryGet</code> 拿到这个变量当前的值。</p>
+<p>这里有一个看起来平常、其实很根本的矛盾：</p>
+<blockquote>
+<p><strong>Node 的 C++ 代码早就编译好了，变量却是策划后来在蓝图里加的。</strong> 写 Node 代码时，既不知道变量叫什么，也不知道它是什么类型，但运行时又必须读到它的值。</p>
+</blockquote>
+<p>UE 用来解决这个矛盾的工具是<strong>反射</strong>（Reflection），其中的核心角色是 <code>FProperty</code>。下面一步步拆开来看。</p>
+<hr>
+<h2 id="2-c-为什么做不到按名字读成员">2. C++ 为什么做不到&quot;按名字读成员&quot;
+</h2><h3 id="21-编译之后名字就消失了">2.1 编译之后，名字就消失了
+</h3><p>在 C++ 里写：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">V</span> <span class="o">=</span> <span class="n">Rig</span><span class="o">-&gt;</span><span class="n">FOV</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>编译器在编译期就把它变成了&quot;地址 + 偏移&quot;，大致相当于：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">V</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="p">)((</span><span class="n">uint8</span><span class="o">*</span><span class="p">)</span><span class="n">Rig</span> <span class="o">+</span> <span class="mh">0x2A8</span><span class="p">);</span>   <span class="c1">// 0x2A8 只是举例
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>最终的机器码里<strong>只剩下数字 <code>0x2A8</code></strong>，字符串 <code>&quot;FOV&quot;</code> 已经不存在了。所以程序运行起来之后，C++ 回答不了这三个问题：</p>
+<ul>
+<li>这个对象有没有一个叫 <code>&quot;FOV&quot;</code> 的成员？</li>
+<li>它是什么类型？</li>
+<li>它的偏移是多少？</li>
+</ul>
+<p>你可能会想到 C++ 的 RTTI，比如 <code>dynamic_cast</code> 和虚函数表。但它们只能回答&quot;这个对象<strong>是不是</strong>某个类&quot;，回答不了&quot;这个类里有哪些成员&quot;。</p>
+<h3 id="22-自己动手一个迷你反射">2.2 自己动手：一个迷你反射
+</h3><p>既然编译器不保留这些信息，那就自己在运行时维护一张表。只用纯 C++ 就能写出一个最小的版本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">enum</span> <span class="k">class</span> <span class="nc">EDemoType</span> <span class="p">{</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">Double</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">FDemoPropInfo</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">Name</span><span class="p">;</span>    <span class="c1">// 名字
+</span></span></span><span class="line"><span class="cl">	<span class="n">EDemoType</span>   <span class="n">Type</span><span class="p">;</span>    <span class="c1">// 类型
+</span></span></span><span class="line"><span class="cl">	<span class="n">size_t</span>      <span class="n">Offset</span><span class="p">;</span>  <span class="c1">// 距对象开头的字节数
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">FDemoRig</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">bool</span>   <span class="n">bAiming</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">double</span> <span class="n">FOV</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 每个类配一张表（UE 里由工具自动生成，这里手写）
+</span></span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="k">const</span> <span class="n">FDemoPropInfo</span> <span class="n">GDemoRigProps</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span> <span class="s">&#34;bAiming&#34;</span><span class="p">,</span> <span class="n">EDemoType</span><span class="o">::</span><span class="n">Bool</span><span class="p">,</span>   <span class="n">offsetof</span><span class="p">(</span><span class="n">FDemoRig</span><span class="p">,</span> <span class="n">bAiming</span><span class="p">)</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span> <span class="s">&#34;FOV&#34;</span><span class="p">,</span>     <span class="n">EDemoType</span><span class="o">::</span><span class="n">Double</span><span class="p">,</span> <span class="n">offsetof</span><span class="p">(</span><span class="n">FDemoRig</span><span class="p">,</span> <span class="n">FOV</span><span class="p">)</span>     <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// ① 按名字查表
+</span></span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">FDemoPropInfo</span><span class="o">*</span> <span class="nf">FindProp</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">Name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="n">FDemoPropInfo</span><span class="o">&amp;</span> <span class="nl">P</span> <span class="p">:</span> <span class="n">GDemoRigProps</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">P</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">Name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="o">&amp;</span><span class="n">P</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// ② 检查类型  ③ 用&#34;地址 + 偏移&#34;读值
+</span></span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="nf">TryGetDouble</span><span class="p">(</span><span class="k">const</span> <span class="n">FDemoRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">Name</span><span class="p">,</span> <span class="kt">double</span><span class="o">&amp;</span> <span class="n">Out</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FDemoPropInfo</span><span class="o">*</span> <span class="n">P</span> <span class="o">=</span> <span class="n">FindProp</span><span class="p">(</span><span class="n">Name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">P</span> <span class="o">||</span> <span class="n">P</span><span class="o">-&gt;</span><span class="n">Type</span> <span class="o">!=</span> <span class="n">EDemoType</span><span class="o">::</span><span class="n">Double</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">Out</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span><span class="o">*</span><span class="p">)((</span><span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">Rig</span> <span class="o">+</span> <span class="n">P</span><span class="o">-&gt;</span><span class="n">Offset</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>反射读取的本质就是这三步。在 UE 里，它们与下面这些 API 一一对应：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>迷你版</th>
+					<th>UE</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>表里的一行 <code>FDemoPropInfo</code></td>
+					<td><code>FProperty</code></td>
+			</tr>
+			<tr>
+					<td>整张表</td>
+					<td><code>UClass</code>（更一般地说是 <code>UStruct</code>）</td>
+			</tr>
+			<tr>
+					<td>① <code>FindProp(Name)</code></td>
+					<td><code>FindFProperty&lt;FProperty&gt;(Class, Name)</code></td>
+			</tr>
+			<tr>
+					<td>② <code>P-&gt;Type == Double</code></td>
+					<td><code>CastField&lt;FDoubleProperty&gt;(Property)</code></td>
+			</tr>
+			<tr>
+					<td>③ <code>*(double*)(&amp;Rig + Offset)</code></td>
+					<td><code>DoubleProperty-&gt;GetPropertyValue_InContainer(&amp;Rig)</code></td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="23-为什么类型信息必不可少">2.3 为什么类型信息必不可少
+</h3><p>有人可能会问：表里只存名字和偏移，不存类型行不行？</p>
+<p>偏移本身就存在表里，与类型无关，查到那一行就能拿到。<strong>真正缺的是另外两件事：要读多少字节，以及这些字节该如何解释。</strong></p>
+<ul>
+<li>bool 占 1 字节，float 占 4 字节，double 占 8 字节。</li>
+<li>同样的 8 个字节，当成 double 和当成指针，解读出来是完全不同的东西。</li>
+</ul>
+<p>如果变量其实是 bool，却按 double 去读，就会把它后面相邻成员的 7 个字节也一起读进来，得到一个毫无意义的数。如果是写入，还会把相邻成员改坏。</p>
+<p>策划完全可能把变量类型从 Float 改成 Integer，也可能绑定了一个同名但类型不同的变量。所以<strong>读取之前必须检查类型</strong>。</p>
+<hr>
+<h2 id="3-ue-的说明书ustruct-与-fproperty">3. UE 的&quot;说明书&quot;：UStruct 与 FProperty
+</h2><p>UE 把上面的迷你反射做成了一整套自动化系统，核心是这样一组类：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">UStruct              ← &#34;拥有一串 FProperty 的东西&#34;，也就是我们说的&#34;表&#34;
+</span></span><span class="line"><span class="cl"> ├ UClass            ← 类的表：UMyRig、BP_MyRig_C …
+</span></span><span class="line"><span class="cl"> ├ UScriptStruct     ← 结构体的表：FVector（X, Y, Z）、FRotator …
+</span></span><span class="line"><span class="cl"> └ UFunction         ← 函数的表：参数和返回值也是 FProperty
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>表里的每一行是一个 <code>FProperty</code>，可以把它理解成<strong>某个成员变量的&quot;身份证&quot;</strong>，上面记着：</p>
+<ul>
+<li>名字（<code>FName</code>）</li>
+<li>类型：由 FProperty 的不同子类来表示，第 5 节会讲</li>
+<li>偏移量（<code>Offset_Internal</code>），以及元素大小 <code>ElementSize</code></li>
+<li>一组标记位（<code>PropertyFlags</code>），例如&quot;蓝图可见&quot;、&ldquo;仅编辑器&rdquo;</li>
+<li>元数据（meta），例如 <code>DisplayName</code>、<code>GetOptions</code>，只在编辑器中存在</li>
+</ul>
+<p>每个 UStruct 通过 <code>SuperStruct</code> 指向自己的父类，形成一条继承链。<strong>每张表只登记自己新增的属性</strong>，不会把父类的属性复制一份。查找时沿着继承链逐级往上找：</p>
+<ul>
+<li><code>FindFProperty(Class, Name)</code> 先查本类，找不到再查父类、父类的父类……</li>
+<li><code>TFieldIterator&lt;FProperty&gt;(Class)</code> 默认也会把父类的属性一起遍历出来。</li>
+</ul>
+<p><code>FindFProperty</code> 的第一个参数类型是 <code>UStruct*</code>，而不是 <code>UClass*</code>，因为结构体也是一张表，同样可以查。这一点在第 6 节会用到。</p>
+<hr>
+<h2 id="4-表从哪里来c-属性与蓝图变量">4. 表从哪里来：C++ 属性与蓝图变量
+</h2><h3 id="41-c-的-uproperty由-uht-生成">4.1 C++ 的 UPROPERTY：由 UHT 生成
+</h3><p>在 C++ 编译器看来，<code>UPROPERTY(...)</code> 这个宏几乎什么也不做。真正起作用的是 <strong>UHT（Unreal Header Tool）</strong>。它在 C++ 编译之前扫描头文件，为每个反射类型生成 <code>.generated.h</code> 和 <code>.gen.cpp</code> 两个文件。</p>
+<p>比如某个节点类 <code>UMyNode</code> 里有一个 <code>UPROPERTY(EditAnywhere) FMyFloatRef Value;</code>，UHT 会在 <code>.gen.cpp</code> 中生成类似下面的代码（已删减）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">const</span> <span class="n">UECodeGen_Private</span><span class="o">::</span><span class="n">FStructPropertyParams</span> <span class="n">Z_Construct_UClass_UMyNode_Statics</span><span class="o">::</span><span class="n">NewProp_Value</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;Value&#34;</span><span class="p">,</span>                                        <span class="c1">// 名字
+</span></span></span><span class="line"><span class="cl">	<span class="k">nullptr</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">(</span><span class="n">EPropertyFlags</span><span class="p">)</span><span class="mh">0x0020080000000001</span><span class="p">,</span>             <span class="c1">// 属性标记
+</span></span></span><span class="line"><span class="cl">	<span class="n">UECodeGen_Private</span><span class="o">::</span><span class="n">EPropertyGenFlags</span><span class="o">::</span><span class="n">Struct</span><span class="p">,</span>   <span class="c1">// 类型：结构体
+</span></span></span><span class="line"><span class="cl">	<span class="p">...,</span>
+</span></span><span class="line"><span class="cl">	<span class="n">STRUCT_OFFSET</span><span class="p">(</span><span class="n">UMyNode</span><span class="p">,</span> <span class="n">Value</span><span class="p">),</span>                  <span class="c1">// 偏移：由编译器算出
+</span></span></span><span class="line"><span class="cl">	<span class="n">Z_Construct_UScriptStruct_FMyFloatRef</span><span class="p">,</span>          <span class="c1">// 结构体类型（指向哪张表）
+</span></span></span><span class="line"><span class="cl">	<span class="n">METADATA_PARAMS</span><span class="p">(...)</span>                            <span class="c1">// 元数据
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这其实就是迷你版里那张手写的表，只不过改成了自动生成：</p>
+<ul>
+<li>名字由 UHT 从源码中读出。</li>
+<li>偏移由 <code>STRUCT_OFFSET</code>（本质上就是 <code>offsetof</code>）在编译期算出。</li>
+<li>类型、标记和元数据，都由 UHT 从 <code>UPROPERTY</code> 的写法中解析出来。</li>
+</ul>
+<p>模块加载时，<code>UECodeGen_Private::ConstructUClass(...)</code> 会根据这些静态描述创建 UClass，并为每一项 new 出对应的 FProperty 子类对象，挂到这个类上。</p>
+<p><code>GENERATED_BODY()</code> 则会往类里注入 <code>StaticClass()</code> 等函数，用来取得这张表。</p>
+<p>顺便看一眼标记值 <code>0x0020080000000001</code>。最低位 <code>0x1</code> 是 <code>CPF_Edit</code>，对应 <code>EditAnywhere</code>。而表示&quot;蓝图可见&quot;的 <code>0x4</code>（<code>CPF_BlueprintVisible</code>）<strong>没有置位</strong>，因为这个成员只写了 <code>EditAnywhere</code>，没写 <code>BlueprintReadOnly</code> 或 <code>BlueprintReadWrite</code>。第 5.4 节会用到这个结论。</p>
+<h3 id="42-蓝图变量在蓝图编译时生成">4.2 蓝图变量：在蓝图编译时生成
+</h3><p>在蓝图里加变量，不需要重新编译 C++。那么这个变量的表项和它占用的内存是从哪来的？</p>
+<p><strong>答案是：编译蓝图会生成一个新的 UClass。</strong> 假设有一个蓝图 <code>BP_MyRig</code>，父类是 <code>UMyRig</code>。编译后会生成一个 <code>UBlueprintGeneratedClass</code> 对象，它是 <code>UClass</code> 的子类，名字叫 <code>BP_MyRig_C</code>，后缀 <code>_C</code> 表示 Class：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">UMyRig                  (C++ 的 UClass)
+</span></span><span class="line"><span class="cl">  自己的属性: [C++ 中带 UPROPERTY 的成员…]
+</span></span><span class="line"><span class="cl">        ▲  SuperStruct
+</span></span><span class="line"><span class="cl">        │
+</span></span><span class="line"><span class="cl">BP_MyRig_C              (UBlueprintGeneratedClass)
+</span></span><span class="line"><span class="cl">  自己的属性: [bAiming, FOV]   ← 只登记蓝图里新增的变量
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>这些变量的内存接在父类后面。</strong> 每个 UClass 都记录着自己的对象一共占多少字节（<code>PropertiesSize</code>）。蓝图编译器排布新变量时，会从父类大小的位置开始往后放，同时考虑内存对齐：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">一个 BP_MyRig_C 对象的内存：
+</span></span><span class="line"><span class="cl">[ UObject 头 | UMyRig 的 C++ 成员 | bAiming | 填充 | FOV ]
+</span></span><span class="line"><span class="cl">0                                ↑ 父类的 PropertiesSize
+</span></span><span class="line"><span class="cl">                                 蓝图变量从这里开始往后排
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>创建对象时，UE 按 <code>BP_MyRig_C</code> 的总大小分配内存，所以这条&quot;尾巴&quot;是真实存在的。但 C++ 代码里没有任何名字能指向它，<strong>只能通过 FProperty 里记录的偏移去访问</strong>。这就是节点必须使用反射的根本原因。</p>
+<h3 id="43-fproperty-的创建时机">4.3 FProperty 的创建时机
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>场景</th>
+					<th>由谁、在何时创建</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>C++ UPROPERTY</td>
+					<td>UHT 生成静态描述数据，模块加载时由 <code>ConstructUClass</code> 创建</td>
+			</tr>
+			<tr>
+					<td>在编辑器中编译蓝图</td>
+					<td>蓝图编译器（Kismet Compiler）为每个变量创建 FProperty，然后计算偏移和类大小（这一步叫 Link）</td>
+			</tr>
+			<tr>
+					<td>保存蓝图资产</td>
+					<td>FProperty 被序列化进 <code>.uasset</code></td>
+			</tr>
+			<tr>
+					<td>打包后的游戏</td>
+					<td><strong>没有蓝图编译</strong>；加载资产时从 <code>.uasset</code> 反序列化出 FProperty，再执行一次 Link</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>有一个细节对理解后面的缓存设计很关键：<strong>在编辑器里重新编译蓝图时，<code>BP_MyRig_C</code> 这个 UClass 对象会被复用，但它的 FProperty 会被销毁后重新创建。</strong> 第 8 节会看到如何应对这一点。</p>
+<hr>
+<h2 id="5-表里的一行fproperty-的类型体系">5. 表里的一行：FProperty 的类型体系
+</h2><h3 id="51-类型--子类">5.1 类型 = 子类
+</h3><p>迷你版用一个枚举表示类型。UE 的做法不同：<strong>每种类型对应一个 FProperty 的子类</strong>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">FField
+</span></span><span class="line"><span class="cl"> └ FProperty                    名字、偏移、ElementSize、PropertyFlags…
+</span></span><span class="line"><span class="cl">    ├ FBoolProperty             ← 蓝图 Boolean
+</span></span><span class="line"><span class="cl">    ├ FNumericProperty
+</span></span><span class="line"><span class="cl">    │   ├ FFloatProperty        ← C++ float
+</span></span><span class="line"><span class="cl">    │   ├ FDoubleProperty       ← 蓝图 Float（UE5 起实际为 double）、C++ double
+</span></span><span class="line"><span class="cl">    │   ├ FIntProperty / FByteProperty / ...
+</span></span><span class="line"><span class="cl">    ├ FNameProperty / FStrProperty / FTextProperty
+</span></span><span class="line"><span class="cl">    ├ FEnumProperty
+</span></span><span class="line"><span class="cl">    ├ FObjectProperty ...       ← UObject 指针
+</span></span><span class="line"><span class="cl">    ├ FStructProperty           ← 任意结构体：FVector、FRotator、自定义 USTRUCT…
+</span></span><span class="line"><span class="cl">    └ FArrayProperty / FMapProperty / FSetProperty
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>所以，&ldquo;这个属性是什么类型&quot;就等于&quot;这个 FProperty 对象实际是哪个子类的实例&rdquo;。</p>
+<p>补充一点历史：UE 4.25 之前，它叫 <code>UProperty</code>，继承自 UObject。后来为了减轻内存和 GC 的负担，改成了不继承 UObject 的 <code>FField</code> 体系。老文章里说的 <code>UProperty</code>，就是今天的 <code>FProperty</code>。</p>
+<h3 id="52-castfieldfproperty-版的-dynamic_cast">5.2 <code>CastField</code>：FProperty 版的 dynamic_cast
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">const</span> <span class="n">FBoolProperty</span><span class="o">*</span> <span class="n">BoolProperty</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FBoolProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>它的语义和 <code>dynamic_cast</code> 一样：类型匹配就返回子类指针，不匹配就返回 <code>nullptr</code>。引擎里的实现很短（见 <code>CoreUObject/Public/UObject/Field.h</code>）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">FieldType</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">FORCEINLINE</span> <span class="n">FieldType</span><span class="o">*</span> <span class="n">CastField</span><span class="p">(</span><span class="n">FField</span><span class="o">*</span> <span class="n">Src</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">Src</span> <span class="o">&amp;&amp;</span> <span class="n">Src</span><span class="o">-&gt;</span><span class="n">IsA</span><span class="o">&lt;</span><span class="n">FieldType</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">?</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">FieldType</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">Src</span><span class="p">)</span> <span class="o">:</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>UE 项目一般会关闭 C++ 的 RTTI，所以引擎自带了一套类型系统：每个 FField 子类都有一个 <code>FFieldClass</code>，<code>IsA</code> 只需比较位标记，速度很快。</p>
+<p>UE 里有两套类型转换函数，分别对应两类对象，不要混用：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>对象种类</th>
+					<th>转换函数</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>UObject（Actor、Rig、Node…）</td>
+					<td><code>Cast&lt;T&gt;()</code></td>
+			</tr>
+			<tr>
+					<td>FField / FProperty</td>
+					<td><code>CastField&lt;T&gt;()</code></td>
+			</tr>
+	</tbody>
+</table></div>
+<p>有了 <code>CastField</code>，类型检查就很好写了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyBoolRef</span><span class="o">::</span><span class="n">AcceptsType</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FBoolProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">)</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyFloatRef</span><span class="o">::</span><span class="n">AcceptsType</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FDoubleProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">)</span> <span class="o">||</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FFloatProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意，Float 版本<strong>同时接受 double 和 float</strong>：</p>
+<ul>
+<li>蓝图里的 &ldquo;Float&rdquo; 变量，在 UE5 中其实是 8 字节的 double。</li>
+<li>C++ 成员如果声明为 <code>float</code>，则是 4 字节。</li>
+</ul>
+<p>两者字节数不同，读法也不同，所以 <code>TryGet</code> 里要先判断是哪一种，再分别读取。这就是第 2.3 节说的&quot;类型决定怎么读&quot;。</p>
+<h3 id="53-getpropertyvalue_incontainer为什么必须先-cast">5.3 <code>GetPropertyValue_InContainer</code>：为什么必须先 Cast
+</h3><p>基类 <code>FProperty</code> 不知道自己对应的 C++ 类型，所以没法提供一个&quot;带类型的读取函数&quot;。只有子类知道：</p>
+<ul>
+<li><code>FDoubleProperty::GetPropertyValue_InContainer</code> 返回 <code>double</code>。</li>
+<li><code>FBoolProperty::GetPropertyValue_InContainer</code> 返回 <code>bool</code>。</li>
+</ul>
+<p>因此代码顺序一定是：先用 <code>CastField</code> 得到具体的子类，再调用读取函数。</p>
+<p>参数里的 <strong>Container</strong> 指&quot;装着这个属性的那个对象&quot;，这里就是 <code>&amp;Rig</code>。函数内部计算的是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">值的地址 = (uint8*)Container + Offset_Internal (+ ElementSize * ArrayIndex，用于 C 风格定长数组)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>另外还有一个不带 <code>_InContainer</code> 后缀的 <code>GetPropertyValue(ValuePtr)</code>，它接收的是已经算好的&quot;值地址&quot;。两者别混淆。</p>
+<p><strong>为什么要调用 API 读取，而不是自己拿偏移去读？</strong> bool 位域是一个很好的例子。C++ 里常见这样的写法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">UPROPERTY</span><span class="p">()</span> <span class="n">uint8</span> <span class="nl">bFoo</span> <span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">UPROPERTY</span><span class="p">()</span> <span class="n">uint8</span> <span class="nl">bBar</span> <span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这两个 bool <strong>共用同一个字节</strong>，各占其中的一个 bit。如果自己写 <code>*(bool*)(&amp;Rig + Offset)</code>，读到的是整个字节，结果就错了。<code>FBoolProperty</code> 内部记录了字节偏移和位掩码，引擎实现如下（见 <code>UnrealType.h</code>）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">FORCEINLINE</span> <span class="kt">bool</span> <span class="nf">GetPropertyValue</span><span class="p">(</span><span class="kt">void</span> <span class="k">const</span><span class="o">*</span> <span class="n">A</span><span class="p">)</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">uint8</span><span class="o">*</span> <span class="n">ByteValue</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint8</span><span class="o">*</span><span class="p">)</span><span class="n">A</span> <span class="o">+</span> <span class="n">ByteOffset</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="o">!!</span><span class="p">(</span><span class="o">*</span><span class="n">ByteValue</span> <span class="o">&amp;</span> <span class="n">FieldMask</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>蓝图的 Boolean 变量独占一个字节，掩码是 0xFF；位域 bool 的掩码只有 1 个 bit。通过 API 读取，调用方完全不用关心这些差异。</p>
+<h3 id="54-属性标记propertyflags">5.4 属性标记：<code>PropertyFlags</code>
+</h3><p>每个 FProperty 都带着一组 64 位的标记 <code>EPropertyFlags</code>，定义在 <code>ObjectMacros.h</code> 中。<code>UPROPERTY</code> 里的大多数说明符，最终都会变成其中的某一位：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>说明符 / 来源</th>
+					<th>产生的标记</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>EditAnywhere</code> / <code>EditDefaultsOnly</code> …</td>
+					<td><code>CPF_Edit</code></td>
+			</tr>
+			<tr>
+					<td><code>BlueprintReadOnly</code> / <code>BlueprintReadWrite</code></td>
+					<td><code>CPF_BlueprintVisible</code>（ReadOnly 额外带 <code>CPF_BlueprintReadOnly</code>）</td>
+			</tr>
+			<tr>
+					<td>在蓝图编辑器里添加的变量</td>
+					<td>天然带有 <code>CPF_BlueprintVisible</code></td>
+			</tr>
+			<tr>
+					<td>写在 <code>#if WITH_EDITORONLY_DATA</code> 中的 UPROPERTY</td>
+					<td><code>CPF_EditorOnly</code></td>
+			</tr>
+			<tr>
+					<td>改名为 <code>xxx_DEPRECATED</code> 的属性</td>
+					<td><code>CPF_Deprecated</code></td>
+			</tr>
+	</tbody>
+</table></div>
+<p>借助这些标记，就能决定&quot;哪些变量允许被绑定&quot;：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">bool</span> <span class="nf">CanBind</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">Property</span>
+</span></span><span class="line"><span class="cl">		<span class="o">&amp;&amp;</span> <span class="n">Property</span><span class="o">-&gt;</span><span class="n">HasAnyPropertyFlags</span><span class="p">(</span><span class="n">CPF_BlueprintVisible</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">Property</span><span class="o">-&gt;</span><span class="n">HasAnyPropertyFlags</span><span class="p">(</span><span class="n">CPF_EditorOnly</span> <span class="o">|</span> <span class="n">CPF_Deprecated</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>三个条件分别是：</p>
+<ul>
+<li><strong>必须蓝图可见。</strong> 只开放那些&quot;有意暴露给蓝图&quot;的变量，C++ 的内部状态不能让策划随意绑定。</li>
+<li><strong>不能是 EditorOnly。</strong> 这类属性在打包后<strong>根本不存在</strong>。如果允许绑定，就会出现&quot;编辑器里一切正常，打包版本却悄悄失效&quot;的情况。这是最难排查的一类 bug，所以干脆禁止绑定。</li>
+<li><strong>不能是 Deprecated。</strong> 已经废弃的属性不应再被使用。</li>
+</ul>
+<p>由此可以推出：如果 C++ 的 Rig 里有 <code>UPROPERTY(EditAnywhere) float BaseFOV;</code>，它<strong>不会</strong>出现在可绑定变量的列表里，因为它没有 <code>CPF_BlueprintVisible</code>。4.1 节里生成代码的标记位也印证了这一点。想让它可以被绑定，加上 <code>BlueprintReadOnly</code> 或 <code>BlueprintReadWrite</code> 即可。节点只读不写，所以两者都行，选哪个取决于你是否希望蓝图也能修改它。</p>
+<hr>
+<h2 id="6-结构体属性表中有表">6. 结构体属性：表中有表
+</h2><p>如果想让节点支持绑定 Vector 变量，就会遇到一个问题：FVector、FRotator 以及所有自定义 USTRUCT，在表里<strong>都是 <code>FStructProperty</code></strong>，只靠 <code>CastField</code> 无法区分。</p>
+<h3 id="61-比较-struct-指针">6.1 比较 <code>Struct</code> 指针
+</h3><p><code>FStructProperty</code> 有一个成员：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">UScriptStruct</span><span class="o">*</span> <span class="n">Struct</span><span class="p">;</span>   <span class="c1">// 指向&#34;这个结构体类型&#34;的描述对象
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>每种 USTRUCT 在整个进程里<strong>只有一个</strong> <code>UScriptStruct</code> 对象，所以直接比较指针就行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">bool</span> <span class="nf">AcceptsType</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FStructProperty</span><span class="o">*</span> <span class="n">StructProperty</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">StructProperty</span> <span class="o">&amp;&amp;</span> <span class="n">StructProperty</span><span class="o">-&gt;</span><span class="n">Struct</span> <span class="o">==</span> <span class="n">TBaseStructure</span><span class="o">&lt;</span><span class="n">FVector</span><span class="o">&gt;::</span><span class="n">Get</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>FVector、FRotator 这类引擎核心类型，用 <code>TBaseStructure&lt;T&gt;::Get()</code> 取得对应的 UScriptStruct。</li>
+<li>自己定义的 USTRUCT，用 <code>FMyStruct::StaticStruct()</code>。</li>
+</ul>
+<p>为什么不比较名字？因为名字比较更慢；不同模块里可能存在同名的结构体；结构体也可能被改名。指针在进程中是唯一的，比较一次只需要一条指令。</p>
+<h3 id="62-结构体也是一张表">6.2 结构体也是一张表
+</h3><p>回到第 3 节的继承图：<code>UScriptStruct</code> 也是一种 <code>UStruct</code>，所以 FVector 也有自己的表，里面是三个 <code>FDoubleProperty</code>，分别叫 X、Y、Z。这样就能清楚地理解 <code>FStructProperty</code> 的含义：</p>
+<blockquote>
+<p>我在容器里占了一块内存，这块内存的布局，请去查 <code>Struct</code> 指向的那张表。</p>
+</blockquote>
+<h3 id="63-读取containerptrtovalueptr">6.3 读取：<code>ContainerPtrToValuePtr</code>
+</h3><p><code>FStructProperty</code> 要对所有结构体通用，它不知道具体的 C++ 类型，所以<strong>没有带类型的 <code>GetPropertyValue_InContainer</code></strong>。正确的做法是：先确认 <code>Struct</code> 匹配，再把地址按目标类型来解释：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="n">FStructProperty</span><span class="o">*</span> <span class="n">StructProperty</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">OutValue</span> <span class="o">=</span> <span class="o">*</span><span class="n">StructProperty</span><span class="o">-&gt;</span><span class="n">ContainerPtrToValuePtr</span><span class="o">&lt;</span><span class="n">FVector</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Rig</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>ContainerPtrToValuePtr&lt;T&gt;</code> 只做一件事：算出&quot;Container + 偏移&quot;，然后转成 <code>T*</code>。<strong>它不检查类型</strong>，所以前面那一步 <code>Struct ==</code> 的检查绝对不能省。</p>
+<p>还有一个和 float/double 同类的坑：UE5 的 <code>FVector</code> 是 double 版本，而 C++ 里有时会用 <code>FVector3f</code>（float 版本）。它们是<strong>两个不同的 UScriptStruct</strong>，指针比较不会相等。</p>
+<hr>
+<h2 id="7-container最容易混淆的概念">7. Container：最容易混淆的概念
+</h2><p>理解反射时，最容易出错的地方是&quot;该传哪个地址&quot;。下面用一个两层的例子来说明。</p>
+<p><strong>问题</strong>：Rig 蓝图里有一个 Vector 变量 <code>Offset</code>，现在只用反射读取 <code>Rig.Offset.Y</code>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 第一层：在 Rig 的表里找 Offset，Container = &amp;Rig
+</span></span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">FStructProperty</span><span class="o">*</span> <span class="n">OffsetProp</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="n">FindFProperty</span><span class="o">&lt;</span><span class="n">FProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Rig</span><span class="p">.</span><span class="n">GetClass</span><span class="p">(),</span> <span class="n">TEXT</span><span class="p">(</span><span class="s">&#34;Offset&#34;</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">VecPtr</span> <span class="o">=</span> <span class="n">OffsetProp</span><span class="o">-&gt;</span><span class="n">ContainerPtrToValuePtr</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Rig</span><span class="p">);</span>   <span class="c1">// = &amp;Rig + 0x300
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 第二层：在 FVector 的表里找 Y，Container = VecPtr
+</span></span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">FDoubleProperty</span><span class="o">*</span> <span class="n">YProp</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FDoubleProperty</span><span class="o">&gt;</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="n">FindFProperty</span><span class="o">&lt;</span><span class="n">FProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">OffsetProp</span><span class="o">-&gt;</span><span class="n">Struct</span><span class="p">,</span> <span class="n">TEXT</span><span class="p">(</span><span class="s">&#34;Y&#34;</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">YProp</span><span class="o">-&gt;</span><span class="n">GetPropertyValue_InContainer</span><span class="p">(</span><span class="n">VecPtr</span><span class="p">);</span>                <span class="c1">// = VecPtr + 0x8
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>读取</th>
+					<th>属性登记在哪张表</th>
+					<th>Container</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>Offset</code></td>
+					<td><code>BP_MyRig_C</code></td>
+					<td><code>&amp;Rig</code>：Rig 对象的起始地址</td>
+			</tr>
+			<tr>
+					<td><code>Y</code></td>
+					<td>FVector 的 UScriptStruct</td>
+					<td><code>Offset</code> 这个向量的起始地址</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>一个常见的误解，是把 Container 当成&quot;属性本身的类型&quot;，或者把它和读出来的值混为一谈。<strong>Container 是&quot;装着这个属性的那个对象&quot;的起始地址</strong>。读出来的 <code>Y</code> 是结果，不是 Container。</p>
+<h3 id="71-为什么是这样偏移相对于自己的表">7.1 为什么是这样：偏移相对于&quot;自己的表&quot;
+</h3><p>每个 FProperty 的偏移，都是<strong>相对于它所属的那个 UStruct 的起点</strong>计算的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Rig 对象内存（示意）：
+</span></span><span class="line"><span class="cl">&amp;Rig + 0x000  [ UObject 头 ... C++ 成员 ... ]
+</span></span><span class="line"><span class="cl">&amp;Rig + 0x300  [ Offset.X ]  ← OffsetProp 的偏移 = 0x300（相对 Rig 起点）
+</span></span><span class="line"><span class="cl">&amp;Rig + 0x308  [ Offset.Y ]  ← YProp 的偏移 = 0x8（相对 FVector 起点！）
+</span></span><span class="line"><span class="cl">&amp;Rig + 0x310  [ Offset.Z ]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>YProp</code> 只知道&quot;我在 FVector 的第 8 个字节&quot;，并不知道这个 FVector 放在哪个对象里。所以必须由调用者把那个 FVector 的起始地址交给它。</p>
+<h3 id="72-传错会怎样">7.2 传错会怎样
+</h3><p>如果第二层错误地传入了 <code>&amp;Rig</code>，读取的地址就成了 <code>&amp;Rig + 0x8</code>。这个位置位于 UObject 头部，读出来的是垃圾数据，而且<strong>不会有任何报错</strong>。反射 API 并不知道你传进来的地址&quot;是什么&quot;，它只负责做加法。</p>
+<h3 id="73-记忆规则">7.3 记忆规则
+</h3><blockquote>
+<p><strong>属性在哪张表里找到，就把那张表的一个实例的地址作为 Container 传进去。上一层算出的值地址，就是下一层的 Container。</strong></p>
+</blockquote>
+<p>三层嵌套也是一样。例如读取 <code>Rig.Data.Pos.Z</code>，其中 <code>Data</code> 的类型是 <code>FMyData</code>，<code>Pos</code> 的类型是 <code>FVector</code>：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>层</th>
+					<th>查哪张表</th>
+					<th>Container</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>1</td>
+					<td><code>Rig.GetClass()</code></td>
+					<td><code>&amp;Rig</code></td>
+			</tr>
+			<tr>
+					<td>2</td>
+					<td><code>FMyData</code> 的 UScriptStruct</td>
+					<td><code>Data</code> 的地址</td>
+			</tr>
+			<tr>
+					<td>3</td>
+					<td><code>FVector</code> 的 UScriptStruct</td>
+					<td><code>Pos</code> 的地址</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>回到我们的节点：变量是在 <code>Rig.GetClass()</code> 这张表里找到的，所以 <code>TryGet</code> 里传入的 Container 是 <code>&amp;Rig</code>。</p>
+<hr>
+<h2 id="8-运行时查找与缓存设计">8. 运行时：查找与缓存设计
+</h2><p>有了前面的基础，就可以完整地看懂运行时的读取路径了。</p>
+<h3 id="81-调用链每帧执行">8.1 调用链：每帧执行
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">相机管理器（每帧更新）
+</span></span><span class="line"><span class="cl"> └ Rig-&gt;Run(...)
+</span></span><span class="line"><span class="cl">     ├ 蓝图事件：计算变量（FOV、bAiming…）     ① 先写
+</span></span><span class="line"><span class="cl">     └ for each Node:
+</span></span><span class="line"><span class="cl">          Node-&gt;Apply(Rig, ...)              ② 后读
+</span></span><span class="line"><span class="cl">            └ SomeRef.TryGet(Rig, Value)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里有两点值得注意：</p>
+<ul>
+<li><strong>蓝图先写、节点后读，都在同一帧内完成。</strong> 所以节点读到的一定是本帧刚算出的值。</li>
+<li><strong><code>TryGet</code> 每帧都会执行</strong>，执行次数是&quot;节点数 × Ref 数&quot;。<code>FindFProperty</code> 要沿着属性链表逐个比较名字，找不到还得继续查父类。FName 比较虽然便宜，但每帧都这样遍历仍是浪费，所以需要缓存。</li>
+</ul>
+<h3 id="82-先弄清所有权为什么缓存几乎总能命中">8.2 先弄清所有权：为什么缓存几乎总能命中
+</h3><p>在 UE 里，这类&quot;一个宿主对象下挂若干节点&quot;的结构，通常这样声明：</p>
+<ul>
+<li>宿主类上的节点数组标记为 <code>Instanced</code>：<code>UPROPERTY(EditAnywhere, Instanced) TArray&lt;TObjectPtr&lt;UMyNode&gt;&gt; Nodes;</code></li>
+<li>节点类本身标记为 <code>DefaultToInstanced, EditInlineNew</code>。</li>
+</ul>
+<p>这样一来，<strong>每个 Node 都是它所属 Rig 的子对象</strong>，Node 的 Outer 就是 Rig。运行时用 <code>NewObject&lt;UMyRig&gt;(Outer, RigClass)</code> 创建 Rig，Instanced 的 Node 也会随这个 Rig 实例各复制一份。</p>
+<p>因此在实际运行中，<strong>每个 Ref 自始至终只会遇到一个 Rig 类</strong>：第一帧查找一次，之后每帧都命中缓存。</p>
+<h3 id="83-为什么用-getclass-而不是-staticclass">8.3 为什么用 <code>GetClass()</code> 而不是 <code>StaticClass()</code>
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">const</span> <span class="n">UClass</span><span class="o">*</span> <span class="n">Class</span> <span class="o">=</span> <span class="n">Rig</span><span class="p">.</span><span class="n">GetClass</span><span class="p">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><code>UMyRig::StaticClass()</code> 是<strong>静态函数</strong>，结果在编译期就已确定，永远返回 C++ 类 <code>UMyRig</code> 的 UClass，与具体是哪个对象无关。</li>
+<li><code>Rig.GetClass()</code> 是<strong>成员函数</strong>，读取的是对象创建时记下的&quot;我属于哪个类&quot;，也就是运行时的真实类型，这里是 <code>BP_MyRig_C</code>。</li>
+</ul>
+<p>可以把两者类比为 C++ 中的&quot;静态类型&quot;和&quot;动态类型&quot;。如果误用了 <code>StaticClass()</code>，查找范围只覆盖 C++ 类及其父类，而蓝图变量登记在 <code>BP_MyRig_C</code> 的表里，所以<strong>永远查不到</strong>。</p>
+<p>同样的道理，缓存必须以类作为 key。两个不同的蓝图 <code>BP_RigA_C</code> 和 <code>BP_RigB_C</code>，即使都有名为 <code>FOV</code> 的变量，偏移甚至类型都可能不同。从 A 查到的 FProperty，绝不能拿去读 B。</p>
+<h3 id="84-一个带缓存的查找实现">8.4 一个带缓存的查找实现
+</h3><p>下面是一个示意实现，展示需要考虑的几个要点：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">FMyValueRefBase</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="k">protected</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">FindBoundProperty</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	<span class="k">mutable</span> <span class="n">TWeakObjectPtr</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">UClass</span><span class="o">&gt;</span> <span class="n">CacheOwner</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">mutable</span> <span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">CacheProp</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#if WITH_EDITORONLY_DATA
+</span></span></span><span class="line"><span class="cl">	<span class="k">mutable</span> <span class="n">int32</span> <span class="n">CacheSerial</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">FMyValueRefBase</span><span class="o">::</span><span class="n">FindBoundProperty</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">)</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">UClass</span><span class="o">*</span> <span class="n">Class</span> <span class="o">=</span> <span class="n">Rig</span><span class="p">.</span><span class="n">GetClass</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">// 1. 缓存命中：同一个类，且（编辑器下）类的属性没有被重建
+</span></span></span><span class="line"><span class="cl">	<span class="kt">bool</span> <span class="n">bHit</span> <span class="o">=</span> <span class="n">CacheOwner</span><span class="p">.</span><span class="n">Get</span><span class="p">()</span> <span class="o">==</span> <span class="n">Class</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#if WITH_EDITORONLY_DATA
+</span></span></span><span class="line"><span class="cl">	<span class="n">bHit</span> <span class="o">=</span> <span class="n">bHit</span> <span class="o">&amp;&amp;</span> <span class="n">CacheSerial</span> <span class="o">==</span> <span class="n">Class</span><span class="o">-&gt;</span><span class="n">FieldPathSerialNumber</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">bHit</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="n">CacheProp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">// 2. 未命中：先记下&#34;这次查的是哪个类&#34;，再查找
+</span></span></span><span class="line"><span class="cl">	<span class="n">CacheOwner</span> <span class="o">=</span> <span class="n">Class</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#if WITH_EDITORONLY_DATA
+</span></span></span><span class="line"><span class="cl">	<span class="n">CacheSerial</span> <span class="o">=</span> <span class="n">Class</span><span class="o">-&gt;</span><span class="n">FieldPathSerialNumber</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Found</span> <span class="o">=</span> <span class="n">FindFProperty</span><span class="o">&lt;</span><span class="n">FProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Class</span><span class="p">,</span> <span class="n">GetBoundName</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">	<span class="n">CacheProp</span> <span class="o">=</span> <span class="p">(</span><span class="n">CanBind</span><span class="p">(</span><span class="n">Found</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">AcceptsProperty</span><span class="p">(</span><span class="n">Found</span><span class="p">))</span> <span class="o">?</span> <span class="nl">Found</span> <span class="p">:</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">CacheProp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">UE_LOG</span><span class="p">(</span><span class="n">LogTemp</span><span class="p">,</span> <span class="n">Warning</span><span class="p">,</span> <span class="n">TEXT</span><span class="p">(</span><span class="s">&#34;Bound variable &#39;%s&#39; is not usable on %s&#34;</span><span class="p">),</span> <span class="p">...);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">CacheProp</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>下面逐个说明其中的设计点。</p>
+<p><strong><code>const</code> 函数 + <code>mutable</code> 成员。</strong> 缓存不会改变&quot;这个 Ref 绑定了什么&quot;这一对外可见的状态，属于<strong>逻辑上的 const</strong>。这是 C++ 里实现内部缓存的惯用写法。</p>
+<p><strong>条件一：类是否相同。</strong> 这就是 8.3 节说的以类为 key。</p>
+<p><strong>条件二：<code>FieldPathSerialNumber</code>。</strong> 这是 <code>UStruct</code> 上一个仅在编辑器中存在的字段（见 <code>Class.h</code>），引擎对它的注释是：</p>
+<blockquote>
+<p><em>Unique id incremented each time this class properties get destroyed</em></p>
+</blockquote>
+<p>在 <code>UStruct::DestroyChildPropertiesAndResetPropertyLinks()</code> 中，每次销毁属性都会把它更新为一个新的序号。</p>
+<p>结合 4.3 节提到的事实：<strong>在编辑器中重新编译蓝图时，UClass 对象被复用，但 FProperty 会被销毁重建。</strong></p>
+<ul>
+<li>如果只检查条件一：类指针没变，缓存被判定为有效，但缓存里的 <code>FProperty*</code> 已经指向被释放的内存，结果可能是崩溃，也可能悄悄读到垃圾数据。</li>
+<li>加上条件二：序号变了，就说明属性已经重建过，需要重新查找。</li>
+</ul>
+<p>打包后的游戏不会重新编译蓝图，所以这个字段和这项检查都放在 <code>WITH_EDITORONLY_DATA</code> 里，运行时没有任何开销。引擎自带的 <code>TFieldPath</code>（见 <code>FieldPath.h</code>）用的也是同一套序号机制，这里相当于手写了一个更轻量的版本。</p>
+<p><strong>失败结果也会被缓存。</strong> 未命中时，代码先把类记下来，再去查找。所以即使没找到，<code>CacheOwner</code> 也已经设置好了，<code>CacheProp</code> 为 <code>nullptr</code>。下一帧两个条件都满足，直接返回 <code>nullptr</code>。这带来两个好处：</p>
+<ul>
+<li>失败后<strong>不会每帧重复查找</strong>；</li>
+<li><strong>不会每帧刷 Warning</strong>：每个 Ref 对每个类只警告一次，避免在高频路径上刷屏。</li>
+</ul>
+<p><strong>类型检查前置。</strong> 类型在查找时已经检查过了，所以 <code>TryGet</code> 里的 <code>CastField</code> 只会遇到两种情况：要么拿到 <code>nullptr</code>（查找失败），要么类型一定正确。<code>TryGet</code> 里仍然写 <code>CastField</code>，一是为了拿到具体的子类，以便调用带类型的读取函数；二是作为兜底检查：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyFloatRef</span><span class="o">::</span><span class="n">TryGet</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">,</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">OutValue</span><span class="p">)</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">switch</span> <span class="p">(</span><span class="n">Source</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">case</span> <span class="n">EMyValueSource</span><span class="o">::</span><span class="nl">Constant</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">		<span class="n">OutValue</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">case</span> <span class="n">EMyValueSource</span><span class="o">::</span><span class="nl">Variable</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">		<span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">default</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span> <span class="o">=</span> <span class="n">FindBoundProperty</span><span class="p">(</span><span class="n">Rig</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="n">FDoubleProperty</span><span class="o">*</span> <span class="n">D</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FDoubleProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">))</span>   <span class="c1">// 蓝图 Float
+</span></span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">OutValue</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">D</span><span class="o">-&gt;</span><span class="n">GetPropertyValue_InContainer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Rig</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="n">FFloatProperty</span><span class="o">*</span> <span class="n">F</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FFloatProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">))</span>     <span class="c1">// C++ float
+</span></span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">OutValue</span> <span class="o">=</span> <span class="n">F</span><span class="o">-&gt;</span><span class="n">GetPropertyValue_InContainer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Rig</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="85-两种缓存指针的选择">8.5 两种缓存指针的选择
+</h3><p><strong>为什么 <code>CacheOwner</code> 用 <code>TWeakObjectPtr</code>，而不用裸指针？</strong></p>
+<p>先纠正一个常见误解：UE 的 UObject <strong>不使用引用计数</strong>，它的生命周期由垃圾回收（GC）管理。<code>TWeakObjectPtr</code> 也不是什么&quot;不计数的智能指针&quot;，它的作用是：</p>
+<blockquote>
+<p><strong>对象被销毁后，<code>Get()</code> 返回 <code>nullptr</code>。</strong></p>
+</blockquote>
+<p>它内部存的不是地址，而是&quot;对象在全局对象表中的索引 + 序列号&quot;。对象被销毁，或者该索引被其他对象复用时，序列号就对不上了。</p>
+<p>如果换成裸指针 <code>const UClass*</code>，会有三个问题：</p>
+<ol>
+<li>它无法让类保持存活。这个 struct 不是 UObject，这个成员也不是 UPROPERTY，GC 根本看不到它。</li>
+<li>类被销毁后，这个裸指针就成了悬空指针。</li>
+<li>最危险的情况是：<strong>新的 UClass 恰好被分配到了同一个地址</strong>。这时 <code>CacheOwner == Class</code> 会误判为相等，返回一个属于旧类、早已被释放的 FProperty。这就是所谓的 ABA 问题。</li>
+</ol>
+<p>缓存本来就不应该延长类的生命周期，所以&quot;弱引用 + 能感知销毁&quot;正合适。客观地说，在 8.2 节的所有权结构下，只要 Rig 实例还在，它的类就一定还在，所以这里更多是一种防御性的写法。</p>
+<p><strong>为什么 <code>CacheProp</code> 不能也用 <code>TWeakObjectPtr</code>？</strong> 因为 FProperty 是 FField，不是 UObject（见 5.1 节）。引擎为 FField 提供的对应工具是 <code>TFieldPath</code>。这里选择&quot;裸指针 + 序号检查&quot;这种更轻量的方案：FProperty 的生命周期从属于它所在的类，只要类没变、属性没有重建，裸指针就是安全的。</p>
+<h3 id="86-读取失败时应该怎么办">8.6 读取失败时应该怎么办
+</h3><p><code>TryGet</code> 返回 false 之后，节点该如何处理是一个设计选择。一种比较稳妥的约定是：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>Ref 用途</th>
+					<th>读取失败时</th>
+					<th>效果</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>&ldquo;是否生效&quot;这类开关</td>
+					<td>保持默认值 <code>true</code></td>
+					<td>节点照常工作，不因一个开关读不到就整体失效</td>
+			</tr>
+			<tr>
+					<td>要写入的数值</td>
+					<td>放弃这一项</td>
+					<td>不修改，保持原值</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>也就是说，<strong>绑定失效时，节点退化为&quot;不修改&rdquo;</strong>。整个过程中，日志里只有查找函数打出的那一条 Warning。</p>
+<h3 id="87-情景推演pie-中删除变量">8.7 情景推演：PIE 中删除变量
+</h3><p>假设在 PIE 运行中，策划在 <code>BP_MyRig</code> 里删掉了变量 <code>FOV</code>，然后点击编译。如果 Ref 对象在重新编译后仍然存活，过程如下：</p>
+<ol>
+<li>条件一通过（还是同一个类），条件二不通过（属性被重建，序号变了）。</li>
+<li>重新查找时找不到 <code>FOV</code>，打出一条 Warning。</li>
+<li>绑定了 <code>FOV</code> 的节点从此按&quot;不修改&quot;处理，之后的帧不会再打日志。</li>
+</ol>
+<p>如果同一个节点上有两个 Ref 都绑定了 <code>FOV</code>，就会各打一条，因为警告是按 Ref 对象计算的。</p>
+<p>需要说明的是：删除变量会改变类的内存布局，引擎可能会对现有的 Rig 实例做<strong>重实例化</strong>，也就是用新对象替换旧对象。这时新 Node 里的缓存是空的，条件一会先不满足。具体走哪条路径取决于引擎的编译流程，但最终结果相同：重新查找、打一次 Warning、不修改。序号检查要防的，正是 Ref 对象跨越重新编译而存活下来的那种情况。</p>
+<hr>
+<h2 id="9-编辑器侧node-对自己做反射">9. 编辑器侧：Node 对自己做反射
+</h2><p>运行时的路径讲完了。在编辑器里，还需要一套配合机制：下拉框、改名找回和数据校验。先来看两个函数，它们反射的对象不再是 Rig，而是 <strong>Node 自己</strong>。</p>
+<h3 id="91-遍历-node-上所有的-ref">9.1 遍历 Node 上所有的 Ref
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">UMyNode</span><span class="o">::</span><span class="n">ForEachRef</span><span class="p">(</span><span class="n">TFunctionRef</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">FMyValueRefBase</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">Func</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="p">(</span><span class="n">TFieldIterator</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span> <span class="n">It</span><span class="p">(</span><span class="n">GetClass</span><span class="p">());</span> <span class="n">It</span><span class="p">;</span> <span class="o">++</span><span class="n">It</span><span class="p">)</span>                  <span class="c1">// ①
+</span></span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="n">It</span><span class="o">-&gt;</span><span class="n">Struct</span> <span class="o">&amp;&amp;</span> <span class="n">It</span><span class="o">-&gt;</span><span class="n">Struct</span><span class="o">-&gt;</span><span class="n">IsChildOf</span><span class="p">(</span><span class="n">FMyValueRefBase</span><span class="o">::</span><span class="n">StaticStruct</span><span class="p">()))</span> <span class="c1">// ②
+</span></span></span><span class="line"><span class="cl">		<span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="n">Func</span><span class="p">(</span><span class="o">*</span><span class="n">It</span><span class="o">-&gt;</span><span class="n">ContainerPtrToValuePtr</span><span class="o">&lt;</span><span class="n">FMyValueRefBase</span><span class="o">&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>             <span class="c1">// ③
+</span></span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>用前面学到的知识逐行解读：</p>
+<ol>
+<li><strong>遍历的是 Node 自己的表</strong>，父类的属性也会一起遍历。模板参数 <code>&lt;FStructProperty&gt;</code> 表示只遍历结构体类型的属性，枚举之类的属性会被跳过。</li>
+<li><strong>判断这个结构体是不是一个 Ref。</strong> 这里用的是 <code>IsChildOf</code>，而不是第 6 节的指针 <code>==</code>，因为 <code>FMyFloatRef</code>、<code>FMyBoolRef</code> 都是 <code>FMyValueRefBase</code> 的<strong>子结构体</strong>。UScriptStruct 同样通过 <code>SuperStruct</code> 记录继承关系，它和 UClass 一样都是 UStruct。</li>
+<li><strong>Container 是 <code>this</code>，也就是 Node。</strong> 属性是在 Node 的表里找到的，自然要传 Node 的地址，这正是第 7 节的规则。拿到的地址被当作基类引用使用。那块内存里确实是一个完整的 <code>FMyFloatRef</code>，带有虚函数表，所以调用 <code>GetBoundName()</code> 这样的虚函数时，会正确分派到子类的实现。</li>
+</ol>
+<p><strong>这样设计的好处</strong>：以后新写的 Node 子类只要声明 <code>UPROPERTY() FMyFloatRef Xxx;</code>，刷新绑定、数据校验等逻辑就会<strong>自动覆盖</strong>到这个字段，不需要手动登记。</p>
+<p><strong>它的限制</strong>：只能找到<strong>顶层</strong>的 Ref。比如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">)</span> <span class="n">TArray</span><span class="o">&lt;</span><span class="n">FMyFloatRef</span><span class="o">&gt;</span> <span class="n">Values</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这一行在表里是 <code>FArrayProperty</code>，不是 <code>FStructProperty</code>，所以 <code>TFieldIterator&lt;FStructProperty&gt;</code> 会直接跳过它。数组元素的类型记录在 <code>FArrayProperty::Inner</code> 里，迭代器不会深入进去。</p>
+<p>注意，这里的判断和&quot;蓝图是否可读&quot;无关。遍历 Ref 时并不检查属性标记；<code>CanBind</code> 检查的是 <strong>Rig 那张表</strong>里的变量。这是两张表、两个不同的反射对象，不要混为一谈。</p>
+<p>如果确实需要支持数组，可以这样写。原理仍然是 Container 规则：每个元素的地址，就是那个 Ref 本身。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="n">FArrayProperty</span><span class="o">*</span> <span class="n">ArrayProperty</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FArrayProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">It</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FStructProperty</span><span class="o">*</span> <span class="n">Inner</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ArrayProperty</span><span class="o">-&gt;</span><span class="n">Inner</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">Inner</span> <span class="o">&amp;&amp;</span> <span class="n">Inner</span><span class="o">-&gt;</span><span class="n">Struct</span><span class="o">-&gt;</span><span class="n">IsChildOf</span><span class="p">(</span><span class="n">FMyValueRefBase</span><span class="o">::</span><span class="n">StaticStruct</span><span class="p">()))</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">FScriptArrayHelper</span> <span class="nf">Helper</span><span class="p">(</span><span class="n">ArrayProperty</span><span class="p">,</span> <span class="n">ArrayProperty</span><span class="o">-&gt;</span><span class="n">ContainerPtrToValuePtr</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="p">(</span><span class="n">int32</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">Helper</span><span class="p">.</span><span class="n">Num</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="n">Func</span><span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">FMyValueRefBase</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">Helper</span><span class="p">.</span><span class="n">GetRawPtr</span><span class="p">(</span><span class="n">i</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果不支持数组，后果是：运行时的 <code>TryGet</code> 照常工作，因为它是 Ref 自己的成员函数；但编辑器里的&quot;改名找回&quot;和&quot;数据校验&quot;会<strong>悄悄漏掉</strong>数组里的 Ref。</p>
+<h3 id="92-getoptions下拉框从哪里来">9.2 <code>GetOptions</code>：下拉框从哪里来
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="p">(</span><span class="n">GetOptions</span> <span class="o">=</span> <span class="s">&#34;GetFloatOptions&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">FName</span> <span class="n">BoundName</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 声明在 UMyNode 上
+</span></span></span><span class="line"><span class="cl"><span class="n">UFUNCTION</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">TArray</span><span class="o">&lt;</span><span class="n">FName</span><span class="o">&gt;</span> <span class="n">GetFloatOptions</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>它的工作过程如下：</p>
+<ol>
+<li>细节面板发现 <code>BoundName</code> 带有 <code>GetOptions</code> 元数据，于是用下拉框控件来绘制它（见 PropertyEditor 模块中的 <code>SPropertyEditorCombo</code>）。</li>
+<li>下拉框需要选项时，引擎的 <code>PropertyEditorUtils::GetPropertyOptions</code> 会通过 <code>PropertyPathHelpers::GetPropertyValue</code>，<strong>在被编辑的对象（Node）上按名字反射查找并调用</strong>这个函数。</li>
+<li>函数返回的名字列表，就成了下拉框的选项。</li>
+</ol>
+<p>UFunction 也是 UStruct 体系的一员（第 3 节），所以&quot;按名字找函数&quot;和&quot;按名字找属性&quot;是同一个思路。由此可以得出两个结论：</p>
+<ul>
+<li>函数<strong>必须写 <code>UFUNCTION()</code></strong>，否则它不会出现在表里，细节面板找不到它。</li>
+<li>函数可以是 <code>private</code> 的。C++ 的访问控制只在编译期生效，反射调用不受它约束。</li>
+</ul>
+<p><strong>如果忘了写 <code>UFUNCTION()</code>，会发生什么？</strong> 查看引擎源码后可以确定：</p>
+<ul>
+<li><strong>能编译通过。</strong> meta 只是一个字符串，UHT 不会检查这个函数是否存在。</li>
+<li><strong>细节面板仍然显示下拉框。</strong> 选择哪种控件只看有没有这个元数据。</li>
+<li><strong>下拉列表是空的，而且没有任何报错。</strong> 只有 <code>&quot;ClassName.FuncName&quot;</code> 这种外部静态函数的写法，在找不到函数时才会触发 <code>ensure</code>。</li>
+<li>受影响的只有这一个字段，其他属性照常显示。</li>
+</ul>
+<p>这是一类典型的&quot;编译期不报错、运行时悄悄失效&quot;的反射陷阱。</p>
+<p>选项函数本身很简单：遍历 <strong>Rig 类</strong>的表，用 <code>CanBind</code> 和对应 Ref 的 <code>AcceptsType</code> 两道条件过滤，收集剩下的名字：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">TArray</span><span class="o">&lt;</span><span class="n">FName</span><span class="o">&gt;</span> <span class="n">UMyNode</span><span class="o">::</span><span class="n">GetFloatOptions</span><span class="p">()</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">TArray</span><span class="o">&lt;</span><span class="n">FName</span><span class="o">&gt;</span> <span class="n">Names</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="n">UClass</span><span class="o">*</span> <span class="n">RigClass</span> <span class="o">=</span> <span class="n">GetRigClass</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="p">(</span><span class="n">TFieldIterator</span><span class="o">&lt;</span><span class="n">FProperty</span><span class="o">&gt;</span> <span class="n">It</span><span class="p">(</span><span class="n">RigClass</span><span class="p">);</span> <span class="n">It</span><span class="p">;</span> <span class="o">++</span><span class="n">It</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="p">(</span><span class="n">CanBind</span><span class="p">(</span><span class="o">*</span><span class="n">It</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">FMyFloatRef</span><span class="o">::</span><span class="n">AcceptsType</span><span class="p">(</span><span class="o">*</span><span class="n">It</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">			<span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="n">Names</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">It</span><span class="o">-&gt;</span><span class="n">GetFName</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">Names</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这两道过滤条件与运行时查找时用的<strong>完全一致</strong>，所以可以保证：<strong>下拉框里能选到的变量，运行时就一定能读到</strong>。让编辑器和运行时遵循同一套规则，是这类设计中一个很重要的一致性保证。</p>
+<p><code>GetRigClass()</code> 利用的是 8.2 节讲的所有权关系：用 <code>GetTypedOuter&lt;UMyRig&gt;()</code> 沿着 Outer 链找到所属的 Rig，再取它的 <code>GetClass()</code>。</p>
+<hr>
+<h2 id="10-变量改名之后guid-找回机制">10. 变量改名之后：Guid 找回机制
+</h2><h3 id="101-问题绑定存的是名字">10.1 问题：绑定存的是名字
+</h3><p><code>BoundName</code> 是一个 FName，比如 <code>&quot;FOV&quot;</code>。如果策划把蓝图变量改名为 <code>TargetFOV</code>，<code>FindFProperty(&quot;FOV&quot;)</code> 就找不到了，绑定随之失效。</p>
+<p>解决办法要借助蓝图本身的机制：<strong>蓝图里的每个变量都有一个不会随改名而变化的 <code>FGuid</code>。</strong> UE 提供了两个函数，用于在名字和 Guid 之间互相转换：</p>
+<ul>
+<li><code>UBlueprint::GetFieldNameFromClassByGuid</code>：由 Guid 得到当前名字</li>
+<li><code>UBlueprint::GetGuidFromClassByFieldName</code>：由名字得到 Guid</li>
+</ul>
+<p>所以可以在 Ref 里额外存一份 Guid：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#if WITH_EDITORONLY_DATA
+</span></span></span><span class="line"><span class="cl">	<span class="n">UPROPERTY</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="n">FGuid</span> <span class="n">BoundGuid</span><span class="p">;</span>      <span class="c1">// 只在编辑器中存在，用于改名后找回
+</span></span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="102-为什么运行时不能直接用-guid">10.2 为什么运行时不能直接用 Guid
+</h3><p>名字与 Guid 的对应关系，保存在 <code>UBlueprint</code> 的变量描述里，也就是 <code>NewVariables</code> 数组，其中每一项都带有 <code>VarGuid</code>。而 <code>UBlueprint</code> 是<strong>只在编辑器中存在的资产对象</strong>，Cook 时会被剥离，打包数据里只保留它生成的 <code>BP_MyRig_C</code> 类。</p>
+<p>所以在打包后的游戏里，不仅 Ref 上没有 Guid（它被 <code>WITH_EDITORONLY_DATA</code> 包住了），<strong>连用来查 Guid 的对照表都不存在</strong>。名字是唯一能带进打包版本的线索。这就引出了一个硬性要求：</p>
+<blockquote>
+<p><strong>资产在保存或 Cook 之前，必须先把名字修正好。</strong></p>
+</blockquote>
+<h3 id="103-同步流程">10.3 同步流程
+</h3><p>可以设计一个同步函数 <code>SyncBinding(RigClass, bTrustName)</code>，流程如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">清空运行时缓存（绑定可能已经变了，下次读取时重新查找）
+</span></span><span class="line"><span class="cl">没有绑定变量，或者没有 Rig 类 → 直接返回
+</span></span><span class="line"><span class="cl">if (!bTrustName &amp;&amp; Guid 有效)                ← 以 Guid 为准
+</span></span><span class="line"><span class="cl">    用 Guid 查出当前名字；如果和存的名字不同 → 更新名字，返回
+</span></span><span class="line"><span class="cl">if 名字在类里找不到 → 返回（保持原样，交给数据校验去报错）
+</span></span><span class="line"><span class="cl">用名字查出 Guid；如果和存的 Guid 不同 → 更新 Guid           ← 以名字为准
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>参数 <code>bTrustName</code> 决定：名字和 Guid 不一致时，以哪一个为准。</p>
+<h3 id="104-为什么需要两种为准">10.4 为什么需要两种&quot;为准&quot;
+</h3><p>关键要看<strong>在那个时刻，哪一个是最新的事实</strong>。</p>
+<p>假设在细节面板里编辑之后，也以 Guid 为准。现在策划在下拉框里把绑定从 A 换成 B：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">初始：              Name = A, Guid = GA
+</span></span><span class="line"><span class="cl">策划在下拉框选 B：   Name = B, Guid = GA   ← 细节面板只改了名字
+</span></span><span class="line"><span class="cl">若以 Guid 为准：     GA → 当前名字是 A → A ≠ B → 把名字改回 A
+</span></span><span class="line"><span class="cl">结果：              Name = A, Guid = GA   ← 策划的选择被悄悄撤销，下拉框跳回 A
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这样绑定就被<strong>锁死在 A 上</strong>，永远换不掉，Guid 也永远不会更新。所以：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>场景</th>
+					<th>最新的事实</th>
+					<th>以谁为准</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>刚在细节面板里编辑完</td>
+					<td>策划刚选的名字</td>
+					<td>名字（<code>true</code>），并用它刷新 Guid</td>
+			</tr>
+			<tr>
+					<td>加载或保存资产</td>
+					<td>蓝图变量可能已被改名，而 Guid 不受改名影响</td>
+					<td>Guid（<code>false</code>），用它修正名字</td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="105-挂到引擎的生命周期钩子上">10.5 挂到引擎的生命周期钩子上
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>钩子</th>
+					<th>参数</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>PostLoad</code>（在编辑器中加载时）</td>
+					<td><code>false</code>，以 Guid 为准</td>
+					<td>资产未打开期间变量可能被改过名，加载时修正名字</td>
+			</tr>
+			<tr>
+					<td><code>PreSave</code>（保存前）</td>
+					<td><code>false</code>，以 Guid 为准</td>
+					<td><strong>保证写入磁盘的名字正确</strong>。Cook 同样会经过加载和保存，所以打包数据里的名字也是修正过的</td>
+			</tr>
+			<tr>
+					<td><code>PostEditChangeProperty</code>（在细节面板中修改 Node 之后）</td>
+					<td><code>true</code>，以名字为准</td>
+					<td>策划刚选了变量，用名字刷新 Guid</td>
+			</tr>
+			<tr>
+					<td><code>IsDataValid</code>（数据校验）</td>
+					<td>检查名字是否存在、类型是否匹配</td>
+					<td>有问题就报 Error，把问题从运行时提前到编辑期</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>这几个钩子内部都可以复用 9.1 节的 <code>ForEachRef</code>，一次性处理 Node 上所有的 Ref。</p>
+<h3 id="106-完整闭环">10.6 完整闭环
+</h3><p>到这里，整个系统形成了一个完整的闭环：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">在编辑器里选变量（GetOptions；过滤规则与运行时一致）
+</span></span><span class="line"><span class="cl"> → 记录 名字 + Guid
+</span></span><span class="line"><span class="cl"> → 改名后由 Guid 找回名字（PostLoad / PreSave）
+</span></span><span class="line"><span class="cl"> → 数据校验兜底（IsDataValid）
+</span></span><span class="line"><span class="cl"> → 打包数据只带名字
+</span></span><span class="line"><span class="cl"> → 运行时按名字查找、缓存、读取（FindBoundProperty / TryGet）
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="11-实战新增一种-vector-ref">11. 实战：新增一种 Vector Ref
+</h2><p>最后，把前面所有的知识串起来，看看如何新增一种能绑定 Vector 变量的值类型。</p>
+<h3 id="-声明-ref-结构体">① 声明 Ref 结构体
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">USTRUCT</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">FMyVectorRef</span> <span class="o">:</span> <span class="k">public</span> <span class="n">FMyValueRefBase</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">GENERATED_BODY</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="p">(</span><span class="n">EditCondition</span> <span class="o">=</span> <span class="s">&#34;Source == EMyValueSource::Constant&#34;</span><span class="p">,</span> <span class="n">EditConditionHides</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="n">FVector</span> <span class="n">Constant</span> <span class="o">=</span> <span class="n">FVector</span><span class="o">::</span><span class="n">ZeroVector</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="p">(</span><span class="n">GetOptions</span> <span class="o">=</span> <span class="s">&#34;GetVectorOptions&#34;</span><span class="p">,</span> <span class="n">EditCondition</span> <span class="o">=</span> <span class="s">&#34;Source == EMyValueSource::Variable&#34;</span><span class="p">,</span> <span class="n">EditConditionHides</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="n">FName</span> <span class="n">BoundName</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="kt">bool</span> <span class="nf">TryGet</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">,</span> <span class="n">FVector</span><span class="o">&amp;</span> <span class="n">OutValue</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">static</span> <span class="kt">bool</span> <span class="nf">AcceptsType</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">virtual</span> <span class="n">FName</span> <span class="nf">GetBoundName</span><span class="p">()</span> <span class="k">const</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="n">BoundName</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">AcceptsProperty</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="n">AcceptsType</span><span class="p">(</span><span class="n">Property</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">protected</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#if WITH_EDITOR
+</span></span></span><span class="line"><span class="cl">	<span class="k">virtual</span> <span class="kt">void</span> <span class="n">SetBoundName</span><span class="p">(</span><span class="n">FName</span> <span class="n">InName</span><span class="p">)</span> <span class="k">override</span> <span class="p">{</span> <span class="n">BoundName</span> <span class="o">=</span> <span class="n">InName</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="-类型判断与读取">② 类型判断与读取
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyVectorRef</span><span class="o">::</span><span class="n">AcceptsType</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FStructProperty</span><span class="o">*</span> <span class="n">StructProperty</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">StructProperty</span> <span class="o">&amp;&amp;</span> <span class="n">StructProperty</span><span class="o">-&gt;</span><span class="n">Struct</span> <span class="o">==</span> <span class="n">TBaseStructure</span><span class="o">&lt;</span><span class="n">FVector</span><span class="o">&gt;::</span><span class="n">Get</span><span class="p">();</span>   <span class="c1">// 第 6 节：比较指针
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyVectorRef</span><span class="o">::</span><span class="n">TryGet</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">,</span> <span class="n">FVector</span><span class="o">&amp;</span> <span class="n">OutValue</span><span class="p">)</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">Source</span> <span class="o">==</span> <span class="n">EMyValueSource</span><span class="o">::</span><span class="n">Constant</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">OutValue</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">Source</span> <span class="o">!=</span> <span class="n">EMyValueSource</span><span class="o">::</span><span class="n">Variable</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// 查找时已校验 Struct 类型；FStructProperty 没有带类型的 GetPropertyValue
+</span></span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="n">FStructProperty</span><span class="o">*</span> <span class="n">StructProperty</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">FindBoundProperty</span><span class="p">(</span><span class="n">Rig</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">OutValue</span> <span class="o">=</span> <span class="o">*</span><span class="n">StructProperty</span><span class="o">-&gt;</span><span class="n">ContainerPtrToValuePtr</span><span class="o">&lt;</span><span class="n">FVector</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Rig</span><span class="p">);</span>   <span class="c1">// 第 7 节：Container = &amp;Rig
+</span></span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="-下拉框选项函数">③ 下拉框选项函数
+</h3><p>在 Node 上加一个选项函数，写法与 9.2 节的 <code>GetFloatOptions</code> 相同，只是把过滤条件换成 <code>FMyVectorRef::AcceptsType</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">UFUNCTION</span><span class="p">()</span>      <span class="c1">// 不能漏写，否则下拉框会悄悄变空（9.2 节）
+</span></span></span><span class="line"><span class="cl"><span class="n">TArray</span><span class="o">&lt;</span><span class="n">FName</span><span class="o">&gt;</span> <span class="n">GetVectorOptions</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="-在-node-中使用">④ 在 Node 中使用
+</h3><p>在 Node 中把它声明为<strong>顶层</strong>的 <code>UPROPERTY(EditAnywhere) FMyVectorRef Xxx;</code>，然后在应用逻辑里调用 <code>Xxx.TryGet(Rig, Value)</code>。只要是顶层字段，刷新绑定、Guid 找回、数据校验都会通过 <code>ForEachRef</code> 自动生效。</p>
+<p>如果要支持 Rotator，把 <code>FVector</code> 换成 <code>FRotator</code>，<code>TBaseStructure&lt;FVector&gt;</code> 换成 <code>TBaseStructure&lt;FRotator&gt;</code> 即可。</p>
+<h3 id="容易踩的坑编译器都不会提醒你">容易踩的坑：编译器都不会提醒你
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>遗漏或错误</th>
+					<th>现象</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>选项函数没写 <code>UFUNCTION()</code></td>
+					<td>下拉框为空，而且没有任何报错</td>
+			</tr>
+			<tr>
+					<td>没有 override <code>GetBoundName</code></td>
+					<td>如果基类返回 <code>NAME_None</code>，就永远找不到变量，每个 Ref 对每个类都会打一次 Warning</td>
+			</tr>
+			<tr>
+					<td><strong>没有 override <code>SetBoundName</code></strong></td>
+					<td>如果基类实现是空函数，变量改名后名字不会跟着更新，保存后绑定就断了</td>
+			</tr>
+			<tr>
+					<td>把 Ref 放进 <code>TArray</code> 或嵌套的结构体里</td>
+					<td>运行时能用，但改名找回和数据校验会漏掉它</td>
+			</tr>
+			<tr>
+					<td>C++ 端用的是 <code>FVector3f</code></td>
+					<td>它和蓝图的 <code>FVector</code> 是不同的 UScriptStruct，类型匹配会失败</td>
+			</tr>
+			<tr>
+					<td><code>AcceptsType</code> 里没比较 <code>Struct</code></td>
+					<td>FRotator 等结构体也能被绑定上，读取时会把错误的内存当作 FVector 来解释</td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="验证步骤">验证步骤
+</h3><ol>
+<li>编译编辑器 Target。</li>
+<li>在 Rig 蓝图中添加一个 Vector 变量，确认它出现在下拉框中，而 Float、Rotator 等变量不会出现。</li>
+<li>给这个变量改名并保存，重新打开后，确认绑定的名字已经跟着更新。</li>
+<li>删除这个变量，运行数据校验，确认会报 Error。</li>
+<li>进入 PIE，确认日志中只出现一次 Warning，并且节点不修改相机。</li>
+</ol>
+<hr>
+<h2 id="12-总结">12. 总结
+</h2><p>回顾整条知识链：</p>
+<ol>
+<li><strong>C++ 编译后名字就消失了</strong>，所以需要一张运行时的&quot;名字 → 类型 + 偏移&quot;表。在 UE 中，这张表就是 <code>UStruct</code>（包括 <code>UClass</code>、<code>UScriptStruct</code>、<code>UFunction</code>），表里的每一行是一个 <code>FProperty</code>。</li>
+<li><strong>C++ 属性的表项由 UHT 生成</strong>，在模块加载时创建；<strong>蓝图变量的表项由蓝图编译器创建</strong>，登记在 <code>BlueprintGeneratedClass</code> 自己的表里，内存接在父类之后。打包后，这些表项从资产中反序列化得到。</li>
+<li><strong>类型由 FProperty 的子类表示</strong>，用 <code>CastField</code> 判断；结构体还要额外比较 <code>Struct</code> 指针。读取时使用 <code>GetPropertyValue_InContainer</code> 或 <code>ContainerPtrToValuePtr</code>；属性标记决定了哪些变量允许被绑定。</li>
+<li><strong>Container 是&quot;装着这个属性的那个对象&quot;的地址。</strong> 属性在哪张表里找到，就传那张表的实例地址；多层嵌套时逐层往下传。</li>
+<li><strong>运行时以类为 key 做缓存。</strong> <code>TWeakObjectPtr</code> 防止类被销毁后误判命中；<code>FieldPathSerialNumber</code> 应对编辑器重新编译时 FProperty 被重建的情况；查找失败的结果也会被缓存，避免重复查找和日志刷屏。</li>
+<li><strong>编辑器一侧</strong>：Node 通过反射遍历自己身上的 Ref；<code>GetOptions</code> 通过反射调用 UFUNCTION 来生成下拉选项，过滤规则与运行时保持一致；Guid 负责在变量改名后找回绑定；<code>PostLoad</code>、<code>PreSave</code>、<code>PostEditChangeProperty</code>、<code>IsDataValid</code> 各自在合适的时机完成修正与校验。</li>
+</ol>
+<p>理解了这些之后，再去看 UE 里任何&quot;按名字操作属性&quot;的代码，比如细节面板、序列化、属性路径、蓝图节点的 Get/Set，你会发现它们底层都是同一套机制：<strong>找到表，找到行，确认类型，再用正确的 Container 加上偏移。</strong></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/unreal-engine/">Unreal Engine</a>
+        
+            <a href="/tags/c&#43;&#43;/">C&#43;&#43;</a>
+        
+            <a href="/tags/uproperty/">UPROPERTY</a>
+        
+            <a href="/tags/fproperty/">FProperty</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 Nov 26, 2026 12:43 &#43;0800
+        </span>
+    </section></footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/ue-componentvisualizer/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/67d0602f4859a873876856fc8f306e7a.png" loading="lazy" data-key="" data-hash="https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/67d0602f4859a873876856fc8f306e7a.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">UE ComponentVisualizer</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    
+    <section class="running-time">
+        本博客已稳定运行 <span id="runningdays" class="running-days"></span>
+    </section>
+    <section class="copyright">
+        &copy; 
+        
+            2024 - 
+        
+        2026 Lazarus
+    </section>
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.de8ed22de9e9054d6edd078d9dda42f59ff6c65530449be92aafc7348e3dec8e.js" defer></script>
+<script>
+    (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
+  
+    ChannelIO('boot', {
+      "pluginKey": "6916cfa7-b953-4dbd-a21f-ff71e9e1b515"
+    });
+</script>
+
+  
+<script>
+  let s1 = '2024-12-19'; 
+  s1 = new Date(s1.replace(/-/g, "/"));
+  let s2 = new Date();
+  let timeDifference = s2.getTime() - s1.getTime();
+
+  let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  let hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+  let result = days + "天" + hours + "小时" + minutes + "分钟";
+  document.getElementById('runningdays').innerHTML = result;
+</script>
+
+<script src="https://npm.elemecdn.com/nprogress@0.2.0/nprogress.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://npm.elemecdn.com/nprogress@0.2.0/nprogress.css" crossorigin="anonymous" />
+<script>
+  NProgress.start();
+  document.addEventListener("readystatechange", () => {
+    if (document.readyState === "interactive") NProgress.inc(0.8);
+    if (document.readyState === "complete") NProgress.done();
+  });
+</script>
+    </body>
+</html>
