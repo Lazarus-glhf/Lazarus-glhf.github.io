@@ -560,7 +560,6 @@
 
     <section class="article-content">
     
-    
     <blockquote>
 <p>设想一个场景：C++ 写的节点在运行时按名字读取蓝图里的变量。本文以这个场景为线索，依次讲解 C++ 自身的局限、UE 反射的表结构、FProperty 的类型体系、Container 概念、运行时的缓存设计、编辑器里的下拉框与改名找回，最后落到&quot;如何新增一种可绑定的值类型&quot;。</p>
 </blockquote>
@@ -616,7 +615,7 @@
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">UENUM</span><span class="p">()</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="nf">UENUM</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="k">enum</span> <span class="k">class</span> <span class="nc">EMyValueSource</span> <span class="o">:</span> <span class="n">uint8</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="n">None</span><span class="p">,</span>       <span class="c1">// 不修改
@@ -624,15 +623,15 @@
 </span></span></span><span class="line"><span class="cl">	<span class="n">Variable</span><span class="p">,</span>   <span class="c1">// 读取 Rig 上的变量
 </span></span></span><span class="line"><span class="cl"><span class="p">};</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">USTRUCT</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nf">USTRUCT</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">FMyFloatRef</span> <span class="o">:</span> <span class="k">public</span> <span class="n">FMyValueRefBase</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="n">GENERATED_BODY</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">GENERATED_BODY</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">float</span> <span class="n">Constant</span> <span class="o">=</span> <span class="mf">0.f</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="p">(</span><span class="n">GetOptions</span> <span class="o">=</span> <span class="s">&#34;GetFloatOptions&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="p">(</span><span class="n">GetOptions</span> <span class="o">=</span> <span class="s">&#34;GetFloatOptions&#34;</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl">	<span class="n">FName</span> <span class="n">BoundName</span><span class="p">;</span>          <span class="c1">// 绑定的变量名
 </span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="kt">bool</span> <span class="nf">TryGet</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">,</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">OutValue</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
@@ -733,22 +732,22 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// 每个类配一张表（UE 里由工具自动生成，这里手写）
 </span></span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="k">const</span> <span class="n">FDemoPropInfo</span> <span class="n">GDemoRigProps</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="p">{</span> <span class="s">&#34;bAiming&#34;</span><span class="p">,</span> <span class="n">EDemoType</span><span class="o">::</span><span class="n">Bool</span><span class="p">,</span>   <span class="n">offsetof</span><span class="p">(</span><span class="n">FDemoRig</span><span class="p">,</span> <span class="n">bAiming</span><span class="p">)</span> <span class="p">},</span>
-</span></span><span class="line"><span class="cl">	<span class="p">{</span> <span class="s">&#34;FOV&#34;</span><span class="p">,</span>     <span class="n">EDemoType</span><span class="o">::</span><span class="n">Double</span><span class="p">,</span> <span class="n">offsetof</span><span class="p">(</span><span class="n">FDemoRig</span><span class="p">,</span> <span class="n">FOV</span><span class="p">)</span>     <span class="p">},</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span> <span class="s">&#34;bAiming&#34;</span><span class="p">,</span> <span class="n">EDemoType</span><span class="o">::</span><span class="n">Bool</span><span class="p">,</span>   <span class="nf">offsetof</span><span class="p">(</span><span class="n">FDemoRig</span><span class="p">,</span> <span class="n">bAiming</span><span class="p">)</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span> <span class="s">&#34;FOV&#34;</span><span class="p">,</span>     <span class="n">EDemoType</span><span class="o">::</span><span class="n">Double</span><span class="p">,</span> <span class="nf">offsetof</span><span class="p">(</span><span class="n">FDemoRig</span><span class="p">,</span> <span class="n">FOV</span><span class="p">)</span>     <span class="p">},</span>
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// ① 按名字查表
 </span></span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">FDemoPropInfo</span><span class="o">*</span> <span class="nf">FindProp</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">Name</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="n">FDemoPropInfo</span><span class="o">&amp;</span> <span class="nl">P</span> <span class="p">:</span> <span class="n">GDemoRigProps</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">P</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">Name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="o">&amp;</span><span class="n">P</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="nf">strcmp</span><span class="p">(</span><span class="n">P</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">Name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="o">&amp;</span><span class="n">P</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// ② 检查类型  ③ 用&#34;地址 + 偏移&#34;读值
 </span></span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="nf">TryGetDouble</span><span class="p">(</span><span class="k">const</span> <span class="n">FDemoRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">Name</span><span class="p">,</span> <span class="kt">double</span><span class="o">&amp;</span> <span class="n">Out</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FDemoPropInfo</span><span class="o">*</span> <span class="n">P</span> <span class="o">=</span> <span class="n">FindProp</span><span class="p">(</span><span class="n">Name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FDemoPropInfo</span><span class="o">*</span> <span class="n">P</span> <span class="o">=</span> <span class="nf">FindProp</span><span class="p">(</span><span class="n">Name</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">P</span> <span class="o">||</span> <span class="n">P</span><span class="o">-&gt;</span><span class="n">Type</span> <span class="o">!=</span> <span class="n">EDemoType</span><span class="o">::</span><span class="n">Double</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="n">Out</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span><span class="o">*</span><span class="p">)((</span><span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">Rig</span> <span class="o">+</span> <span class="n">P</span><span class="o">-&gt;</span><span class="n">Offset</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
@@ -851,9 +850,9 @@
 </span></span><span class="line"><span class="cl">	<span class="p">(</span><span class="n">EPropertyFlags</span><span class="p">)</span><span class="mh">0x0020080000000001</span><span class="p">,</span>             <span class="c1">// 属性标记
 </span></span></span><span class="line"><span class="cl">	<span class="n">UECodeGen_Private</span><span class="o">::</span><span class="n">EPropertyGenFlags</span><span class="o">::</span><span class="n">Struct</span><span class="p">,</span>   <span class="c1">// 类型：结构体
 </span></span></span><span class="line"><span class="cl">	<span class="p">...,</span>
-</span></span><span class="line"><span class="cl">	<span class="n">STRUCT_OFFSET</span><span class="p">(</span><span class="n">UMyNode</span><span class="p">,</span> <span class="n">Value</span><span class="p">),</span>                  <span class="c1">// 偏移：由编译器算出
+</span></span><span class="line"><span class="cl">	<span class="nf">STRUCT_OFFSET</span><span class="p">(</span><span class="n">UMyNode</span><span class="p">,</span> <span class="n">Value</span><span class="p">),</span>                  <span class="c1">// 偏移：由编译器算出
 </span></span></span><span class="line"><span class="cl">	<span class="n">Z_Construct_UScriptStruct_FMyFloatRef</span><span class="p">,</span>          <span class="c1">// 结构体类型（指向哪张表）
-</span></span></span><span class="line"><span class="cl">	<span class="n">METADATA_PARAMS</span><span class="p">(...)</span>                            <span class="c1">// 元数据
+</span></span></span><span class="line"><span class="cl">	<span class="nf">METADATA_PARAMS</span><span class="p">(...)</span>                            <span class="c1">// 元数据
 </span></span></span><span class="line"><span class="cl"><span class="p">};</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -987,7 +986,7 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">FieldType</span><span class="o">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="n">FORCEINLINE</span> <span class="n">FieldType</span><span class="o">*</span> <span class="n">CastField</span><span class="p">(</span><span class="n">FField</span><span class="o">*</span> <span class="n">Src</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">FORCEINLINE</span> <span class="n">FieldType</span><span class="o">*</span> <span class="nf">CastField</span><span class="p">(</span><span class="n">FField</span><span class="o">*</span> <span class="n">Src</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">Src</span> <span class="o">&amp;&amp;</span> <span class="n">Src</span><span class="o">-&gt;</span><span class="n">IsA</span><span class="o">&lt;</span><span class="n">FieldType</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">?</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">FieldType</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">Src</span><span class="p">)</span> <span class="o">:</span> <span class="k">nullptr</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
@@ -1027,12 +1026,12 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyBoolRef</span><span class="o">::</span><span class="n">AcceptsType</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyBoolRef</span><span class="o">::</span><span class="nf">AcceptsType</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FBoolProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">)</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyFloatRef</span><span class="o">::</span><span class="n">AcceptsType</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyFloatRef</span><span class="o">::</span><span class="nf">AcceptsType</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FDoubleProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">)</span> <span class="o">||</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FFloatProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
@@ -1068,8 +1067,8 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">UPROPERTY</span><span class="p">()</span> <span class="n">uint8</span> <span class="nl">bFoo</span> <span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="n">UPROPERTY</span><span class="p">()</span> <span class="n">uint8</span> <span class="nl">bBar</span> <span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="nf">UPROPERTY</span><span class="p">()</span> <span class="n">uint8</span> <span class="nl">bFoo</span> <span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">UPROPERTY</span><span class="p">()</span> <span class="n">uint8</span> <span class="nl">bBar</span> <span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>这两个 bool <strong>共用同一个字节</strong>，各占其中的一个 bit。如果自己写 <code>*(bool*)(&amp;Rig + Offset)</code>，读到的是整个字节，结果就错了。<code>FBoolProperty</code> 内部记录了字节偏移和位掩码，引擎实现如下（见 <code>UnrealType.h</code>）：</p>
@@ -1136,8 +1135,8 @@
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">bool</span> <span class="nf">CanBind</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">Property</span>
-</span></span><span class="line"><span class="cl">		<span class="o">&amp;&amp;</span> <span class="n">Property</span><span class="o">-&gt;</span><span class="n">HasAnyPropertyFlags</span><span class="p">(</span><span class="n">CPF_BlueprintVisible</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">		<span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">Property</span><span class="o">-&gt;</span><span class="n">HasAnyPropertyFlags</span><span class="p">(</span><span class="n">CPF_EditorOnly</span> <span class="o">|</span> <span class="n">CPF_Deprecated</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="o">&amp;&amp;</span> <span class="n">Property</span><span class="o">-&gt;</span><span class="nf">HasAnyPropertyFlags</span><span class="p">(</span><span class="n">CPF_BlueprintVisible</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">Property</span><span class="o">-&gt;</span><span class="nf">HasAnyPropertyFlags</span><span class="p">(</span><span class="n">CPF_EditorOnly</span> <span class="o">|</span> <span class="n">CPF_Deprecated</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -1174,7 +1173,7 @@
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">bool</span> <span class="nf">AcceptsType</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FStructProperty</span><span class="o">*</span> <span class="n">StructProperty</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">StructProperty</span> <span class="o">&amp;&amp;</span> <span class="n">StructProperty</span><span class="o">-&gt;</span><span class="n">Struct</span> <span class="o">==</span> <span class="n">TBaseStructure</span><span class="o">&lt;</span><span class="n">FVector</span><span class="o">&gt;::</span><span class="n">Get</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">StructProperty</span> <span class="o">&amp;&amp;</span> <span class="n">StructProperty</span><span class="o">-&gt;</span><span class="n">Struct</span> <span class="o">==</span> <span class="n">TBaseStructure</span><span class="o">&lt;</span><span class="n">FVector</span><span class="o">&gt;::</span><span class="nf">Get</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -1225,13 +1224,13 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 第一层：在 Rig 的表里找 Offset，Container = &amp;Rig
 </span></span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">FStructProperty</span><span class="o">*</span> <span class="n">OffsetProp</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="n">FindFProperty</span><span class="o">&lt;</span><span class="n">FProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Rig</span><span class="p">.</span><span class="n">GetClass</span><span class="p">(),</span> <span class="n">TEXT</span><span class="p">(</span><span class="s">&#34;Offset&#34;</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">	<span class="n">FindFProperty</span><span class="o">&lt;</span><span class="n">FProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Rig</span><span class="p">.</span><span class="nf">GetClass</span><span class="p">(),</span> <span class="nf">TEXT</span><span class="p">(</span><span class="s">&#34;Offset&#34;</span><span class="p">)));</span>
 </span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">VecPtr</span> <span class="o">=</span> <span class="n">OffsetProp</span><span class="o">-&gt;</span><span class="n">ContainerPtrToValuePtr</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Rig</span><span class="p">);</span>   <span class="c1">// = &amp;Rig + 0x300
 </span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// 第二层：在 FVector 的表里找 Y，Container = VecPtr
 </span></span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">FDoubleProperty</span><span class="o">*</span> <span class="n">YProp</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FDoubleProperty</span><span class="o">&gt;</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="n">FindFProperty</span><span class="o">&lt;</span><span class="n">FProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">OffsetProp</span><span class="o">-&gt;</span><span class="n">Struct</span><span class="p">,</span> <span class="n">TEXT</span><span class="p">(</span><span class="s">&#34;Y&#34;</span><span class="p">)));</span>
-</span></span><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">YProp</span><span class="o">-&gt;</span><span class="n">GetPropertyValue_InContainer</span><span class="p">(</span><span class="n">VecPtr</span><span class="p">);</span>                <span class="c1">// = VecPtr + 0x8
+</span></span><span class="line"><span class="cl">	<span class="n">FindFProperty</span><span class="o">&lt;</span><span class="n">FProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">OffsetProp</span><span class="o">-&gt;</span><span class="n">Struct</span><span class="p">,</span> <span class="nf">TEXT</span><span class="p">(</span><span class="s">&#34;Y&#34;</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">YProp</span><span class="o">-&gt;</span><span class="nf">GetPropertyValue_InContainer</span><span class="p">(</span><span class="n">VecPtr</span><span class="p">);</span>                <span class="c1">// = VecPtr + 0x8
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="table-wrapper"><table>
@@ -1350,7 +1349,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">const</span> <span class="n">UClass</span><span class="o">*</span> <span class="n">Class</span> <span class="o">=</span> <span class="n">Rig</span><span class="p">.</span><span class="n">GetClass</span><span class="p">();</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">const</span> <span class="n">UClass</span><span class="o">*</span> <span class="n">Class</span> <span class="o">=</span> <span class="n">Rig</span><span class="p">.</span><span class="nf">GetClass</span><span class="p">();</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
@@ -1411,7 +1410,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="c1">// ...
 </span></span></span><span class="line"><span class="cl"><span class="k">protected</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">FindBoundProperty</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="nf">FindBoundProperty</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
 </span></span><span class="line"><span class="cl">	<span class="k">mutable</span> <span class="n">TWeakObjectPtr</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">UClass</span><span class="o">&gt;</span> <span class="n">CacheOwner</span><span class="p">;</span>
@@ -1421,12 +1420,12 @@
 </span></span><span class="line"><span class="cl"><span class="cp">#endif
 </span></span></span><span class="line"><span class="cl"><span class="p">};</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">FMyValueRefBase</span><span class="o">::</span><span class="n">FindBoundProperty</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">)</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">FMyValueRefBase</span><span class="o">::</span><span class="nf">FindBoundProperty</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">)</span> <span class="k">const</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">UClass</span><span class="o">*</span> <span class="n">Class</span> <span class="o">=</span> <span class="n">Rig</span><span class="p">.</span><span class="n">GetClass</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">UClass</span><span class="o">*</span> <span class="n">Class</span> <span class="o">=</span> <span class="n">Rig</span><span class="p">.</span><span class="nf">GetClass</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="c1">// 1. 缓存命中：同一个类，且（编辑器下）类的属性没有被重建
-</span></span></span><span class="line"><span class="cl">	<span class="kt">bool</span> <span class="n">bHit</span> <span class="o">=</span> <span class="n">CacheOwner</span><span class="p">.</span><span class="n">Get</span><span class="p">()</span> <span class="o">==</span> <span class="n">Class</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">	<span class="kt">bool</span> <span class="n">bHit</span> <span class="o">=</span> <span class="n">CacheOwner</span><span class="p">.</span><span class="nf">Get</span><span class="p">()</span> <span class="o">==</span> <span class="n">Class</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="cp">#if WITH_EDITORONLY_DATA
 </span></span></span><span class="line"><span class="cl">	<span class="n">bHit</span> <span class="o">=</span> <span class="n">bHit</span> <span class="o">&amp;&amp;</span> <span class="n">CacheSerial</span> <span class="o">==</span> <span class="n">Class</span><span class="o">-&gt;</span><span class="n">FieldPathSerialNumber</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="cp">#endif
@@ -1440,12 +1439,12 @@
 </span></span><span class="line"><span class="cl"><span class="cp">#if WITH_EDITORONLY_DATA
 </span></span></span><span class="line"><span class="cl">	<span class="n">CacheSerial</span> <span class="o">=</span> <span class="n">Class</span><span class="o">-&gt;</span><span class="n">FieldPathSerialNumber</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="cp">#endif
-</span></span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Found</span> <span class="o">=</span> <span class="n">FindFProperty</span><span class="o">&lt;</span><span class="n">FProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Class</span><span class="p">,</span> <span class="n">GetBoundName</span><span class="p">());</span>
-</span></span><span class="line"><span class="cl">	<span class="n">CacheProp</span> <span class="o">=</span> <span class="p">(</span><span class="n">CanBind</span><span class="p">(</span><span class="n">Found</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">AcceptsProperty</span><span class="p">(</span><span class="n">Found</span><span class="p">))</span> <span class="o">?</span> <span class="nl">Found</span> <span class="p">:</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Found</span> <span class="o">=</span> <span class="n">FindFProperty</span><span class="o">&lt;</span><span class="n">FProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Class</span><span class="p">,</span> <span class="nf">GetBoundName</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">	<span class="n">CacheProp</span> <span class="o">=</span> <span class="p">(</span><span class="nf">CanBind</span><span class="p">(</span><span class="n">Found</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nf">AcceptsProperty</span><span class="p">(</span><span class="n">Found</span><span class="p">))</span> <span class="o">?</span> <span class="nl">Found</span> <span class="p">:</span> <span class="k">nullptr</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">CacheProp</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">	<span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="n">UE_LOG</span><span class="p">(</span><span class="n">LogTemp</span><span class="p">,</span> <span class="n">Warning</span><span class="p">,</span> <span class="n">TEXT</span><span class="p">(</span><span class="s">&#34;Bound variable &#39;%s&#39; is not usable on %s&#34;</span><span class="p">),</span> <span class="p">...);</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">UE_LOG</span><span class="p">(</span><span class="n">LogTemp</span><span class="p">,</span> <span class="n">Warning</span><span class="p">,</span> <span class="nf">TEXT</span><span class="p">(</span><span class="s">&#34;Bound variable &#39;%s&#39; is not usable on %s&#34;</span><span class="p">),</span> <span class="p">...);</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">CacheProp</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
@@ -1501,7 +1500,7 @@
 </span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyFloatRef</span><span class="o">::</span><span class="n">TryGet</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">,</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">OutValue</span><span class="p">)</span> <span class="k">const</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyFloatRef</span><span class="o">::</span><span class="nf">TryGet</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">,</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">OutValue</span><span class="p">)</span> <span class="k">const</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">switch</span> <span class="p">(</span><span class="n">Source</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">	<span class="p">{</span>
@@ -1514,15 +1513,15 @@
 </span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span> <span class="o">=</span> <span class="n">FindBoundProperty</span><span class="p">(</span><span class="n">Rig</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span> <span class="o">=</span> <span class="nf">FindBoundProperty</span><span class="p">(</span><span class="n">Rig</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="n">FDoubleProperty</span><span class="o">*</span> <span class="n">D</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FDoubleProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">))</span>   <span class="c1">// 蓝图 Float
 </span></span></span><span class="line"><span class="cl">	<span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="n">OutValue</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">D</span><span class="o">-&gt;</span><span class="n">GetPropertyValue_InContainer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Rig</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">		<span class="n">OutValue</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">D</span><span class="o">-&gt;</span><span class="nf">GetPropertyValue_InContainer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Rig</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="n">FFloatProperty</span><span class="o">*</span> <span class="n">F</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FFloatProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">))</span>     <span class="c1">// C++ float
 </span></span></span><span class="line"><span class="cl">	<span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="n">OutValue</span> <span class="o">=</span> <span class="n">F</span><span class="o">-&gt;</span><span class="n">GetPropertyValue_InContainer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Rig</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">OutValue</span> <span class="o">=</span> <span class="n">F</span><span class="o">-&gt;</span><span class="nf">GetPropertyValue_InContainer</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Rig</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
@@ -1595,13 +1594,13 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">UMyNode</span><span class="o">::</span><span class="n">ForEachRef</span><span class="p">(</span><span class="n">TFunctionRef</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">FMyValueRefBase</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">Func</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">UMyNode</span><span class="o">::</span><span class="nf">ForEachRef</span><span class="p">(</span><span class="n">TFunctionRef</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">FMyValueRefBase</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">Func</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="p">(</span><span class="n">TFieldIterator</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span> <span class="n">It</span><span class="p">(</span><span class="n">GetClass</span><span class="p">());</span> <span class="n">It</span><span class="p">;</span> <span class="o">++</span><span class="n">It</span><span class="p">)</span>                  <span class="c1">// ①
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="p">(</span><span class="n">TFieldIterator</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span> <span class="nf">It</span><span class="p">(</span><span class="nf">GetClass</span><span class="p">());</span> <span class="n">It</span><span class="p">;</span> <span class="o">++</span><span class="n">It</span><span class="p">)</span>                  <span class="c1">// ①
 </span></span></span><span class="line"><span class="cl">	<span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="n">It</span><span class="o">-&gt;</span><span class="n">Struct</span> <span class="o">&amp;&amp;</span> <span class="n">It</span><span class="o">-&gt;</span><span class="n">Struct</span><span class="o">-&gt;</span><span class="n">IsChildOf</span><span class="p">(</span><span class="n">FMyValueRefBase</span><span class="o">::</span><span class="n">StaticStruct</span><span class="p">()))</span> <span class="c1">// ②
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="n">It</span><span class="o">-&gt;</span><span class="n">Struct</span> <span class="o">&amp;&amp;</span> <span class="n">It</span><span class="o">-&gt;</span><span class="n">Struct</span><span class="o">-&gt;</span><span class="nf">IsChildOf</span><span class="p">(</span><span class="n">FMyValueRefBase</span><span class="o">::</span><span class="nf">StaticStruct</span><span class="p">()))</span> <span class="c1">// ②
 </span></span></span><span class="line"><span class="cl">		<span class="p">{</span>
-</span></span><span class="line"><span class="cl">			<span class="n">Func</span><span class="p">(</span><span class="o">*</span><span class="n">It</span><span class="o">-&gt;</span><span class="n">ContainerPtrToValuePtr</span><span class="o">&lt;</span><span class="n">FMyValueRefBase</span><span class="o">&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>             <span class="c1">// ③
+</span></span><span class="line"><span class="cl">			<span class="nf">Func</span><span class="p">(</span><span class="o">*</span><span class="n">It</span><span class="o">-&gt;</span><span class="n">ContainerPtrToValuePtr</span><span class="o">&lt;</span><span class="n">FMyValueRefBase</span><span class="o">&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>             <span class="c1">// ③
 </span></span></span><span class="line"><span class="cl">		<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
@@ -1620,7 +1619,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">)</span> <span class="n">TArray</span><span class="o">&lt;</span><span class="n">FMyFloatRef</span><span class="o">&gt;</span> <span class="n">Values</span><span class="p">;</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="nf">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">)</span> <span class="n">TArray</span><span class="o">&lt;</span><span class="n">FMyFloatRef</span><span class="o">&gt;</span> <span class="n">Values</span><span class="p">;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>这一行在表里是 <code>FArrayProperty</code>，不是 <code>FStructProperty</code>，所以 <code>TFieldIterator&lt;FStructProperty&gt;</code> 会直接跳过它。数组元素的类型记录在 <code>FArrayProperty::Inner</code> 里，迭代器不会深入进去。</p>
@@ -1645,12 +1644,12 @@
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="n">FArrayProperty</span><span class="o">*</span> <span class="n">ArrayProperty</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FArrayProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">It</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FStructProperty</span><span class="o">*</span> <span class="n">Inner</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ArrayProperty</span><span class="o">-&gt;</span><span class="n">Inner</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">Inner</span> <span class="o">&amp;&amp;</span> <span class="n">Inner</span><span class="o">-&gt;</span><span class="n">Struct</span><span class="o">-&gt;</span><span class="n">IsChildOf</span><span class="p">(</span><span class="n">FMyValueRefBase</span><span class="o">::</span><span class="n">StaticStruct</span><span class="p">()))</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">Inner</span> <span class="o">&amp;&amp;</span> <span class="n">Inner</span><span class="o">-&gt;</span><span class="n">Struct</span><span class="o">-&gt;</span><span class="nf">IsChildOf</span><span class="p">(</span><span class="n">FMyValueRefBase</span><span class="o">::</span><span class="nf">StaticStruct</span><span class="p">()))</span>
 </span></span><span class="line"><span class="cl">	<span class="p">{</span>
 </span></span><span class="line"><span class="cl">		<span class="n">FScriptArrayHelper</span> <span class="nf">Helper</span><span class="p">(</span><span class="n">ArrayProperty</span><span class="p">,</span> <span class="n">ArrayProperty</span><span class="o">-&gt;</span><span class="n">ContainerPtrToValuePtr</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="p">(</span><span class="n">int32</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">Helper</span><span class="p">.</span><span class="n">Num</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="p">(</span><span class="n">int32</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">Helper</span><span class="p">.</span><span class="nf">Num</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">		<span class="p">{</span>
-</span></span><span class="line"><span class="cl">			<span class="n">Func</span><span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">FMyValueRefBase</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">Helper</span><span class="p">.</span><span class="n">GetRawPtr</span><span class="p">(</span><span class="n">i</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">Func</span><span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">FMyValueRefBase</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">Helper</span><span class="p">.</span><span class="nf">GetRawPtr</span><span class="p">(</span><span class="n">i</span><span class="p">)));</span>
 </span></span><span class="line"><span class="cl">		<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
@@ -1664,7 +1663,7 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="p">(</span><span class="n">GetOptions</span> <span class="o">=</span> <span class="s">&#34;GetFloatOptions&#34;</span><span class="p">))</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="nf">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="p">(</span><span class="n">GetOptions</span> <span class="o">=</span> <span class="s">&#34;GetFloatOptions&#34;</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl"><span class="n">FName</span> <span class="n">BoundName</span><span class="p">;</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -1676,8 +1675,8 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 声明在 UMyNode 上
-</span></span></span><span class="line"><span class="cl"><span class="n">UFUNCTION</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="n">TArray</span><span class="o">&lt;</span><span class="n">FName</span><span class="o">&gt;</span> <span class="n">GetFloatOptions</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">UFUNCTION</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">TArray</span><span class="o">&lt;</span><span class="n">FName</span><span class="o">&gt;</span> <span class="nf">GetFloatOptions</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>它的工作过程如下：</p>
@@ -1719,16 +1718,16 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">TArray</span><span class="o">&lt;</span><span class="n">FName</span><span class="o">&gt;</span> <span class="n">UMyNode</span><span class="o">::</span><span class="n">GetFloatOptions</span><span class="p">()</span> <span class="k">const</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">TArray</span><span class="o">&lt;</span><span class="n">FName</span><span class="o">&gt;</span> <span class="n">UMyNode</span><span class="o">::</span><span class="nf">GetFloatOptions</span><span class="p">()</span> <span class="k">const</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="n">TArray</span><span class="o">&lt;</span><span class="n">FName</span><span class="o">&gt;</span> <span class="n">Names</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="n">UClass</span><span class="o">*</span> <span class="n">RigClass</span> <span class="o">=</span> <span class="n">GetRigClass</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="n">UClass</span><span class="o">*</span> <span class="n">RigClass</span> <span class="o">=</span> <span class="nf">GetRigClass</span><span class="p">())</span>
 </span></span><span class="line"><span class="cl">	<span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="p">(</span><span class="n">TFieldIterator</span><span class="o">&lt;</span><span class="n">FProperty</span><span class="o">&gt;</span> <span class="n">It</span><span class="p">(</span><span class="n">RigClass</span><span class="p">);</span> <span class="n">It</span><span class="p">;</span> <span class="o">++</span><span class="n">It</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="p">(</span><span class="n">TFieldIterator</span><span class="o">&lt;</span><span class="n">FProperty</span><span class="o">&gt;</span> <span class="nf">It</span><span class="p">(</span><span class="n">RigClass</span><span class="p">);</span> <span class="n">It</span><span class="p">;</span> <span class="o">++</span><span class="n">It</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">		<span class="p">{</span>
-</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="p">(</span><span class="n">CanBind</span><span class="p">(</span><span class="o">*</span><span class="n">It</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">FMyFloatRef</span><span class="o">::</span><span class="n">AcceptsType</span><span class="p">(</span><span class="o">*</span><span class="n">It</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="p">(</span><span class="nf">CanBind</span><span class="p">(</span><span class="o">*</span><span class="n">It</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">FMyFloatRef</span><span class="o">::</span><span class="nf">AcceptsType</span><span class="p">(</span><span class="o">*</span><span class="n">It</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl">			<span class="p">{</span>
-</span></span><span class="line"><span class="cl">				<span class="n">Names</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">It</span><span class="o">-&gt;</span><span class="n">GetFName</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">				<span class="n">Names</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">It</span><span class="o">-&gt;</span><span class="nf">GetFName</span><span class="p">());</span>
 </span></span><span class="line"><span class="cl">			<span class="p">}</span>
 </span></span><span class="line"><span class="cl">		<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
@@ -1757,7 +1756,7 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#if WITH_EDITORONLY_DATA
-</span></span></span><span class="line"><span class="cl">	<span class="n">UPROPERTY</span><span class="p">()</span>
+</span></span></span><span class="line"><span class="cl">	<span class="nf">UPROPERTY</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">	<span class="n">FGuid</span> <span class="n">BoundGuid</span><span class="p">;</span>      <span class="c1">// 只在编辑器中存在，用于改名后找回
 </span></span></span><span class="line"><span class="cl"><span class="cp">#endif
 </span></span></span></code></pre></td></tr></table>
@@ -1911,26 +1910,26 @@
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">USTRUCT</span><span class="p">()</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="nf">USTRUCT</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">FMyVectorRef</span> <span class="o">:</span> <span class="k">public</span> <span class="n">FMyValueRefBase</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="n">GENERATED_BODY</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">GENERATED_BODY</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="p">(</span><span class="n">EditCondition</span> <span class="o">=</span> <span class="s">&#34;Source == EMyValueSource::Constant&#34;</span><span class="p">,</span> <span class="n">EditConditionHides</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="p">(</span><span class="n">EditCondition</span> <span class="o">=</span> <span class="s">&#34;Source == EMyValueSource::Constant&#34;</span><span class="p">,</span> <span class="n">EditConditionHides</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl">	<span class="n">FVector</span> <span class="n">Constant</span> <span class="o">=</span> <span class="n">FVector</span><span class="o">::</span><span class="n">ZeroVector</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="p">(</span><span class="n">GetOptions</span> <span class="o">=</span> <span class="s">&#34;GetVectorOptions&#34;</span><span class="p">,</span> <span class="n">EditCondition</span> <span class="o">=</span> <span class="s">&#34;Source == EMyValueSource::Variable&#34;</span><span class="p">,</span> <span class="n">EditConditionHides</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="p">(</span><span class="n">GetOptions</span> <span class="o">=</span> <span class="s">&#34;GetVectorOptions&#34;</span><span class="p">,</span> <span class="n">EditCondition</span> <span class="o">=</span> <span class="s">&#34;Source == EMyValueSource::Variable&#34;</span><span class="p">,</span> <span class="n">EditConditionHides</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl">	<span class="n">FName</span> <span class="n">BoundName</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="kt">bool</span> <span class="nf">TryGet</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">,</span> <span class="n">FVector</span><span class="o">&amp;</span> <span class="n">OutValue</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="k">static</span> <span class="kt">bool</span> <span class="nf">AcceptsType</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="k">virtual</span> <span class="n">FName</span> <span class="nf">GetBoundName</span><span class="p">()</span> <span class="k">const</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="n">BoundName</span><span class="p">;</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl">	<span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">AcceptsProperty</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="n">AcceptsType</span><span class="p">(</span><span class="n">Property</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">AcceptsProperty</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nf">AcceptsType</span><span class="p">(</span><span class="n">Property</span><span class="p">);</span> <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">protected</span><span class="o">:</span>
 </span></span><span class="line"><span class="cl"><span class="cp">#if WITH_EDITOR
-</span></span></span><span class="line"><span class="cl">	<span class="k">virtual</span> <span class="kt">void</span> <span class="n">SetBoundName</span><span class="p">(</span><span class="n">FName</span> <span class="n">InName</span><span class="p">)</span> <span class="k">override</span> <span class="p">{</span> <span class="n">BoundName</span> <span class="o">=</span> <span class="n">InName</span><span class="p">;</span> <span class="p">}</span>
+</span></span></span><span class="line"><span class="cl">	<span class="k">virtual</span> <span class="kt">void</span> <span class="nf">SetBoundName</span><span class="p">(</span><span class="n">FName</span> <span class="n">InName</span><span class="p">)</span> <span class="k">override</span> <span class="p">{</span> <span class="n">BoundName</span> <span class="o">=</span> <span class="n">InName</span><span class="p">;</span> <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="cp">#endif
 </span></span></span><span class="line"><span class="cl"><span class="p">};</span>
 </span></span></code></pre></td></tr></table>
@@ -1965,13 +1964,13 @@
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyVectorRef</span><span class="o">::</span><span class="n">AcceptsType</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyVectorRef</span><span class="o">::</span><span class="nf">AcceptsType</span><span class="p">(</span><span class="k">const</span> <span class="n">FProperty</span><span class="o">*</span> <span class="n">Property</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">FStructProperty</span><span class="o">*</span> <span class="n">StructProperty</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Property</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">StructProperty</span> <span class="o">&amp;&amp;</span> <span class="n">StructProperty</span><span class="o">-&gt;</span><span class="n">Struct</span> <span class="o">==</span> <span class="n">TBaseStructure</span><span class="o">&lt;</span><span class="n">FVector</span><span class="o">&gt;::</span><span class="n">Get</span><span class="p">();</span>   <span class="c1">// 第 6 节：比较指针
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">StructProperty</span> <span class="o">&amp;&amp;</span> <span class="n">StructProperty</span><span class="o">-&gt;</span><span class="n">Struct</span> <span class="o">==</span> <span class="n">TBaseStructure</span><span class="o">&lt;</span><span class="n">FVector</span><span class="o">&gt;::</span><span class="nf">Get</span><span class="p">();</span>   <span class="c1">// 第 6 节：比较指针
 </span></span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyVectorRef</span><span class="o">::</span><span class="n">TryGet</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">,</span> <span class="n">FVector</span><span class="o">&amp;</span> <span class="n">OutValue</span><span class="p">)</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">FMyVectorRef</span><span class="o">::</span><span class="nf">TryGet</span><span class="p">(</span><span class="k">const</span> <span class="n">UMyRig</span><span class="o">&amp;</span> <span class="n">Rig</span><span class="p">,</span> <span class="n">FVector</span><span class="o">&amp;</span> <span class="n">OutValue</span><span class="p">)</span> <span class="k">const</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">Source</span> <span class="o">==</span> <span class="n">EMyValueSource</span><span class="o">::</span><span class="n">Constant</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">	<span class="p">{</span>
@@ -1983,7 +1982,7 @@
 </span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="c1">// 查找时已校验 Struct 类型；FStructProperty 没有带类型的 GetPropertyValue
-</span></span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="n">FStructProperty</span><span class="o">*</span> <span class="n">StructProperty</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="n">FindBoundProperty</span><span class="p">(</span><span class="n">Rig</span><span class="p">)))</span>
+</span></span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="n">FStructProperty</span><span class="o">*</span> <span class="n">StructProperty</span> <span class="o">=</span> <span class="n">CastField</span><span class="o">&lt;</span><span class="n">FStructProperty</span><span class="o">&gt;</span><span class="p">(</span><span class="nf">FindBoundProperty</span><span class="p">(</span><span class="n">Rig</span><span class="p">)))</span>
 </span></span><span class="line"><span class="cl">	<span class="p">{</span>
 </span></span><span class="line"><span class="cl">		<span class="n">OutValue</span> <span class="o">=</span> <span class="o">*</span><span class="n">StructProperty</span><span class="o">-&gt;</span><span class="n">ContainerPtrToValuePtr</span><span class="o">&lt;</span><span class="n">FVector</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Rig</span><span class="p">);</span>   <span class="c1">// 第 7 节：Container = &amp;Rig
 </span></span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
@@ -2000,8 +1999,8 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">UFUNCTION</span><span class="p">()</span>      <span class="c1">// 不能漏写，否则下拉框会悄悄变空（9.2 节）
-</span></span></span><span class="line"><span class="cl"><span class="n">TArray</span><span class="o">&lt;</span><span class="n">FName</span><span class="o">&gt;</span> <span class="n">GetVectorOptions</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="nf">UFUNCTION</span><span class="p">()</span>      <span class="c1">// 不能漏写，否则下拉框会悄悄变空（9.2 节）
+</span></span></span><span class="line"><span class="cl"><span class="n">TArray</span><span class="o">&lt;</span><span class="n">FName</span><span class="o">&gt;</span> <span class="nf">GetVectorOptions</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="-在-node-中使用">④ 在 Node 中使用

@@ -408,7 +408,6 @@
 
     <section class="article-content">
     
-    
     <h2 id="1-创建一个-module修改-buildcs-和-cpp-文件如下">1. 创建一个 Module，修改 Build.cs 和 .cpp 文件如下
 </h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -496,32 +495,32 @@
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;UnLuaTest/LineDraw.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// Actually registers the module
-</span></span></span><span class="line"><span class="cl"><span class="n">IMPLEMENT_GAME_MODULE</span><span class="p">(</span><span class="n">FUnLuaTestEditorModule</span><span class="p">,</span> <span class="n">UnLuaTestEditor</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">IMPLEMENT_GAME_MODULE</span><span class="p">(</span><span class="n">FUnLuaTestEditorModule</span><span class="p">,</span> <span class="n">UnLuaTestEditor</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">FUnLuaTestEditorModule</span><span class="o">::</span><span class="n">StartupModule</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">FUnLuaTestEditorModule</span><span class="o">::</span><span class="nf">StartupModule</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl"> <span class="n">UE_LOG</span><span class="p">(</span><span class="n">LogTemp</span><span class="p">,</span> <span class="n">Warning</span><span class="p">,</span> <span class="n">TEXT</span><span class="p">(</span><span class="s">&#34;StartupModule&#34;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"> <span class="nf">UE_LOG</span><span class="p">(</span><span class="n">LogTemp</span><span class="p">,</span> <span class="n">Warning</span><span class="p">,</span> <span class="nf">TEXT</span><span class="p">(</span><span class="s">&#34;StartupModule&#34;</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl"> <span class="k">if</span> <span class="p">(</span><span class="n">GUnrealEd</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="n">UE_LOG</span><span class="p">(</span><span class="n">LogTemp</span><span class="p">,</span> <span class="n">Warning</span><span class="p">,</span> <span class="n">TEXT</span><span class="p">(</span><span class="s">&#34;OnRegeister&#34;</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">  <span class="n">TSharedPtr</span><span class="o">&lt;</span><span class="n">FComponentVisualizer</span><span class="o">&gt;</span> <span class="n">Viz</span> <span class="o">=</span> <span class="n">MakeShareable</span><span class="p">(</span><span class="k">new</span> <span class="n">LineVisualizer</span><span class="p">());</span>	
+</span></span><span class="line"><span class="cl">  <span class="nf">UE_LOG</span><span class="p">(</span><span class="n">LogTemp</span><span class="p">,</span> <span class="n">Warning</span><span class="p">,</span> <span class="nf">TEXT</span><span class="p">(</span><span class="s">&#34;OnRegeister&#34;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="n">TSharedPtr</span><span class="o">&lt;</span><span class="n">FComponentVisualizer</span><span class="o">&gt;</span> <span class="n">Viz</span> <span class="o">=</span> <span class="nf">MakeShareable</span><span class="p">(</span><span class="k">new</span> <span class="nf">LineVisualizer</span><span class="p">());</span>	
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"> <span class="c1">// ULineDraw 为 自定义 ActorComponent, 这里对其注册 ComponentVisualizer
-</span></span></span><span class="line"><span class="cl">  <span class="n">GUnrealEd</span><span class="o">-&gt;</span><span class="n">RegisterComponentVisualizer</span><span class="p">(</span><span class="n">ULineDraw</span><span class="o">::</span><span class="n">StaticClass</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetFName</span><span class="p">(),</span> 
+</span></span></span><span class="line"><span class="cl">  <span class="n">GUnrealEd</span><span class="o">-&gt;</span><span class="nf">RegisterComponentVisualizer</span><span class="p">(</span><span class="n">ULineDraw</span><span class="o">::</span><span class="nf">StaticClass</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">GetFName</span><span class="p">(),</span> 
 </span></span><span class="line"><span class="cl">  <span class="n">Viz</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="n">Viz</span><span class="o">-&gt;</span><span class="n">OnRegister</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Viz</span><span class="o">-&gt;</span><span class="nf">OnRegister</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"> <span class="p">}</span>
 </span></span><span class="line"><span class="cl"> <span class="k">else</span>
 </span></span><span class="line"><span class="cl"> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="n">UE_LOG</span><span class="p">(</span><span class="n">LogTemp</span><span class="p">,</span> <span class="n">Warning</span><span class="p">,</span> <span class="n">TEXT</span><span class="p">(</span><span class="s">&#34;Regeister failed&#34;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">UE_LOG</span><span class="p">(</span><span class="n">LogTemp</span><span class="p">,</span> <span class="n">Warning</span><span class="p">,</span> <span class="nf">TEXT</span><span class="p">(</span><span class="s">&#34;Regeister failed&#34;</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl"> <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">FUnLuaTestEditorModule</span><span class="o">::</span><span class="n">ShutdownModule</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">FUnLuaTestEditorModule</span><span class="o">::</span><span class="nf">ShutdownModule</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl"> <span class="k">if</span> <span class="p">(</span><span class="n">GUnrealEd</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="n">GUnrealEd</span><span class="o">-&gt;</span><span class="n">UnregisterComponentVisualizer</span><span class="p">(</span><span class="n">ULineDraw</span><span class="o">::</span><span class="n">StaticClass</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetFName</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">  <span class="n">GUnrealEd</span><span class="o">-&gt;</span><span class="nf">UnregisterComponentVisualizer</span><span class="p">(</span><span class="n">ULineDraw</span><span class="o">::</span><span class="nf">StaticClass</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">GetFName</span><span class="p">());</span>
 </span></span><span class="line"><span class="cl"> <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -666,46 +665,46 @@
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;Curves/CurveVector.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;LineDraw.generated.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">UCLASS</span><span class="p">(</span> <span class="n">ClassGroup</span><span class="o">=</span><span class="p">(</span><span class="n">Custom</span><span class="p">),</span> <span class="n">meta</span><span class="o">=</span><span class="p">(</span><span class="n">BlueprintSpawnableComponent</span><span class="p">)</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">UCLASS</span><span class="p">(</span> <span class="n">ClassGroup</span><span class="o">=</span><span class="p">(</span><span class="n">Custom</span><span class="p">),</span> <span class="n">meta</span><span class="o">=</span><span class="p">(</span><span class="n">BlueprintSpawnableComponent</span><span class="p">)</span> <span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">UNLUATEST_API</span> <span class="nl">ULineDraw</span> <span class="p">:</span> <span class="k">public</span> <span class="n">UActorComponent</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl"> <span class="n">GENERATED_BODY</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"> <span class="nf">GENERATED_BODY</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>	
 </span></span><span class="line"><span class="cl"> <span class="c1">// Sets default values for this component&#39;s properties
-</span></span></span><span class="line"><span class="cl"> <span class="n">ULineDraw</span><span class="p">();</span>
+</span></span></span><span class="line"><span class="cl"> <span class="nf">ULineDraw</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">protected</span><span class="o">:</span>
 </span></span><span class="line"><span class="cl"> <span class="c1">// Called when the game starts
-</span></span></span><span class="line"><span class="cl"> <span class="k">virtual</span> <span class="kt">void</span> <span class="n">BeginPlay</span><span class="p">()</span> <span class="k">override</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl"> <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">BeginPlay</span><span class="p">()</span> <span class="k">override</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>	
 </span></span><span class="line"><span class="cl"> <span class="c1">// Called every frame
-</span></span></span><span class="line"><span class="cl"> <span class="k">virtual</span> <span class="kt">void</span> <span class="n">TickComponent</span><span class="p">(</span><span class="kt">float</span> <span class="n">DeltaTime</span><span class="p">,</span> <span class="n">ELevelTick</span> <span class="n">TickType</span><span class="p">,</span> <span class="n">FActorComponentTickFunction</span><span class="o">*</span> <span class="n">ThisTickFunction</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl"> <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">TickComponent</span><span class="p">(</span><span class="kt">float</span> <span class="n">DeltaTime</span><span class="p">,</span> <span class="n">ELevelTick</span> <span class="n">TickType</span><span class="p">,</span> <span class="n">FActorComponentTickFunction</span><span class="o">*</span> <span class="n">ThisTickFunction</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/** Spawn Actor 的种类 */</span>
-</span></span><span class="line"><span class="cl"> <span class="n">UPROPERTY</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"> <span class="nf">UPROPERTY</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"> <span class="n">TSubclassOf</span><span class="o">&lt;</span><span class="n">APointActor</span><span class="o">&gt;</span> <span class="n">ActorToSpawn</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/** 点的集合 */</span>
-</span></span><span class="line"><span class="cl"> <span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">BlueprintReadWrite</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> <span class="nf">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">BlueprintReadWrite</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"> <span class="n">TArray</span><span class="o">&lt;</span><span class="n">APointActor</span><span class="o">*&gt;</span> <span class="n">PointActors</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/** 画线信息来源的 Curve, 增加的点的值最终也是更新到 Curve 上 */</span>
-</span></span><span class="line"><span class="cl"> <span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> <span class="nf">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"> <span class="n">UCurveVector</span><span class="o">*</span> <span class="n">Points</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/** 是否以 Component Owner 的坐标为起点 */</span>
-</span></span><span class="line"><span class="cl"> <span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> <span class="nf">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"> <span class="kt">bool</span> <span class="n">bDrawFromActor</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/** 添加一个点 */</span>
-</span></span><span class="line"><span class="cl"> <span class="n">UFUNCTION</span><span class="p">(</span><span class="n">CallInEditor</span><span class="p">,</span> <span class="n">Category</span><span class="o">=</span><span class="s">&#34;Custom Point&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"> <span class="kt">void</span> <span class="n">AddPoints</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"> <span class="nf">UFUNCTION</span><span class="p">(</span><span class="n">CallInEditor</span><span class="p">,</span> <span class="n">Category</span><span class="o">=</span><span class="s">&#34;Custom Point&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> <span class="kt">void</span> <span class="nf">AddPoints</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/** 销毁所有的点，重置 Curve 数据 */</span>
-</span></span><span class="line"><span class="cl"> <span class="n">UFUNCTION</span><span class="p">(</span><span class="n">CallInEditor</span><span class="p">,</span> <span class="n">Category</span><span class="o">=</span><span class="s">&#34;Custom Point&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"> <span class="kt">void</span> <span class="n">ClearAllPoints</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"> <span class="nf">UFUNCTION</span><span class="p">(</span><span class="n">CallInEditor</span><span class="p">,</span> <span class="n">Category</span><span class="o">=</span><span class="s">&#34;Custom Point&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> <span class="kt">void</span> <span class="nf">ClearAllPoints</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
 </span></span><span class="line"><span class="cl">    <span class="cm">/**AddPoint() 生成 Point 对应 Curve 上的默认 Key 值
@@ -725,7 +724,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;GetMeshSizeInterface.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// Sets default values for this component&#39;s properties
-</span></span></span><span class="line"><span class="cl"><span class="n">ULineDraw</span><span class="o">::</span><span class="n">ULineDraw</span><span class="p">()</span>
+</span></span></span><span class="line"><span class="cl"><span class="n">ULineDraw</span><span class="o">::</span><span class="nf">ULineDraw</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl"> <span class="c1">// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 </span></span></span><span class="line"><span class="cl"> <span class="c1">// off to improve performance if you don&#39;t need them.
@@ -735,32 +734,32 @@
 </span></span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// Called when the game starts
-</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">ULineDraw</span><span class="o">::</span><span class="n">BeginPlay</span><span class="p">()</span>
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">ULineDraw</span><span class="o">::</span><span class="nf">BeginPlay</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl"> <span class="n">Super</span><span class="o">::</span><span class="n">BeginPlay</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"> <span class="n">Super</span><span class="o">::</span><span class="nf">BeginPlay</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"> <span class="c1">// ...
 </span></span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// Called every frame
-</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">ULineDraw</span><span class="o">::</span><span class="n">TickComponent</span><span class="p">(</span><span class="kt">float</span> <span class="n">DeltaTime</span><span class="p">,</span> <span class="n">ELevelTick</span> <span class="n">TickType</span><span class="p">,</span> 
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">ULineDraw</span><span class="o">::</span><span class="nf">TickComponent</span><span class="p">(</span><span class="kt">float</span> <span class="n">DeltaTime</span><span class="p">,</span> <span class="n">ELevelTick</span> <span class="n">TickType</span><span class="p">,</span> 
 </span></span><span class="line"><span class="cl"><span class="n">FActorComponentTickFunction</span><span class="o">*</span> <span class="n">ThisTickFunction</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl"> <span class="n">Super</span><span class="o">::</span><span class="n">TickComponent</span><span class="p">(</span><span class="n">DeltaTime</span><span class="p">,</span> <span class="n">TickType</span><span class="p">,</span> <span class="n">ThisTickFunction</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"> <span class="n">Super</span><span class="o">::</span><span class="nf">TickComponent</span><span class="p">(</span><span class="n">DeltaTime</span><span class="p">,</span> <span class="n">TickType</span><span class="p">,</span> <span class="n">ThisTickFunction</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"> <span class="c1">// ...
 </span></span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">ULineDraw</span><span class="o">::</span><span class="n">AddPoints</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">ULineDraw</span><span class="o">::</span><span class="nf">AddPoints</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl"> <span class="k">if</span> <span class="p">(</span><span class="n">ActorToSpawn</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="n">UWorld</span><span class="o">*</span> <span class="n">MyWorld</span> <span class="o">=</span> <span class="n">GetWorld</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="n">UWorld</span><span class="o">*</span> <span class="n">MyWorld</span> <span class="o">=</span> <span class="nf">GetWorld</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">MyWorld</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">{</span>
 </span></span><span class="line"><span class="cl">   <span class="n">APointActor</span><span class="o">*</span> <span class="n">Point</span> <span class="o">=</span> <span class="n">MyWorld</span><span class="o">-&gt;</span><span class="n">SpawnActor</span><span class="o">&lt;</span><span class="n">APointActor</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ActorToSpawn</span><span class="p">,</span> 
-</span></span><span class="line"><span class="cl">   <span class="k">this</span><span class="o">-&gt;</span><span class="n">GetOwner</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetActorLocation</span><span class="p">(),</span> <span class="n">FRotator</span><span class="p">(</span><span class="mf">0.f</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">   <span class="n">PointActors</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">Point</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">   <span class="n">Point</span><span class="o">-&gt;</span><span class="n">AttachToActor</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">GetOwner</span><span class="p">(),</span> 
+</span></span><span class="line"><span class="cl">   <span class="k">this</span><span class="o">-&gt;</span><span class="nf">GetOwner</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">GetActorLocation</span><span class="p">(),</span> <span class="nf">FRotator</span><span class="p">(</span><span class="mf">0.f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">   <span class="n">PointActors</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">Point</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Point</span><span class="o">-&gt;</span><span class="nf">AttachToActor</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="nf">GetOwner</span><span class="p">(),</span> 
 </span></span><span class="line"><span class="cl">   <span class="n">FAttachmentTransformRules</span><span class="o">::</span><span class="n">KeepWorldTransform</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">   <span class="n">Point</span><span class="o">-&gt;</span><span class="n">Time</span> <span class="o">=</span> <span class="n">PointDefaultTime</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">   <span class="n">PointDefaultTime</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
@@ -768,14 +767,14 @@
 </span></span><span class="line"><span class="cl"> <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">ULineDraw</span><span class="o">::</span><span class="n">ClearAllPoints</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">ULineDraw</span><span class="o">::</span><span class="nf">ClearAllPoints</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl"> <span class="k">for</span> <span class="p">(</span><span class="n">APointActor</span><span class="o">*</span> <span class="nl">point</span> <span class="p">:</span> <span class="n">PointActors</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="n">point</span><span class="o">-&gt;</span><span class="n">Destroy</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="n">point</span><span class="o">-&gt;</span><span class="nf">Destroy</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"> <span class="n">PointActors</span><span class="p">.</span><span class="n">Reset</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"> <span class="n">Points</span><span class="o">-&gt;</span><span class="n">ResetCurve</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"> <span class="n">PointActors</span><span class="p">.</span><span class="nf">Reset</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"> <span class="n">Points</span><span class="o">-&gt;</span><span class="nf">ResetCurve</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -885,14 +884,14 @@
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;SceneManagement.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;UnLuaTest/LineDraw.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">LineVisualizer</span><span class="o">::</span><span class="n">DrawVisualization</span><span class="p">(</span><span class="k">const</span> <span class="n">UActorComponent</span><span class="o">*</span> <span class="n">Component</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">LineVisualizer</span><span class="o">::</span><span class="nf">DrawVisualization</span><span class="p">(</span><span class="k">const</span> <span class="n">UActorComponent</span><span class="o">*</span> <span class="n">Component</span><span class="p">,</span> 
 </span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">FSceneView</span><span class="o">*</span> <span class="n">View</span><span class="p">,</span> <span class="n">FPrimitiveDrawInterface</span><span class="o">*</span> <span class="n">PDI</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl"> <span class="c1">// UE_LOG(LogTemp, Warning, TEXT(&#34;Drawing&#34;));
 </span></span></span><span class="line"><span class="cl"> <span class="k">const</span> <span class="n">ULineDraw</span><span class="o">*</span> <span class="n">LineDrawer</span> <span class="o">=</span> <span class="n">Cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ULineDraw</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Component</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl"> <span class="c1">// 获取组件所在 Actor 的坐标
-</span></span></span><span class="line"><span class="cl"> <span class="n">FVector</span> <span class="n">ActorLocation</span><span class="o">=</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">GetOwner</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetTargetLocation</span><span class="p">();</span>
+</span></span></span><span class="line"><span class="cl"> <span class="n">FVector</span> <span class="n">ActorLocation</span><span class="o">=</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="nf">GetOwner</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">GetTargetLocation</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl"> <span class="k">if</span> <span class="p">(</span><span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">Points</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"> <span class="p">{</span>
@@ -901,32 +900,32 @@
 </span></span><span class="line"><span class="cl">  <span class="n">UCurveVector</span><span class="o">*</span> <span class="n">Curve</span> <span class="o">=</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">Points</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="c1">// 将 PointActor 点的信息写入到 Curve 里面
-</span></span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">PointActors</span><span class="p">.</span><span class="n">Num</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span></span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">PointActors</span><span class="p">.</span><span class="nf">Num</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">{</span>
 </span></span><span class="line"><span class="cl">   <span class="n">APointActor</span><span class="o">*</span> <span class="n">Point</span> <span class="o">=</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">PointActors</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">   <span class="n">FVector</span> <span class="n">Val</span> <span class="o">=</span> <span class="n">Point</span><span class="o">-&gt;</span><span class="n">GetActorLocation</span><span class="p">()</span> <span class="o">-</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">GetOwner</span><span class="p">()</span><span class="o">-&gt;</span>
-</span></span><span class="line"><span class="cl">   <span class="n">GetActorLocation</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">   <span class="n">FVector</span> <span class="n">Val</span> <span class="o">=</span> <span class="n">Point</span><span class="o">-&gt;</span><span class="nf">GetActorLocation</span><span class="p">()</span> <span class="o">-</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="nf">GetOwner</span><span class="p">()</span><span class="o">-&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="nf">GetActorLocation</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">   <span class="n">FKeyHandle</span> <span class="n">Key</span> <span class="o">=</span> <span class="n">Curve</span><span class="o">-&gt;</span><span class="n">FloatCurves</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">UpdateOrAddKey</span><span class="p">(</span><span class="n">Point</span><span class="o">-&gt;</span><span class="n">Time</span><span class="p">,</span> <span class="n">Val</span><span class="p">.</span><span class="n">X</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">   <span class="n">Curve</span><span class="o">-&gt;</span><span class="n">FloatCurves</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">SetKeyInterpMode</span><span class="p">(</span><span class="n">Key</span><span class="p">,</span> <span class="n">ERichCurveInterpMode</span><span class="o">::</span><span class="n">RCIM_Cubic</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">   <span class="n">FKeyHandle</span> <span class="n">Key</span> <span class="o">=</span> <span class="n">Curve</span><span class="o">-&gt;</span><span class="n">FloatCurves</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">UpdateOrAddKey</span><span class="p">(</span><span class="n">Point</span><span class="o">-&gt;</span><span class="n">Time</span><span class="p">,</span> <span class="n">Val</span><span class="p">.</span><span class="n">X</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Curve</span><span class="o">-&gt;</span><span class="n">FloatCurves</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">SetKeyInterpMode</span><span class="p">(</span><span class="n">Key</span><span class="p">,</span> <span class="n">ERichCurveInterpMode</span><span class="o">::</span><span class="n">RCIM_Cubic</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">   
-</span></span><span class="line"><span class="cl">   <span class="n">Key</span> <span class="o">=</span> <span class="n">Curve</span><span class="o">-&gt;</span><span class="n">FloatCurves</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">UpdateOrAddKey</span><span class="p">(</span><span class="n">Point</span><span class="o">-&gt;</span><span class="n">Time</span><span class="p">,</span> <span class="n">Val</span><span class="p">.</span><span class="n">Y</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">   <span class="n">Curve</span><span class="o">-&gt;</span><span class="n">FloatCurves</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">SetKeyInterpMode</span><span class="p">(</span><span class="n">Key</span><span class="p">,</span> <span class="n">ERichCurveInterpMode</span><span class="o">::</span><span class="n">RCIM_Cubic</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Key</span> <span class="o">=</span> <span class="n">Curve</span><span class="o">-&gt;</span><span class="n">FloatCurves</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nf">UpdateOrAddKey</span><span class="p">(</span><span class="n">Point</span><span class="o">-&gt;</span><span class="n">Time</span><span class="p">,</span> <span class="n">Val</span><span class="p">.</span><span class="n">Y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Curve</span><span class="o">-&gt;</span><span class="n">FloatCurves</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nf">SetKeyInterpMode</span><span class="p">(</span><span class="n">Key</span><span class="p">,</span> <span class="n">ERichCurveInterpMode</span><span class="o">::</span><span class="n">RCIM_Cubic</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">   
-</span></span><span class="line"><span class="cl">   <span class="n">Key</span> <span class="o">=</span> <span class="n">Curve</span><span class="o">-&gt;</span><span class="n">FloatCurves</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">UpdateOrAddKey</span><span class="p">(</span><span class="n">Point</span><span class="o">-&gt;</span><span class="n">Time</span><span class="p">,</span> <span class="n">Val</span><span class="p">.</span><span class="n">Z</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">   <span class="n">Curve</span><span class="o">-&gt;</span><span class="n">FloatCurves</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">SetKeyInterpMode</span><span class="p">(</span><span class="n">Key</span><span class="p">,</span> <span class="n">ERichCurveInterpMode</span><span class="o">::</span><span class="n">RCIM_Cubic</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Key</span> <span class="o">=</span> <span class="n">Curve</span><span class="o">-&gt;</span><span class="n">FloatCurves</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="nf">UpdateOrAddKey</span><span class="p">(</span><span class="n">Point</span><span class="o">-&gt;</span><span class="n">Time</span><span class="p">,</span> <span class="n">Val</span><span class="p">.</span><span class="n">Z</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Curve</span><span class="o">-&gt;</span><span class="n">FloatCurves</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="nf">SetKeyInterpMode</span><span class="p">(</span><span class="n">Key</span><span class="p">,</span> <span class="n">ERichCurveInterpMode</span><span class="o">::</span><span class="n">RCIM_Cubic</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">  
 </span></span><span class="line"><span class="cl">  <span class="cm">/** 获取 Curve 所有值的时间区间 */</span>
-</span></span><span class="line"><span class="cl">  <span class="n">Curve</span><span class="o">-&gt;</span><span class="n">GetTimeRange</span><span class="p">(</span><span class="n">Time</span><span class="p">,</span> <span class="n">MaxTime</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Curve</span><span class="o">-&gt;</span><span class="nf">GetTimeRange</span><span class="p">(</span><span class="n">Time</span><span class="p">,</span> <span class="n">MaxTime</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">  
 </span></span><span class="line"><span class="cl">  <span class="cm">/** 画出整个 Curve 曲线 */</span>
 </span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="n">Time</span> <span class="o">&lt;</span> <span class="n">MaxTime</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">{</span>
-</span></span><span class="line"><span class="cl">   <span class="n">FVector</span> <span class="n">Start</span> <span class="o">=</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">Points</span><span class="o">-&gt;</span><span class="n">GetVectorValue</span><span class="p">(</span><span class="n">Time</span><span class="p">)</span> <span class="o">+</span> <span class="n">ActorLocation</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">   <span class="n">FVector</span> <span class="n">End</span> <span class="o">=</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">Points</span><span class="o">-&gt;</span><span class="n">GetVectorValue</span><span class="p">(</span><span class="n">Time</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">+</span> <span class="n">ActorLocation</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">   <span class="n">FVector</span> <span class="n">Start</span> <span class="o">=</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">Points</span><span class="o">-&gt;</span><span class="nf">GetVectorValue</span><span class="p">(</span><span class="n">Time</span><span class="p">)</span> <span class="o">+</span> <span class="n">ActorLocation</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">   <span class="n">FVector</span> <span class="n">End</span> <span class="o">=</span> <span class="n">LineDrawer</span><span class="o">-&gt;</span><span class="n">Points</span><span class="o">-&gt;</span><span class="nf">GetVectorValue</span><span class="p">(</span><span class="n">Time</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">+</span> <span class="n">ActorLocation</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">   
-</span></span><span class="line"><span class="cl">   <span class="n">PDI</span><span class="o">-&gt;</span><span class="n">DrawLine</span><span class="p">(</span><span class="n">Start</span><span class="p">,</span> <span class="n">End</span><span class="p">,</span> <span class="n">FLinearColor</span><span class="o">::</span><span class="n">Red</span><span class="p">,</span> <span class="n">SDPG_World</span><span class="p">,</span> <span class="mf">2.0f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">   <span class="n">PDI</span><span class="o">-&gt;</span><span class="nf">DrawLine</span><span class="p">(</span><span class="n">Start</span><span class="p">,</span> <span class="n">End</span><span class="p">,</span> <span class="n">FLinearColor</span><span class="o">::</span><span class="n">Red</span><span class="p">,</span> <span class="n">SDPG_World</span><span class="p">,</span> <span class="mf">2.0f</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">   
 </span></span><span class="line"><span class="cl">   <span class="n">Time</span> <span class="o">+=</span> <span class="mf">0.1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>

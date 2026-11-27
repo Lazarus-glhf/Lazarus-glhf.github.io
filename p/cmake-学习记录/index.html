@@ -428,7 +428,6 @@
 
     <section class="article-content">
     
-    
     <h2 id="前言絮絮叨叨">前言絮絮叨叨
 </h2><p>CMake 目前对我而言最大的意义就是告诉我，如果一个东西如果你不用，那最好挑中午的时候学，因为早晚要忘。这次重新倒腾博客，想了想决定把 CMake 作为第一篇文章，希望以后学了的东西都能用上（笑。</p>
 <hr>
@@ -589,9 +588,9 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// TutorialConfig.h.in
 </span></span></span><span class="line"><span class="cl"><span class="c1">// the configured options and settings for Tutorial
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define Tutorial_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define Tutorial_VERSION_MINOR @PROJECT_VERSION_MINOR@
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define Tutorial_VERSION_PATCH @PROJECT_VERSION_PATCH@
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define <span class="nb">Tutorial_VERSION_MAJOR</span> <span class="no">@PROJECT_VERSION_MAJOR@</span>
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define <span class="nb">Tutorial_VERSION_MINOR</span> <span class="no">@PROJECT_VERSION_MINOR@</span>
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define <span class="nb">Tutorial_VERSION_PATCH</span> <span class="no">@PROJECT_VERSION_PATCH@</span>
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>当使用 CMake 构建项目后，会在 build 中生成一个 <code>TutorialConfig.h</code> 文件，内容如下：</p>
@@ -606,9 +605,9 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// TutorialConfig.h
 </span></span></span><span class="line"><span class="cl"><span class="c1">// the configured options and settings for Tutorial
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define Tutorial_VERSION_MAJOR 1
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define Tutorial_VERSION_MINOR 0
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define Tutorial_VERSION_PATCH 2
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define <span class="nb">Tutorial_VERSION_MAJOR</span> <span class="mi">1</span>
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define <span class="nb">Tutorial_VERSION_MINOR</span> <span class="mi">0</span>
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define <span class="nb">Tutorial_VERSION_PATCH</span> <span class="mi">2</span>
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>接着就可以直接在 <code>tutorial.cpp</code> 里去 include 这个 <code>TutorialConfig.h</code> 了，like so</p>
@@ -712,11 +711,11 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// the configured options and settings for Tutorial
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define Tutorial_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define Tutorial_VERSION_MINOR @PROJECT_VERSION_MINOR@
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define Tutorial_VERSION_PATCH @PROJECT_VERSION_PATCH@
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define <span class="nb">Tutorial_VERSION_MAJOR</span> <span class="no">@PROJECT_VERSION_MAJOR@</span>
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define <span class="nb">Tutorial_VERSION_MINOR</span> <span class="no">@PROJECT_VERSION_MINOR@</span>
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define <span class="nb">Tutorial_VERSION_PATCH</span> <span class="no">@PROJECT_VERSION_PATCH@</span>
 </span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="cp">#define TIMESTAMP @COMPILE_TIME@
+</span></span><span class="line"><span class="cl"><span class="cp">#define <span class="nb">TIMESTAMP</span> <span class="no">@COMPILE_TIME@</span>
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>cmake build 生成的 <code>TutorialConfig.h</code> 会增加一个时间宏</p>
@@ -731,11 +730,11 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// the configured options and settings for Tutorial
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define Tutorial_VERSION_MAJOR 1
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define Tutorial_VERSION_MINOR 0
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define Tutorial_VERSION_PATCH 2
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define <span class="nb">Tutorial_VERSION_MAJOR</span> <span class="mi">1</span>
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define <span class="nb">Tutorial_VERSION_MINOR</span> <span class="mi">0</span>
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define <span class="nb">Tutorial_VERSION_PATCH</span> <span class="mi">2</span>
 </span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="cp">#define TIMESTAMP 20241223-022712
+</span></span><span class="line"><span class="cl"><span class="cp">#define <span class="nb">TIMESTAMP</span> <span class="mi">20241223</span><span class="o">-</span><span class="mo">022712</span>
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>然后就可以在代码里调用了。</p>
