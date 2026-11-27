@@ -6,22 +6,34 @@
 
 <link rel='canonical' href='https://lazarus-glhf.github.io/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/'>
 
-<link rel="stylesheet" href="/scss/style.min.861fcc498f2074500f776d26b9c6c5bf7fd03aed38103fad1a81e94ca9ffb8cc.css"><meta property='og:title' content="搭建个人 MC 服务器指北">
+<link rel="stylesheet" href="/scss/style.min.1d682fbf3bc2440d21bc50d6512d261c839627b0f40670d36a3acc6df7c1fb36.css"><meta property='og:title' content="搭建个人 MC 服务器指北">
 <meta property='og:description' content="Set up a linux Minecraft Server.">
 <meta property='og:url' content='https://lazarus-glhf.github.io/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/'>
 <meta property='og:site_name' content='Lazarus&#39;s Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='linux' /><meta property='article:tag' content='minecraft' /><meta property='article:published_time' content='2023-07-22T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-21T20:23:36&#43;08:00'/><meta property='og:image' content='https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/tinify.png' />
 <meta name="twitter:title" content="搭建个人 MC 服务器指北">
 <meta name="twitter:description" content="Set up a linux Minecraft Server."><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/tinify.png' />
-<style>
+    <meta name="twitter:image" content='https://cdn.jsdelivr.net/gh/Lazarus-glhf/ImageStorage@main/Blog/tinify.png' /><style>
     @font-face {
         font-family: '霞鹜文楷';
         src: url(/font/LXGWWenKai-Regular.ttf) format('truetype');
         font-display: swap;
     }
+    @font-face {
+        font-family: 'JetBrains Mono';
+        src: url(/font/JetBrainsMono/JetBrainsMono.woff2) format('woff2');
+        font-weight: 100 800;
+        font-style: normal;
+        font-display: swap;
+    }
+    @font-face {
+        font-family: 'JetBrains Mono';
+        src: url(/font/JetBrainsMono/JetBrainsMono-Italic.woff2) format('woff2');
+        font-weight: 100 800;
+        font-style: italic;
+        font-display: swap;
+    }
 </style>
-
 
 
 <script defer src="https://cloud.umami.is/script.js" data-website-id="89c9cc18-3cbe-43d9-89a0-bfd85e1b4fd3"></script>
@@ -768,8 +780,8 @@
         const template = document.getElementById('giscus-client');
         const client = document.importNode(template.content, true).querySelector('script');
         const currentTheme = () => document.documentElement.dataset.scheme === 'dark'
-            ? "https://lazarus-glhf.github.io/css/giscus/dark.c491f9ad5d812ae3a17f2ad13cc5913e3c847f41293621f39391d04078bcdc09.css"
-            : "https://lazarus-glhf.github.io/css/giscus/light.23cf27d2a179d71354bc672b279f08ef66dadf087b7534bb9f1e6b87a45ee2f4.css";
+            ? "https://lazarus-glhf.github.io/css/giscus/dark.f36f2fdae067ff54ad1d3a30819454d6bc9cc133f69b535d683f351f1ed139cf.css"
+            : "https://lazarus-glhf.github.io/css/giscus/light.1c756a608db386ab22c94e0531939623f5deeec5ed1cf2213d7a00a35c49cf98.css";
         
         client.dataset.theme = currentTheme();
         

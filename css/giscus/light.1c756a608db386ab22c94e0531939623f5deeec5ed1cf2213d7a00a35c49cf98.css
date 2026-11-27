@@ -1,16 +1,25 @@
-@import url("https://giscus.app/themes/catppuccin_macchiato.css");
+@import url("https://giscus.app/themes/catppuccin_latte.css");
 
+/* The giscus iframe is cross-origin, so a local dev server URL would be unreachable. */
+@font-face {
+    font-family: "霞鹜文楷";
+    src: url("https://lazarus-glhf.github.io/font/LXGWWenKai-Regular.ttf") format("truetype");
+    font-display: swap;
+}
 /* The embedded document has its own canvas and native control color scheme. */
 :root {
-    color-scheme: dark;
-    --discussion-panel: #1e1e2e;
-    --discussion-card: #2a2d41;
-    --discussion-input: #24273a;
-    --discussion-line: #494d64;
-    --discussion-text: #cad3f5;
-    --discussion-muted: #b8c0e0;
-    --discussion-accent: #c6a0f6;
-    --discussion-accent-hover: #b7bdf8;
+    color-scheme: light;
+    --discussion-panel: #eff1f5;
+    --discussion-card: #e6e9ef;
+    --discussion-input: #fafaff;
+    --discussion-line: #ccd0da;
+    --discussion-text: #4c4f69;
+    --discussion-muted: #5c5f77;
+    --discussion-accent: #722ec9;
+    --discussion-accent-hover: #6324b2;
+    /* Match the blog's typeface; code keeps giscus' monospace stack. */
+    --font-family-sans: "霞鹜文楷", -apple-system, BlinkMacSystemFont, "Segoe UI", "Droid Sans", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Droid Sans Fallback", "Microsoft YaHei", sans-serif;
+    --font-family-default: var(--font-family-sans);
     background-color: var(--discussion-panel);
     color: var(--discussion-text);
 }
@@ -86,16 +95,31 @@ main .gsc-comment-box .gsc-comment-box-textarea::placeholder {
 }
 
 .gsc-comment-box-tabs button.color-text-primary {
-    box-shadow: inset 0 -2px var(--discussion-accent);
+    color: var(--discussion-accent);
     font-weight: 600;
 }
 
-.gsc-comment-box .gsc-comment-box-write:focus-within {
-    background-color: var(--discussion-input);
+.gsc-comment-box .gsc-comment-box-write,
+.gsc-comment-box .gsc-comment-box-write:focus-within,
+.gsc-comment-box .gsc-comment-box-textarea,
+.gsc-comment-box .gsc-comment-box-textarea:focus {
+    border: 0;
+    outline: none;
     box-shadow: none;
+    background-color: transparent;
 }
 
-.gsc-main :is(button, a, summary, textarea):focus-visible {
+.gsc-comment-box .gsc-comment-box-textarea {
+    caret-color: var(--discussion-accent);
+}
+
+@media (forced-colors: active) {
+    .gsc-comment-box .gsc-comment-box-textarea:focus {
+        outline: 2px solid Highlight;
+    }
+}
+
+.gsc-main :is(button, a, summary):focus-visible {
     outline: 2px solid var(--discussion-accent);
     outline-offset: 2px;
 }
@@ -115,8 +139,8 @@ main .gsc-comment-box .gsc-comment-box-textarea::placeholder {
     }
 }
 
-/* A blank, signed-in composer expands on focus. Drafts and previews stay open. */
-.gsc-comments > .gsc-comment-box:not(:focus-within):has(.gsc-comment-box-textarea:enabled:placeholder-shown) {
+/* Any blank, signed-in composer (main or reply) expands on focus. Drafts, previews and edits stay open. */
+.gsc-comments .gsc-comment-box:not(:focus-within):has(.gsc-comment-box-textarea:enabled:placeholder-shown) {
     padding: 0;
 
     .gsc-comment-box-main {
