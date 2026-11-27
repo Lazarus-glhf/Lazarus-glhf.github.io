@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://lazarus-glhf.github.io/p/ue-fproperty-reflection/'>
 
-<link rel="stylesheet" href="/scss/style.min.f6a0e51dd5c80121abb206c649731eaab83b67b1607c4e4366b1f9e784eb6e31.css"><meta property='og:title' content="从\"按名字读变量\"说起：一步步搞懂 UE 的 FProperty 反射">
+<link rel="stylesheet" href="/scss/style.min.1988228c0b95763622ed124409be747405f9fb428c4a940027c21f9435b2da0d.css"><meta property='og:title' content="从\"按名字读变量\"说起：一步步搞懂 UE 的 FProperty 反射">
 <meta property='og:description' content="以相机节点读取蓝图变量为例，讲解 UPROPERTY 如何生成属性描述，以及如何用 FProperty 查找、校验和读取变量。">
 <meta property='og:url' content='https://lazarus-glhf.github.io/p/ue-fproperty-reflection/'>
 <meta property='og:site_name' content='Lazarus&#39;s Blog'>
@@ -277,48 +277,48 @@
         
         <div class="widget--toc">
             <nav id="TableOfContents">
-  <ol>
+  <ul>
     <li><a href="#目录">目录</a></li>
     <li><a href="#1-问题从哪里来">1. 问题从哪里来</a></li>
     <li><a href="#2-c-为什么做不到按名字读成员">2. C++ 为什么做不到&quot;按名字读成员&quot;</a>
-      <ol>
+      <ul>
         <li><a href="#21-编译之后名字就消失了">2.1 编译之后，名字就消失了</a></li>
         <li><a href="#22-自己动手一个迷你反射">2.2 自己动手：一个迷你反射</a></li>
         <li><a href="#23-为什么类型信息必不可少">2.3 为什么类型信息必不可少</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#3-ue-的说明书ustruct-与-fproperty">3. UE 的&quot;说明书&quot;：UStruct 与 FProperty</a></li>
     <li><a href="#4-表从哪里来c-属性与蓝图变量">4. 表从哪里来：C++ 属性与蓝图变量</a>
-      <ol>
+      <ul>
         <li><a href="#41-c-的-uproperty由-uht-生成">4.1 C++ 的 UPROPERTY：由 UHT 生成</a></li>
         <li><a href="#42-蓝图变量在蓝图编译时生成">4.2 蓝图变量：在蓝图编译时生成</a></li>
         <li><a href="#43-fproperty-的创建时机">4.3 FProperty 的创建时机</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#5-表里的一行fproperty-的类型体系">5. 表里的一行：FProperty 的类型体系</a>
-      <ol>
+      <ul>
         <li><a href="#51-类型--子类">5.1 类型 = 子类</a></li>
         <li><a href="#52-castfieldfproperty-版的-dynamic_cast">5.2 <code>CastField</code>：FProperty 版的 dynamic_cast</a></li>
         <li><a href="#53-getpropertyvalue_incontainer为什么必须先-cast">5.3 <code>GetPropertyValue_InContainer</code>：为什么必须先 Cast</a></li>
         <li><a href="#54-属性标记propertyflags">5.4 属性标记：<code>PropertyFlags</code></a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#6-结构体属性表中有表">6. 结构体属性：表中有表</a>
-      <ol>
+      <ul>
         <li><a href="#61-比较-struct-指针">6.1 比较 <code>Struct</code> 指针</a></li>
         <li><a href="#62-结构体也是一张表">6.2 结构体也是一张表</a></li>
         <li><a href="#63-读取containerptrtovalueptr">6.3 读取：<code>ContainerPtrToValuePtr</code></a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#7-container最容易混淆的概念">7. Container：最容易混淆的概念</a>
-      <ol>
+      <ul>
         <li><a href="#71-为什么是这样偏移相对于自己的表">7.1 为什么是这样：偏移相对于&quot;自己的表&quot;</a></li>
         <li><a href="#72-传错会怎样">7.2 传错会怎样</a></li>
         <li><a href="#73-记忆规则">7.3 记忆规则</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#8-运行时查找与缓存设计">8. 运行时：查找与缓存设计</a>
-      <ol>
+      <ul>
         <li><a href="#81-调用链每帧执行">8.1 调用链：每帧执行</a></li>
         <li><a href="#82-先弄清所有权为什么缓存几乎总能命中">8.2 先弄清所有权：为什么缓存几乎总能命中</a></li>
         <li><a href="#83-为什么用-getclass-而不是-staticclass">8.3 为什么用 <code>GetClass()</code> 而不是 <code>StaticClass()</code></a></li>
@@ -326,36 +326,36 @@
         <li><a href="#85-两种缓存指针的选择">8.5 两种缓存指针的选择</a></li>
         <li><a href="#86-读取失败时应该怎么办">8.6 读取失败时应该怎么办</a></li>
         <li><a href="#87-情景推演pie-中删除变量">8.7 情景推演：PIE 中删除变量</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#9-编辑器侧node-对自己做反射">9. 编辑器侧：Node 对自己做反射</a>
-      <ol>
+      <ul>
         <li><a href="#91-遍历-node-上所有的-ref">9.1 遍历 Node 上所有的 Ref</a></li>
         <li><a href="#92-getoptions下拉框从哪里来">9.2 <code>GetOptions</code>：下拉框从哪里来</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#10-变量改名之后guid-找回机制">10. 变量改名之后：Guid 找回机制</a>
-      <ol>
+      <ul>
         <li><a href="#101-问题绑定存的是名字">10.1 问题：绑定存的是名字</a></li>
         <li><a href="#102-为什么运行时不能直接用-guid">10.2 为什么运行时不能直接用 Guid</a></li>
         <li><a href="#103-同步流程">10.3 同步流程</a></li>
         <li><a href="#104-为什么需要两种为准">10.4 为什么需要两种&quot;为准&quot;</a></li>
         <li><a href="#105-挂到引擎的生命周期钩子上">10.5 挂到引擎的生命周期钩子上</a></li>
         <li><a href="#106-完整闭环">10.6 完整闭环</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#11-实战新增一种-vector-ref">11. 实战：新增一种 Vector Ref</a>
-      <ol>
+      <ul>
         <li><a href="#-声明-ref-结构体">① 声明 Ref 结构体</a></li>
         <li><a href="#-类型判断与读取">② 类型判断与读取</a></li>
         <li><a href="#-下拉框选项函数">③ 下拉框选项函数</a></li>
         <li><a href="#-在-node-中使用">④ 在 Node 中使用</a></li>
         <li><a href="#容易踩的坑编译器都不会提醒你">容易踩的坑：编译器都不会提醒你</a></li>
         <li><a href="#验证步骤">验证步骤</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#12-总结">12. 总结</a></li>
-  </ol>
+  </ul>
 </nav>
         </div>
     </section>
@@ -475,48 +475,48 @@
         <details class="mobile-toc">
             <summary>目录</summary>
             <nav id="mobile-table-of-contents">
-  <ol>
+  <ul>
     <li><a href="#目录">目录</a></li>
     <li><a href="#1-问题从哪里来">1. 问题从哪里来</a></li>
     <li><a href="#2-c-为什么做不到按名字读成员">2. C++ 为什么做不到&quot;按名字读成员&quot;</a>
-      <ol>
+      <ul>
         <li><a href="#21-编译之后名字就消失了">2.1 编译之后，名字就消失了</a></li>
         <li><a href="#22-自己动手一个迷你反射">2.2 自己动手：一个迷你反射</a></li>
         <li><a href="#23-为什么类型信息必不可少">2.3 为什么类型信息必不可少</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#3-ue-的说明书ustruct-与-fproperty">3. UE 的&quot;说明书&quot;：UStruct 与 FProperty</a></li>
     <li><a href="#4-表从哪里来c-属性与蓝图变量">4. 表从哪里来：C++ 属性与蓝图变量</a>
-      <ol>
+      <ul>
         <li><a href="#41-c-的-uproperty由-uht-生成">4.1 C++ 的 UPROPERTY：由 UHT 生成</a></li>
         <li><a href="#42-蓝图变量在蓝图编译时生成">4.2 蓝图变量：在蓝图编译时生成</a></li>
         <li><a href="#43-fproperty-的创建时机">4.3 FProperty 的创建时机</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#5-表里的一行fproperty-的类型体系">5. 表里的一行：FProperty 的类型体系</a>
-      <ol>
+      <ul>
         <li><a href="#51-类型--子类">5.1 类型 = 子类</a></li>
         <li><a href="#52-castfieldfproperty-版的-dynamic_cast">5.2 <code>CastField</code>：FProperty 版的 dynamic_cast</a></li>
         <li><a href="#53-getpropertyvalue_incontainer为什么必须先-cast">5.3 <code>GetPropertyValue_InContainer</code>：为什么必须先 Cast</a></li>
         <li><a href="#54-属性标记propertyflags">5.4 属性标记：<code>PropertyFlags</code></a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#6-结构体属性表中有表">6. 结构体属性：表中有表</a>
-      <ol>
+      <ul>
         <li><a href="#61-比较-struct-指针">6.1 比较 <code>Struct</code> 指针</a></li>
         <li><a href="#62-结构体也是一张表">6.2 结构体也是一张表</a></li>
         <li><a href="#63-读取containerptrtovalueptr">6.3 读取：<code>ContainerPtrToValuePtr</code></a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#7-container最容易混淆的概念">7. Container：最容易混淆的概念</a>
-      <ol>
+      <ul>
         <li><a href="#71-为什么是这样偏移相对于自己的表">7.1 为什么是这样：偏移相对于&quot;自己的表&quot;</a></li>
         <li><a href="#72-传错会怎样">7.2 传错会怎样</a></li>
         <li><a href="#73-记忆规则">7.3 记忆规则</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#8-运行时查找与缓存设计">8. 运行时：查找与缓存设计</a>
-      <ol>
+      <ul>
         <li><a href="#81-调用链每帧执行">8.1 调用链：每帧执行</a></li>
         <li><a href="#82-先弄清所有权为什么缓存几乎总能命中">8.2 先弄清所有权：为什么缓存几乎总能命中</a></li>
         <li><a href="#83-为什么用-getclass-而不是-staticclass">8.3 为什么用 <code>GetClass()</code> 而不是 <code>StaticClass()</code></a></li>
@@ -524,36 +524,36 @@
         <li><a href="#85-两种缓存指针的选择">8.5 两种缓存指针的选择</a></li>
         <li><a href="#86-读取失败时应该怎么办">8.6 读取失败时应该怎么办</a></li>
         <li><a href="#87-情景推演pie-中删除变量">8.7 情景推演：PIE 中删除变量</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#9-编辑器侧node-对自己做反射">9. 编辑器侧：Node 对自己做反射</a>
-      <ol>
+      <ul>
         <li><a href="#91-遍历-node-上所有的-ref">9.1 遍历 Node 上所有的 Ref</a></li>
         <li><a href="#92-getoptions下拉框从哪里来">9.2 <code>GetOptions</code>：下拉框从哪里来</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#10-变量改名之后guid-找回机制">10. 变量改名之后：Guid 找回机制</a>
-      <ol>
+      <ul>
         <li><a href="#101-问题绑定存的是名字">10.1 问题：绑定存的是名字</a></li>
         <li><a href="#102-为什么运行时不能直接用-guid">10.2 为什么运行时不能直接用 Guid</a></li>
         <li><a href="#103-同步流程">10.3 同步流程</a></li>
         <li><a href="#104-为什么需要两种为准">10.4 为什么需要两种&quot;为准&quot;</a></li>
         <li><a href="#105-挂到引擎的生命周期钩子上">10.5 挂到引擎的生命周期钩子上</a></li>
         <li><a href="#106-完整闭环">10.6 完整闭环</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#11-实战新增一种-vector-ref">11. 实战：新增一种 Vector Ref</a>
-      <ol>
+      <ul>
         <li><a href="#-声明-ref-结构体">① 声明 Ref 结构体</a></li>
         <li><a href="#-类型判断与读取">② 类型判断与读取</a></li>
         <li><a href="#-下拉框选项函数">③ 下拉框选项函数</a></li>
         <li><a href="#-在-node-中使用">④ 在 Node 中使用</a></li>
         <li><a href="#容易踩的坑编译器都不会提醒你">容易踩的坑：编译器都不会提醒你</a></li>
         <li><a href="#验证步骤">验证步骤</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#12-总结">12. 总结</a></li>
-  </ol>
+  </ul>
 </nav>
         </details>
     

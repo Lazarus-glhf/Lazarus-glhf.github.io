@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://lazarus-glhf.github.io/p/docker-cpa-newapi-networking/'>
 
-<link rel="stylesheet" href="/scss/style.min.f6a0e51dd5c80121abb206c649731eaab83b67b1607c4e4366b1f9e784eb6e31.css"><meta property='og:title' content="使用 Docker 部署 CLIProxyAPI 与 New API 并配置互联">
+<link rel="stylesheet" href="/scss/style.min.1988228c0b95763622ed124409be747405f9fb428c4a940027c21f9435b2da0d.css"><meta property='og:title' content="使用 Docker 部署 CLIProxyAPI 与 New API 并配置互联">
 <meta property='og:description' content="在 Docker 环境下分别部署 CLIProxyAPI 和 New API，通过 Docker 网络实现容器间互通，将 CLIProxyAPI 作为 New API 的上游渠道。">
 <meta property='og:url' content='https://lazarus-glhf.github.io/p/docker-cpa-newapi-networking/'>
 <meta property='og:site_name' content='Lazarus&#39;s Blog'>
@@ -277,28 +277,28 @@
         
         <div class="widget--toc">
             <nav id="TableOfContents">
-  <ol>
+  <ul>
     <li><a href="#前置知识docker-容器的网络隔离">前置知识：Docker 容器的网络隔离</a></li>
     <li><a href="#部署-cliproxyapi">部署 CLIProxyAPI</a></li>
     <li><a href="#部署-new-api">部署 New API</a></li>
     <li><a href="#方案一共享-docker-网络推荐">方案一：共享 Docker 网络（推荐）</a>
-      <ol>
+      <ul>
         <li><a href="#创建共享网络">创建共享网络</a></li>
         <li><a href="#将两个容器加入同一网络">将两个容器加入同一网络</a></li>
         <li><a href="#验证连通性">验证连通性</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#在-new-api-中添加-cpa-渠道">在 New API 中添加 CPA 渠道</a></li>
     <li><a href="#方案二经由宿主机端口映射访问不配置共享网络">方案二：经由宿主机端口映射访问（不配置共享网络）</a>
-      <ol>
+      <ul>
         <li><a href="#docker-desktopwindows--macos">Docker Desktop（Windows / macOS）</a></li>
         <li><a href="#linux-原生-docker">Linux 原生 Docker</a></li>
         <li><a href="#注意事项">注意事项</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#持久化网络配置可选">持久化网络配置（可选）</a></li>
     <li><a href="#常用命令">常用命令</a></li>
-  </ol>
+  </ul>
 </nav>
         </div>
     </section>
@@ -414,28 +414,28 @@
         <details class="mobile-toc">
             <summary>目录</summary>
             <nav id="mobile-table-of-contents">
-  <ol>
+  <ul>
     <li><a href="#前置知识docker-容器的网络隔离">前置知识：Docker 容器的网络隔离</a></li>
     <li><a href="#部署-cliproxyapi">部署 CLIProxyAPI</a></li>
     <li><a href="#部署-new-api">部署 New API</a></li>
     <li><a href="#方案一共享-docker-网络推荐">方案一：共享 Docker 网络（推荐）</a>
-      <ol>
+      <ul>
         <li><a href="#创建共享网络">创建共享网络</a></li>
         <li><a href="#将两个容器加入同一网络">将两个容器加入同一网络</a></li>
         <li><a href="#验证连通性">验证连通性</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#在-new-api-中添加-cpa-渠道">在 New API 中添加 CPA 渠道</a></li>
     <li><a href="#方案二经由宿主机端口映射访问不配置共享网络">方案二：经由宿主机端口映射访问（不配置共享网络）</a>
-      <ol>
+      <ul>
         <li><a href="#docker-desktopwindows--macos">Docker Desktop（Windows / macOS）</a></li>
         <li><a href="#linux-原生-docker">Linux 原生 Docker</a></li>
         <li><a href="#注意事项">注意事项</a></li>
-      </ol>
+      </ul>
     </li>
     <li><a href="#持久化网络配置可选">持久化网络配置（可选）</a></li>
     <li><a href="#常用命令">常用命令</a></li>
-  </ol>
+  </ul>
 </nav>
         </details>
     
