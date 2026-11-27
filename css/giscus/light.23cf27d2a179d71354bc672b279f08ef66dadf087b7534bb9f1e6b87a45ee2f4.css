@@ -1,0 +1,138 @@
+@import url("https://giscus.app/themes/catppuccin_latte.css");
+
+/* The embedded document has its own canvas and native control color scheme. */
+:root {
+    color-scheme: light;
+    --discussion-panel: #eff1f5;
+    --discussion-card: #e6e9ef;
+    --discussion-input: #fafaff;
+    --discussion-line: #ccd0da;
+    --discussion-text: #4c4f69;
+    --discussion-muted: #5c5f77;
+    --discussion-accent: #722ec9;
+    --discussion-accent-hover: #6324b2;
+    background-color: var(--discussion-panel);
+    color: var(--discussion-text);
+}
+
+main {
+    --color-canvas-default: var(--discussion-card);
+    --color-canvas-subtle: var(--discussion-panel);
+    --color-canvas-inset: var(--discussion-input);
+    --color-border-default: var(--discussion-line);
+    --color-border-muted: var(--discussion-line);
+    --color-accent-fg: var(--discussion-accent);
+    --color-btn-primary-bg: var(--discussion-accent);
+    --color-btn-primary-hover-bg: var(--discussion-accent-hover);
+    --color-btn-primary-hover-border: var(--discussion-accent-hover);
+}
+
+main .gsc-comment-box .gsc-comment-box-textarea::placeholder {
+    color: var(--discussion-muted);
+    opacity: 1;
+}
+
+.gsc-main,
+.gsc-comments,
+.gsc-timeline {
+    gap: 0.75rem;
+}
+
+.gsc-comment .gsc-comment-content {
+    padding-block: 0.5rem;
+}
+
+.gsc-reactions {
+    align-items: flex-start;
+}
+
+.gsc-timeline .gsc-comment > .color-bg-primary {
+    border: 0;
+    background: transparent;
+}
+
+.gsc-comment + .gsc-comment {
+    border-block-start: 1px solid var(--discussion-line);
+    padding-block-start: 0.75rem;
+}
+
+.gsc-comment .gsc-replies {
+    margin-inline-start: clamp(0.5rem, 2vw, 1rem);
+    border: 0;
+    border-inline-start: 2px solid var(--discussion-line);
+    background: transparent;
+}
+
+.gsc-comment .gsc-reply-box,
+.gsc-reply-box > button {
+    border: 0;
+    background-color: var(--discussion-card);
+}
+
+.gsc-comments .gsc-comment-box {
+    border: 0;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--discussion-card);
+}
+
+.gsc-comments .gsc-comment-box-tabs,
+.gsc-comment-box-tabs button,
+.gsc-comment-box .gsc-comment-box-textarea,
+.gsc-comment-box .gsc-comment-box-textarea-extras,
+.gsc-comment-box .gsc-comment-box-preview {
+    border: 0;
+    background-color: transparent;
+}
+
+.gsc-comment-box-tabs button.color-text-primary {
+    box-shadow: inset 0 -2px var(--discussion-accent);
+    font-weight: 600;
+}
+
+.gsc-comment-box .gsc-comment-box-write:focus-within {
+    background-color: var(--discussion-input);
+    box-shadow: none;
+}
+
+.gsc-main :is(button, a, summary, textarea):focus-visible {
+    outline: 2px solid var(--discussion-accent);
+    outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+    .gsc-comment-box-buttons:has(a.btn-primary),
+    .gsc-comment-box-buttons a.btn-primary {
+        width: 100%;
+        margin-inline: 0;
+        justify-content: center;
+    }
+
+    .gsc-comment-box-tabs button,
+    .gsc-comment-box-buttons .btn,
+    .gsc-reply-box > button {
+        min-height: 44px;
+    }
+}
+
+/* A blank, signed-in composer expands on focus. Drafts and previews stay open. */
+.gsc-comments > .gsc-comment-box:not(:focus-within):has(.gsc-comment-box-textarea:enabled:placeholder-shown) {
+    padding: 0;
+
+    .gsc-comment-box-main {
+        margin: 0;
+    }
+
+    .gsc-comment-box-tabs,
+    .gsc-comment-box-textarea-extras,
+    .gsc-comment-box-bottom {
+        display: none;
+    }
+
+    .gsc-comment-box-textarea {
+        display: block;
+        height: 2.75rem;
+        min-height: 2.75rem;
+        border-radius: 0.375rem;
+    }
+}

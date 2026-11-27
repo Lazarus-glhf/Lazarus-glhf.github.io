@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://lazarus-glhf.github.io/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/'>
 
-<link rel="stylesheet" href="/scss/style.min.1988228c0b95763622ed124409be747405f9fb428c4a940027c21f9435b2da0d.css"><meta property='og:title' content="搭建个人 MC 服务器指北">
+<link rel="stylesheet" href="/scss/style.min.861fcc498f2074500f776d26b9c6c5bf7fd03aed38103fad1a81e94ca9ffb8cc.css"><meta property='og:title' content="搭建个人 MC 服务器指北">
 <meta property='og:description' content="Set up a linux Minecraft Server.">
 <meta property='og:url' content='https://lazarus-glhf.github.io/p/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA-mc-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E5%8C%97/'>
 <meta property='og:site_name' content='Lazarus&#39;s Blog'>
@@ -754,54 +754,40 @@
      
     
         
-    <script
-    src="https://giscus.app/client.js"
-    data-repo="Lazarus-glhf/Lazarus-glhf.github.io"
-    data-repo-id="R_kgDOM4flvQ"
-    data-category="Announcements"
-    data-category-id="DIC_kwDOM4flvc4DME1T"
-    data-mapping="pathname"
-    data-strict="0"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="bottom"
-    data-theme="preferred_color_scheme"
-    data-lang="zh-CN"
-    data-loading=""
-    crossorigin="anonymous"
-    async
-></script>
+    <template id="giscus-client">
+    <script src="https://giscus.app/client.js"
+            data-repo="Lazarus-glhf/Lazarus-glhf.github.io" data-repo-id="R_kgDOM4flvQ"
+            data-category="Announcements" data-category-id="DIC_kwDOM4flvc4DME1T"
+            data-mapping="pathname" data-strict="0"
+            data-reactions-enabled="1" data-emit-metadata="0"
+            data-input-position="bottom" data-lang="zh-CN"
+             crossorigin="anonymous" async></script>
+</template>
 <script>
-    function setGiscusTheme(theme) {
-        let giscus = document.querySelector("iframe.giscus-frame");
-        if (giscus) {
-            giscus.contentWindow.postMessage(
-                {
-                    giscus: {
-                        setConfig: {
-                            theme: theme,
-                        },
-                    },
-                },
-                "https://giscus.app"
-            );
+    (() => {
+        const template = document.getElementById('giscus-client');
+        const client = document.importNode(template.content, true).querySelector('script');
+        const currentTheme = () => document.documentElement.dataset.scheme === 'dark'
+            ? "https://lazarus-glhf.github.io/css/giscus/dark.c491f9ad5d812ae3a17f2ad13cc5913e3c847f41293621f39391d04078bcdc09.css"
+            : "https://lazarus-glhf.github.io/css/giscus/light.23cf27d2a179d71354bc672b279f08ef66dadf087b7534bb9f1e6b87a45ee2f4.css";
+        
+        client.dataset.theme = currentTheme();
+        
+        template.replaceWith(client);
+
+        
+        const frameWindow = () => document.querySelector('iframe.giscus-frame')?.contentWindow;
+        function syncTheme() {
+            frameWindow()?.postMessage({ giscus: { setConfig: { theme: currentTheme() } } }, 'https://giscus.app');
         }
-    }
-
-    (function () {
-        addEventListener("message", (e) => {
-            if (event.origin !== "https://giscus.app") return;
-            handler();
-        });
-        window.addEventListener("onColorSchemeChange", handler);
-
-        function handler() {
-            if (document.documentElement.dataset.scheme === "light") {
-                setGiscusTheme('preferred_color_scheme');
-            } else {
-                setGiscusTheme('preferred_color_scheme');
+        window.addEventListener('onColorSchemeChange', syncTheme);
+        window.addEventListener('message', function onReady(event) {
+            if (event.origin === 'https://giscus.app' && event.data?.giscus?.resizeHeight &&
+                event.source === frameWindow()) {
+                if (client.dataset.theme !== currentTheme()) syncTheme();
+                window.removeEventListener('message', onReady);
             }
-        }
+        });
     })();
 </script>
 
